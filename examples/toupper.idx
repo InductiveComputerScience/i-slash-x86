@@ -1,0 +1,54 @@
+Bgs RdrandGuaranteedS
+  u64 n
+	b1 c
+	b1 tb10
+Ens
+
+Fnc RdrandGuaranteed
+	Mov c, 0
+  Loop
+  If exp b: c = 0
+		Rdrand n, c
+  EndLoop
+Ret
+
+Bgs ToUpperILS
+  u8x32a str
+	u64 len
+	u64 len32
+	u64 len1
+	u64 i
+	b1 tb10
+	u8x32 a
+	u8x32 z
+	u8x32 x32
+	u8x32 x
+	u8x32 lcm
+	b8x32 tb8x320
+	b8x32 tb8x321
+	b8x32 tb8x322
+	u8x32 padding
+Ens
+
+Fnc ToUpperIL
+	Len len, str
+	Div len32, len, 32
+
+	Mov a, 'a'
+	Mov z, 'z'
+	Mov x32, 32
+
+	Mov i, 0
+  Loop
+  If exp b: i < len32
+		Idr x, str, i
+
+		exp bb8x32: lcm = (x >= a & x <= z) & x32
+		exp au8x32: x = x - lcm
+
+		Idw str, i, x
+
+		Inc i
+  EndLoop
+Ret
+

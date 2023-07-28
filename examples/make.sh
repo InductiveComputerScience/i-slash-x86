@@ -1,3 +1,4 @@
+~/apps/jdk-17/bin/java -jar Translator.jar ioc.idx ioc.idx.1 ioc.asm ioc.h
 java -jar Translator.jar ioc.idx ioc.idx.1 ioc.asm ioc.h
 gcc -c test.c -m64
 nasm -f elf64 ioc.asm -I ..
