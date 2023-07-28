@@ -1,0 +1,733 @@
+; -----------------------------------------------------------------------------
+; Add
+
+%macro Add.mmu8 3
+	mov al, byte [rdi + %2]
+	mov ah, byte [rdi + %3]
+	add al, ah
+	mov byte [rdi + %1], al
+%endmacro
+
+%macro Add.mmu16 3
+	mov ax, word [rdi + %2]
+	mov dx, word [rdi + %3]
+	add ax, dx
+	mov word [rdi + %1], ax
+%endmacro
+
+%macro Add.miu16 3
+	mov ax, word [rdi + %2]
+	mov dx, %3
+	add ax, dx
+	mov word [rdi + %1], ax
+%endmacro
+
+%macro Add.miu64 3
+	mov rax, qword [rdi + %2]
+	mov rdx, %3
+	add rax, rdx
+	mov qword [rdi + %1], rax
+%endmacro
+
+%macro Add.mmf64 3
+  movsd xmm0, [rdi + %2]
+  addsd xmm0, [rdi + %3]
+  movsd [rdi + %1], xmm0
+%endmacro
+
+%macro Add.mmu64 3
+	mov rax, qword [rdi + %2]
+	mov rdx, qword [rdi + %3]
+	add rax, rdx
+	mov qword [rdi + %1], rax
+%endmacro
+
+%macro Add.miu8x32 3
+	vmovdqu ymm0, yword [rdi + %2]
+	mov rax, %3
+  movq xmm2, rax
+  vpbroadcastb ymm1, xmm2
+	vpaddb ymm0, ymm0, ymm1
+	vmovdqu yword [rdi + %1], ymm0
+%endmacro
+
+; -----------------------------------------------------------------------------
+; Sub
+
+%macro Sub.mmu8 3
+	mov al, byte [rdi + %2]
+	mov ah, byte [rdi + %3]
+	sub al, ah
+	mov byte [rdi + %1], al
+%endmacro
+
+%macro Sub.mmu16 3
+	mov ax, word [rdi + %2]
+	mov dx, word [rdi + %3]
+	sub ax, dx
+	mov word [rdi + %1], ax
+%endmacro
+
+%macro Sub.mmf64 3
+  movsd xmm0, [rdi + %2]
+  subsd xmm0, [rdi + %3]
+  movsd [rdi + %1], xmm0
+%endmacro
+
+%macro Sub.mmu8x32 3
+	vmovdqu ymm0, yword [rdi + %2]
+	vmovdqu ymm1, yword [rdi + %3]
+	vpsubb ymm0, ymm0, ymm1
+	vmovdqu yword [rdi + %1], ymm0
+%endmacro
+
+%macro Sub.miu8x32 3
+	vmovdqu ymm0, yword [rdi + %2]
+	mov rax, %3
+  movq xmm2, rax
+  vpbroadcastb ymm1, xmm2
+	vpsubb ymm0, ymm0, ymm1
+	vmovdqu yword [rdi + %1], ymm0
+%endmacro
+
+; -----------------------------------------------------------------------------
+; Mul
+
+%macro Mul.mmu8 3
+	mov al, byte [rdi + %2]
+	mov ah, byte [rdi + %3]
+	mul ah
+	mov byte [rdi + %1], al
+%endmacro
+
+%macro Mul.mmu16 3
+	mov ax, word [rdi + %2]
+	mov dx, word [rdi + %3]
+	mul dx
+	mov word [rdi + %1], ax
+%endmacro
+
+%macro Mul.mmf64 3
+  movsd xmm0, [rdi + %2]
+  mulsd xmm0, [rdi + %3]
+  movsd [rdi + %1], xmm0
+%endmacro
+
+%macro Mul.mmu64 3
+	mov rax, qword [rdi + %2]
+	mov rdx, qword [rdi + %3]
+	mul rdx
+	mov qword [rdi + %1], rax
+%endmacro
+
+%macro Mul.miu64 3
+	mov rax, qword [rdi + %2]
+	mov rdx, %3
+	mul rdx
+	mov qword [rdi + %1], rax
+%endmacro
+
+%macro Mul.imu64 3
+	mov rax, %2
+	mov rdx, qword [rdi + %3]
+	mul rdx
+	mov qword [rdi + %1], rax
+%endmacro
+
+; -----------------------------------------------------------------------------
+; Div
+
+%macro Div.mmu8 3
+	mov al, byte [rdi + %2]
+	mov ah, 0
+	mov dl, byte [rdi + %3]
+	mov dh, 0
+	div dl
+	mov byte [rdi + %1], al
+%endmacro
+
+%macro Div.mmu16 3
+	mov ax, word [rdi + %2]
+	mov dx, 0
+	mov cx, word [rdi + %3]
+	div cx
+	mov word [rdi + %1], ax
+%endmacro
+
+%macro Div.mmu64 3
+	mov rax, qword [rdi + %2]
+	mov rdx, 0
+	mov rcx, qword [rdi + %3]
+	div rcx
+	mov qword [rdi + %1], rax
+%endmacro
+
+%macro Div.miu64 3
+	mov rax, qword [rdi + %2]
+	mov rdx, 0
+	mov rcx, %3
+	div rcx
+	mov qword [rdi + %1], rax
+%endmacro
+
+%macro Div.iiu64 3
+  mov rax, %2
+  mov rdx, 0
+  mov rcx, %3
+  div rcx
+  mov qword [rdi + %1], rax
+%endmacro
+
+%macro Div.mmf64 3
+  movsd xmm0, [rdi + %2]
+  divsd xmm0, [rdi + %3]
+  movsd [rdi + %1], xmm0
+%endmacro
+
+; -----------------------------------------------------------------------------
+; DivMod
+
+%macro DivMod.mmu64 4
+	mov rax, qword [rdi + %3]
+	mov rdx, 0
+	mov rcx, qword [rdi + %4]
+	div rcx
+	mov qword [rdi + %1], rax
+	mov qword [rdi + %2], rdx
+%endmacro
+
+%macro DivMod.miu64 4
+	mov rax, qword [rdi + %3]
+	mov rdx, 0
+	mov rcx, %4
+	div rcx
+	mov qword [rdi + %1], rax
+	mov qword [rdi + %2], rdx
+%endmacro
+
+; -----------------------------------------------------------------------------
+; Mod
+
+%macro Mod.mmu64 3
+	mov rax, qword [rdi + %2]
+	mov rdx, 0
+	mov rcx, qword [rdi + %3]
+	div rcx
+	mov qword [rdi + %1], rdx
+%endmacro
+
+; -----------------------------------------------------------------------------
+; MulDiv
+
+%macro MulDiv.mmu64 4
+	mov rax, qword [rdi + %2]
+	mov rdx, qword [rdi + %3]
+	mul rdx
+	mov rcx, qword [rdi + %4]
+	div rcx
+	mov qword [rdi + %1], rax
+%endmacro
+
+; -----------------------------------------------------------------------------
+; Mov
+
+%macro Mov.mb1 2
+	mov al, byte [rdi + %2]
+	and al, 1
+  mov byte [rdi + %1], al
+%endmacro
+
+%macro Mov.ib1 2
+	mov al, %2
+	and al, 1
+  mov byte [rdi + %1], al
+%endmacro
+
+%macro Mov.mu8 2
+	mov al, byte [rdi + %2]
+  mov byte [rdi + %1], al
+%endmacro
+
+%macro Mov.mu16 2
+	mov ax, word [rdi + %2]
+  mov word [rdi + %1], ax
+%endmacro
+
+%macro Mov.iu16 2
+	mov ax, %2
+  mov word [rdi + %1], ax
+%endmacro
+
+%macro Mov.iu32 2
+	mov eax, %2
+  mov dword [rdi + %1], eax
+%endmacro
+
+%macro Mov.iu64 2
+	mov rax, %2
+  mov qword [rdi + %1], rax
+%endmacro
+
+%macro Mov.mu64 2
+	mov rax, qword [rdi + %2]
+  mov qword [rdi + %1], rax
+%endmacro
+
+%macro Mov.iu8x32 2
+	mov rax, %2
+  movq xmm2, rax
+  vpbroadcastb ymm0, xmm2
+	vmovdqu yword [rdi + %1], ymm0
+%endmacro
+
+
+
+; -----------------------------------------------------------------------------
+; Loop
+
+%macro Loop 1
+	%1:
+%endmacro
+
+; -----------------------------------------------------------------------------
+; Len
+
+%macro Len 2
+	mov rax, qword [rdi + %2]
+	mov rax, qword [rax - 8]
+  mov qword [rdi + %1], rax
+%endmacro
+
+; -----------------------------------------------------------------------------
+; Lt
+
+%macro Lt.mmu16 3
+	mov ax, word [rdi + %2]
+	mov dx, word [rdi + %3]
+	cmp ax, dx
+	setb al
+  mov byte [rdi + %1], al
+%endmacro
+
+%macro Lt.mmu32 3
+	mov eax, dword [rdi + %2]
+	mov edx, dword [rdi + %3]
+	cmp eax, edx
+	setb al
+  mov byte [rdi + %1], al
+%endmacro
+
+%macro Lt.mmu64 3
+	mov rax, qword [rdi + %2]
+	mov rdx, qword [rdi + %3]
+	cmp rax, rdx
+	setb al
+  mov byte [rdi + %1], al
+%endmacro
+
+%macro Lt.iiu16 3
+	mov ax, %2
+	mov dx, %3
+	cmp ax, dx
+	setb al
+  mov byte [rdi + %1], al
+%endmacro
+
+%macro Lt.iiu64 3
+	mov rax, %2
+	mov rdx, %3
+	cmp rax, rdx
+	setb al
+  mov byte [rdi + %1], al
+%endmacro
+
+%macro Lt.mms16 3
+	mov ax, word [rdi + %2]
+	mov dx, word [rdi + %3]
+	cmp ax, dx
+	setl al
+  mov byte [rdi + %1], al
+%endmacro
+
+%macro Lt.iis16 3
+	mov ax, %2
+	mov dx, %3
+	cmp ax, dx
+	setl al
+  mov byte [rdi + %1], al
+%endmacro
+
+%macro Lt.miu8x32 3
+	vmovdqu ymm0, yword [rdi + %2]
+	mov rax, %3
+  movq xmm2, rax
+  vpbroadcastb ymm1, xmm2
+	vpcmpgtb ymm0, ymm0, ymm1
+	vmovdqu yword [rdi + %1], ymm0
+%endmacro
+
+; -----------------------------------------------------------------------------
+; Lte
+
+%macro Lte.mmu8x32 3
+	vmovdqu ymm0, yword [rdi + %2]
+	vmovdqu ymm1, yword [rdi + %3]
+	vpcmpgtb ymm2, ymm0, ymm1
+	vpcmpeqb ymm3, ymm3, ymm3
+	vpxor ymm0, ymm2, ymm3
+	vmovdqu yword [rdi + %1], ymm0
+%endmacro
+
+%macro Lte.miu8x32 3
+	vmovdqu ymm0, yword [rdi + %2]
+	mov rax, %3
+  movq xmm2, rax
+  vpbroadcastb ymm1, xmm2
+	vpcmpgtb ymm2, ymm0, ymm1
+	vpcmpeqb ymm3, ymm3, ymm3
+	vpxor ymm0, ymm2, ymm3
+	vmovdqu yword [rdi + %1], ymm0
+%endmacro
+
+; -----------------------------------------------------------------------------
+; Gt
+
+%macro Gt.miu8x32 3
+	vmovdqu ymm0, yword [rdi + %2]
+	mov rax, %3
+  movq xmm2, rax
+  vpbroadcastb ymm1, xmm2
+	vpcmpgtb ymm0, ymm0, ymm1
+	vmovdqu yword [rdi + %1], ymm0
+%endmacro
+
+; -----------------------------------------------------------------------------
+; Gte
+
+%macro Gte.mmu8x32 3
+	vmovdqu ymm0, yword [rdi + %2]
+	vmovdqu ymm1, yword [rdi + %3]
+	vpcmpgtb ymm2, ymm0, ymm1
+	vpcmpeqb ymm3, ymm0, ymm1
+	vpor ymm0, ymm2, ymm3
+	vmovdqu yword [rdi + %1], ymm0
+%endmacro
+
+%macro Gte.miu8x32 3
+	vmovdqu ymm0, yword [rdi + %2]
+	mov rax, %3
+  movq xmm2, rax
+  vpbroadcastb ymm1, xmm2
+	vpcmpgtb ymm2, ymm0, ymm1
+	vpcmpeqb ymm3, ymm0, ymm1
+	vpor ymm0, ymm2, ymm3
+	vmovdqu yword [rdi + %1], ymm0
+%endmacro
+
+; -----------------------------------------------------------------------------
+; Not
+
+%macro Not.mb1 2
+  mov al, byte [rdi + %2]
+	not al
+	and al, 1
+  mov byte [rdi + %1], al 
+%endmacro
+
+%macro Not.mu8x32 2
+	vmovdqu ymm0, yword [rdi + %2]
+	vpcmpeqb ymm3, ymm3, ymm3
+	vpxor ymm0, ymm0, ymm3
+	vmovdqu yword [rdi + %1], ymm0
+%endmacro
+
+; -----------------------------------------------------------------------------
+; And
+
+%macro And.mmb1 3
+  mov al, byte [rdi + %2]
+  mov ah, byte [rdi + %3]
+	and al, ah
+	and al, 1
+  mov byte [rdi + %1], al
+%endmacro
+
+%macro And.mmu8 3
+  mov al, byte [rdi + %2]
+  mov ah, byte [rdi + %3]
+	and al, ah
+	and al, 1
+  mov byte [rdi + %1], al
+%endmacro
+
+%macro And.mmu8x32 3
+	vmovdqu ymm0, yword [rdi + %2]
+	vmovdqu ymm1, yword [rdi + %3]
+	vpand ymm0, ymm0, ymm1
+	vmovdqu yword [rdi + %1], ymm0
+%endmacro
+
+%macro And.mmb8x32 3
+	vmovdqu ymm0, yword [rdi + %2]
+	vmovdqu ymm1, yword [rdi + %3]
+	vpand ymm0, ymm0, ymm1
+	vmovdqu yword [rdi + %1], ymm0
+%endmacro
+
+%macro And.miu8x32 3
+	vmovdqu ymm0, yword [rdi + %2]
+	vmovdqu ymm1, yword [rdi + %3]
+	mov rax, %3
+  movq xmm2, rax
+  vpbroadcastb ymm1, xmm2
+	vpand ymm0, ymm0, ymm1
+	vmovdqu yword [rdi + %1], ymm0
+%endmacro
+
+; -----------------------------------------------------------------------------
+; If
+
+%macro If.mb1 2
+	mov al, 0
+	mov ah, byte [rdi + %1]
+	and ah, 1
+  cmp al, ah
+	je %2
+%endmacro
+
+%macro If.mu8 2
+	mov al, 0
+	mov ah, byte [rdi + %1]
+  cmp al, ah
+	je %2
+%endmacro
+
+; -----------------------------------------------------------------------------
+; Endloop
+
+%macro EndLoop 2
+	jmp %1
+	%2:
+%endmacro
+
+; -----------------------------------------------------------------------------
+; Endb
+
+%macro Endb 1
+	%1:
+%endmacro
+
+; -----------------------------------------------------------------------------
+; Idr
+
+%macro Idr.mmu16a 3
+	mov rax, qword [rdi + %2]
+	mov rdx, qword [rdi + %3]
+	mov ax, word [rax + rdx * 2]
+  mov word [rdi + %1], ax
+%endmacro
+
+%macro Idr.mmu32a 3
+	mov rax, qword [rdi + %2]
+	mov rdx, qword [rdi + %3]
+	mov eax, dword [rax + rdx * 4]
+  mov dword [rdi + %1], eax
+%endmacro
+
+%macro Idr.mmu8x32a 3
+	mov rax, qword [rdi + %2]
+	mov rdx, qword [rdi + %3]
+	shl rdx, 5
+	vmovdqu ymm0, yword [rax + rdx]
+  vmovdqu yword [rdi + %1], ymm0
+%endmacro
+
+; -----------------------------------------------------------------------------
+; Eq
+
+%macro Eq.mmu16 3
+	mov ax, word [rdi + %2]
+	mov dx, word [rdi + %3]
+	cmp ax, dx
+	sete al
+  mov byte [rdi + %1], al
+%endmacro
+
+%macro Eq.mmu32 3
+	mov eax, dword [rdi + %2]
+	mov edx, dword [rdi + %3]
+	cmp eax, edx
+	sete al
+  mov byte [rdi + %1], al
+%endmacro
+
+%macro Eq.iiu16 3
+	mov ax, %2
+	mov dx, %3
+	cmp ax, dx
+	sete al
+  mov byte [rdi + %1], al
+%endmacro
+
+%macro Eq.mib1 3
+	mov al, byte [rdi + %2]
+	mov dl, %3
+	cmp al, dl
+	sete al
+  mov byte [rdi + %1], al
+%endmacro
+
+
+
+; -----------------------------------------------------------------------------
+; Acw
+
+%macro Acw.mmu16 3
+  mov ax, word [rdi + %3]
+  mov rdx, qword [rdi + %1]
+  mov word [rdx + %2], ax
+%endmacro
+
+%macro Acw.mmu64 3
+  mov rax, qword [rdi + %3]
+  mov rdx, qword [rdi + %1]
+  mov qword [rdx + %2], rax
+%endmacro
+
+%macro Acw.miu64 3
+  mov rax, %3
+  mov rdx, qword [rdi + %1]
+  mov qword [rdx + %2], rax
+%endmacro
+
+; -----------------------------------------------------------------------------
+; Acr
+
+%macro Acr.mmu64 3
+  mov rax, [rdi + %2]
+  mov rax, [rax + %3]
+  mov [rdi + %1], rax
+%endmacro
+
+%macro Acr.mmb1 3
+  mov rax, [rdi + %2]
+  mov al, byte [rax + %3]
+  mov [rdi + %1], al
+%endmacro
+
+; -----------------------------------------------------------------------------
+; Inc
+
+%macro Inc.mu64 1
+  inc qword [rdi + %1]
+%endmacro
+
+; -----------------------------------------------------------------------------
+; Shl
+
+%macro Shl.mib32 3
+  mov eax, dword [rdi + %2]
+	shl eax, %3
+  mov dword [rdi + %1], eax
+%endmacro
+
+; -----------------------------------------------------------------------------
+; Shl
+
+%macro Or.mmb32 3
+  mov eax, dword [rdi + %2]
+  mov edx, dword [rdi + %3]
+	or eax, edx
+  mov dword [rdi + %1], eax
+%endmacro
+
+%macro Or.mmu8x32 3
+	vmovdqu ymm0, yword [rdi + %2]
+	vmovdqu ymm1, yword [rdi + %3]
+	vpor ymm0, ymm0, ymm1
+	vmovdqu yword [rdi + %1], ymm0
+%endmacro
+
+; -----------------------------------------------------------------------------
+; Call
+
+%macro Call 2
+	push rdi
+  mov rdi, [rdi + %2]
+  call %1
+	pop rdi
+%endmacro
+
+; -----------------------------------------------------------------------------
+; Else
+
+%macro Else 2
+	jmp %2
+	%1:
+%endmacro
+
+; -----------------------------------------------------------------------------
+; New
+
+extern malloc
+
+%macro New 2
+	push rdi
+	push rdi
+  mov rdi, %2_size
+  call malloc
+	pop rdi
+	pop rdi
+  mov [rdi + %1], rax
+%endmacro
+
+; -----------------------------------------------------------------------------
+; Del
+
+extern free
+
+%macro Del.mstr 1
+	push rdi
+	push rdi
+	mov rdi, [rdi + %1]
+	call free
+	pop rdi
+	pop rdi
+%endmacro
+
+; -----------------------------------------------------------------------------
+; Idw
+
+%macro Idw.iiu16a 3
+  mov rcx, %2
+  mov rax, [rdi + %1]
+  lea rax, [rax + rcx * 2]
+  mov rcx, %3
+  mov [rax], rcx
+%endmacro
+
+%macro Idw.mmu8x32a 3
+	vmovdqu ymm0, yword [rdi + %3]
+  mov rax, qword [rdi + %1]
+  mov rcx, qword [rdi + %2]
+	shl rcx, 5
+  vmovdqu yword [rax + rcx], ymm0
+%endmacro
+
+; -----------------------------------------------------------------------------
+; Rdrand
+
+%macro Rdrand.mu64 2
+  rdrand rax
+  mov qword [rdi + %1], rax
+	setc byte [rdi + %2]
+%endmacro
+
+
+
+
+
+
+
+
+
