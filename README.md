@@ -54,15 +54,15 @@ A header for C is also generated, so that you can call the functions from C or C
 ```
 Bgs RdrandGuaranteedS
   u64 n
-	b1 c
-	b1 tb10
+  b1 c
+  b1 tb10
 Ens
 
 Fnc RdrandGuaranteed
-	Mov c, 0
+  Mov c, 0
   Loop
   If exp b: c = 0
-		Rdrand n, c
+    Rdrand n, c
   EndLoop
 Ret
 ```
