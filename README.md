@@ -12,6 +12,7 @@ Benefits of the language includes:
  * All behavior is defined and specified (No undefined or unspecified behavior.)
  * What you see is what you get. (No as-if rule.)
  * All the code is executed. (No surprising code removal.)
+ * It is easy to further optimize the resulting assembly as the code will be a direct translation.
 
 ## The Language
 
