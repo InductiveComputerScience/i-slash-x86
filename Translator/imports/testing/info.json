@@ -1,0 +1,13 @@
+{
+    "name": "testing",
+    "version": "0.1.8",
+    "organization namespace": "no.inductive.idea10.programs",
+    "scientific namespace": "computerscience.development.testing",
+    "imports": [
+        ["","no.inductive.idea10.programs","references","0.1.5"],
+        ["","no.inductive.idea10.programs","arrays","0.9.7"]
+    ],
+    "development imports": [],
+    "reprefix": [],
+    "ownerCustomerId": "Inductive AS"
+}

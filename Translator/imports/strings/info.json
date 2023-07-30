@@ -1,0 +1,15 @@
+{
+    "name": "strings",
+    "version": "0.9.14",
+    "organization namespace": "no.inductive.idea10.programs",
+    "scientific namespace": "computerscience.datastructures.basic",
+    "imports": [
+        ["", "no.inductive.idea10.programs", "lists", "0.1.13"],
+        ["", "no.inductive.idea10.programs", "references", "0.1.5"],
+        ["char", "no.inductive.libraries", "Characters", "0.1.4"]
+    ],
+    "development imports": [
+        ["", "no.inductive.idea10.programs", "testing", "0.1.8"]
+    ],
+    "ownerCustomerId": "Inductive AS"
+}

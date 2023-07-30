@@ -1,0 +1,13 @@
+{
+  "name": "lists",
+  "version": "0.1.13",
+  "organization namespace": "no.inductive.idea10.programs",
+  "scientific namespace": "computerscience.datastructures.basic",
+  "imports": [
+    ["", "no.inductive.idea10.programs", "references", "0.1.5"],
+    ["", "no.inductive.idea10.programs", "arrays", "0.9.7"]
+  ],
+  "development imports": [
+  ],
+  "ownerCustomerId": "Inductive AS"
+}

@@ -1,6 +1,6 @@
 # I/x86
 
-A programming language that gives direct control of x86 processors. It is translated directly into x86 assembly. It has access to all features of x86-64 processors.
+A programming language that gives direct control of x86 processors. It is translated directly into x86 assembly, line by line. It will always have native access to all features of x86-64 processors, including its newest extensions.
 
 The language is set up such that it is as simple as possible and is easy to use. The compiler is not complicated, only about 1500 lines of code that anyone can understand.
 
@@ -14,6 +14,51 @@ Benefits of the language includes:
  * All the code is executed. (No surprising code removal.)
 
 ## The Language
+
+### Operations
+
+Use the operations in the x86 CPU directly like this:
+
+```
+Add x, a, b
+Sub x, a, b
+Mul x, a, b
+Div x, a, b
+```
+
+### Expression
+
+Or write inline expressions. Here a / b + c * d is the expression, "exp" marks the beginning of an expression, "a" marks the expression as an Arithmetic expression and finally, u64 says that the type of the expression is unsigned 64-bit.
+
+```
+exp a u64: x = a / b + c * d
+```
+
+Here, the type is 64-bit float, or double precision.
+
+```
+exp a f64: h1 = (x2 - x)/(x2 - x1)*q11 + (x - x1)/(x2 - x1)*q12
+```
+
+There are also bitwise expressions
+
+```
+exp bw b32: total = d2 | d1 << 8 | d0 << 16
+```
+
+And boolean-relational expressions
+
+```
+exp b: i < len & !found
+```
+
+In the future, there will be more kinds of expressions. You can easily extend the compiler with your own expression types.
+
+The three expression types listed here are based on the open-source formula translators:
+
+ * [Arithmetic Formula Translation](https://repo.progsbase.com/repoviewer/no.inductive.libraries/FormulaTranslation/0.1.6///ArithmeticFormulaToTFormFunctions/)
+ * [Bitwise Formula Translation](https://repo.progsbase.com/repoviewer/no.inductive.libraries/FormulaTranslation/0.1.6///BitwiseFormulaToTFormFunctions/)
+ * [Boolean-Relational Formula Translation](https://repo.progsbase.com/repoviewer/no.inductive.libraries/FormulaTranslation/0.1.6///BooleanFormulaToTFormFunctions/)
 
 ### Functions
 
@@ -55,22 +100,6 @@ f(&s);
 // s.x contains the return value.
 ```
 
-### Operations
-
-Use the operations in the x86 CPU directly like this:
-
-```
-Add x, a, b
-Sub x, a, b
-Mul x, a, b
-Div x, a, b
-```
-
-Or write inline expressions. Here x = a / b is the expression, "exp" marks the beginning of an expression, "a" marks the expression as an Arithmetic expression and finally, u64 says that the type of the expression is unsigned 64-bit.
-
-```
-exp a u64: x = a / b + c * d
-```
 
 ## How the Compiler Works
 
@@ -162,7 +191,7 @@ A header for C is also generated, so that you can call the functions from C or C
 
 
 
-## Rdrand
+### Rdrand
 
 ```
 Bgs RdrandGuaranteedS

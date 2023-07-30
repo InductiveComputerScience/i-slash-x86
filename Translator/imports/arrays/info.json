@@ -1,0 +1,12 @@
+{
+    "name": "arrays",
+    "version": "0.9.7",
+    "organization namespace": "no.inductive.idea10.programs",
+    "scientific namespace": "computerscience.algorithms.arrays",
+    "imports": [
+        ["", "no.inductive.idea10.programs", "references", "0.1.5"]
+    ],
+    "development imports": [],
+    "reprefix": [],
+    "ownerCustomerId": "Inductive AS"
+}

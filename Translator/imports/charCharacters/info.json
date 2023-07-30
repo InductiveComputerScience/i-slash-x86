@@ -1,0 +1,9 @@
+{
+    "name": "Characters",
+    "version": "0.1.4",
+    "organization namespace": "no.inductive.libraries",
+    "scientific namespace": "computerscience.datastructures.basic",
+    "imports": [],
+    "development imports": [],
+    "ownerCustomerId": "Inductive AS"
+}
