@@ -43,8 +43,8 @@ Fnc ToUpperIL
   If exp b: i < len32
     Idr x, str, i
 
-    exp bb8x32: lcm = (x >= a & x <= z) & x32
-    exp au8x32: x = x - lcm
+    exp b b8x32: lcm = (x >= a & x <= z) & x32
+    exp a u8x32: x = x - lcm
 
     Idw str, i, x
 

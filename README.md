@@ -191,7 +191,7 @@ A header for C is also generated, so that you can call the functions from C or C
 
 
 
-### Rdrand
+### Getting Random Numbers Using Rdrand
 
 ```
 Bgs RdrandGuaranteedS
