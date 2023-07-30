@@ -2,6 +2,119 @@
 
 A programming language that gives direct control of x86 processors. It is translated directly into x86 assembly. It has access to all features of x86-64 processors.
 
+The language is set up such that it is as simple as possible and is easy to use. The compiler is not complicated, only about 1500 lines of code that anyone can understand.
+
+Benefits of the language includes:
+
+ * Simple language, simple compiler.
+ * Access to all features of the x86 processor.
+ * Use all features of the x86 processor to speed up your programs.
+ * All behavior is defined and specified (No undefined or unspecified behavior.)
+ * What you see is what you get. (No as-if rule.)
+ * All the code is executed. (No surprising code removal.)
+
+## The Language
+
+### Functions
+
+Make a function `f` as follows:
+
+```
+Fnc f
+  ...
+Ret
+```
+
+The input, output and local variables are set up in a structure with the same name as the function followed by `S`.
+
+Bgs fS
+  u64 x
+  u64 a
+  u64 b
+Ens
+
+### Calling Functions
+
+Call functions by passing it an instance of its structure. You set the input before calling the function and read the output after calling the function.
+
+```
+Call f, i
+```
+
+A header is generated for C/C++ for easily calling the functions:
+
+```
+#include "code.h"
+
+...
+
+struct fS s;
+s.a = 5;
+s.b = 5;
+f(&s);
+// s.x contains the return value.
+```
+
+### Operations
+
+Use the operations in the x86 CPU directly like this:
+
+```
+Add x, a, b
+Sub x, a, b
+Mul x, a, b
+Div x, a, b
+```
+
+Or write inline expressions. Here x = a / b is the expression, "exp" marks the beginning of an expression, "a" marks the expression as an Arithmetic expression and finally, u64 says that the type of the expression is unsigned 64-bit.
+
+```
+exp a u64: x = a / b + c * d
+```
+
+## How the Compiler Works
+
+### Overview
+
+1. The compiler traverses the code to convert all expressions to a series of instructions.
+2. The compiler traverses the code to identify the type of each instruction. The type includes:
+ a) Wether the parameters are variables or literals.
+ b) The type of the operands.
+3. A C-header is generated.
+3. NASM processes the macros and assembles the code.
+
+### Details
+
+1. The compiler will translate the expression into a series of CPU operations (by traversing the expression left-first):
+
+```
+; exp a u64: x = a / b + c * d
+Div t0, a, b
+Mul t1, c, d
+Add x, t0, t1
+```
+
+2. Then identify the types. Here "mm" means both parameters are memory, u64 means unsigned 64-bit integer division.
+
+```
+Div.mmu64 t0, a, b
+...
+```
+
+Then convert each of these to a series of CPU-instructions with explicit handling of CPU registers. This one performs 64-bit unsigned integer division of two variables.
+
+```
+mov rax, qword [rdi + a]
+mov rdx, 0
+mov rcx, qword [rdi + b]
+div rcx
+mov qword [rdi + t0], rax
+...
+```
+
+This can then be passed to an assembler, NASM, to complete the compilation.
+
+
 ## Examples
 
 ### Finding the index of a character in a string
