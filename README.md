@@ -2,6 +2,8 @@
 
 A programming language that gives direct control of x86 processors. It is translated directly into x86 assembly, line by line. It will always have native access to all features of x86-64 processors, including its newest extensions.
 
+The idea behind the programming language is that all programming is assembly programming, and this language helps the programmer program assembly. Once the programmer is happy with the instructions used, the generated assembly code is easy to recognize, and can be hand-tuned to unlock the final percentages of performance.
+
 The language is set up such that it is as simple as possible and is easy to use. The compiler is not complicated, only about 1500 lines of code that anyone can understand.
 
 Benefits of the language includes:
