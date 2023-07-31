@@ -74,6 +74,7 @@ public class ArithmeticFormulaFunctionWriter{
 
 		t = CreateBooleanArrayReferenceLengthValue(0d, false);
 		assignedT = CreateNumberReference(0d);
+		tf.string = new char [0];
 
 		ASTToTFormFunctionsInner(ast, tf, t, assignedT, prefix, postfix, tprefix, parenthesis, semicolon, wrappedNumber, target, 0d);
 	}
@@ -95,6 +96,14 @@ public class ArithmeticFormulaFunctionWriter{
 				if(!ast.r.leaf){
 					ASTToTFormFunctionsInner(ast.r, tf, ts, assignedT, prefix, postfix, tprefix, parenthesis, semicolon, wrappedNumber, target, level + 1d);
 					tr = assignedT.numberValue;
+				}
+
+				if(!ast.l.leaf){
+					FreeTVariable(ts, tl);
+				}
+
+				if(!ast.r.leaf){
+					FreeTVariable(ts, tr);
 				}
 
 				functionName = ArithmeticBinarySymbolToFunctionName(ast.value);
@@ -143,8 +152,6 @@ public class ArithmeticFormulaFunctionWriter{
 					tf.string = AppendString(tf.string, tprefix);
 					numberString = nCreateStringDecimalFromNumber(tl);
 					tf.string = AppendString(tf.string, numberString);
-
-					FreeTVariable(ts, tl);
 				}
 				tf.string = AppendString(tf.string, ", ".toCharArray());
 				if(ast.r.leaf){
@@ -169,8 +176,6 @@ public class ArithmeticFormulaFunctionWriter{
 					tf.string = AppendString(tf.string, tprefix);
 					numberString = nCreateStringDecimalFromNumber(tr);
 					tf.string = AppendString(tf.string, numberString);
-
-					FreeTVariable(ts, tr);
 				}
 				if(parenthesis){
 					tf.string = AppendString(tf.string, ")".toCharArray());
@@ -187,6 +192,7 @@ public class ArithmeticFormulaFunctionWriter{
 				if(!ast.l.leaf){
 					ASTToTFormFunctionsInner(ast.l, tf, ts, assignedT, prefix, postfix, tprefix, parenthesis, semicolon, wrappedNumber, target, level + 1d);
 					tl = assignedT.numberValue;
+					FreeTVariable(ts, tl);
 				}
 
 				functionName = ArithmeticBinarySymbolToFunctionName(ast.value);
@@ -220,8 +226,6 @@ public class ArithmeticFormulaFunctionWriter{
 					tf.string = AppendString(tf.string, tprefix);
 					numberString = nCreateStringDecimalFromNumber(tl);
 					tf.string = AppendString(tf.string, numberString);
-
-					FreeTVariable(ts, tl);
 				}
 				if(parenthesis){
 					tf.string = AppendString(tf.string, ")".toCharArray());
@@ -236,6 +240,7 @@ public class ArithmeticFormulaFunctionWriter{
 				if(!ast.l.leaf){
 					ASTToTFormFunctionsInner(ast.l, tf, ts, assignedT, prefix, postfix, tprefix, parenthesis, semicolon, wrappedNumber, target, level + 1d);
 					tl = assignedT.numberValue;
+					FreeTVariable(ts, tl);
 				}
 
 				functionName = CopyString(ast.value);
@@ -270,8 +275,6 @@ public class ArithmeticFormulaFunctionWriter{
 					tf.string = AppendString(tf.string, tprefix);
 					numberString = nCreateStringDecimalFromNumber(tl);
 					tf.string = AppendString(tf.string, numberString);
-
-					FreeTVariable(ts, tl);
 				}
 				if(parenthesis){
 					tf.string = AppendString(tf.string, ")".toCharArray());
@@ -356,36 +359,27 @@ public class ArithmeticFormulaFunctionWriter{
 		return f;
 	}
 
-	public static char [] ArithmeticFormulaToTFormFunctions(char [] f, char [] prefix, char [] postfix, char [] tprefix, boolean parenthesis, boolean semicolon, boolean wrappedNumber, char [] target){
-		char [] af;
+	public static boolean ArithmeticFormulaToTFormFunctions(char [] f, char [] prefix, char [] postfix, char [] tprefix, boolean parenthesis, boolean semicolon, boolean wrappedNumber, char [] target, StringReference result, StringReference message){
 		StringArrayReference tokens;
 		boolean success;
-		StringReference errorMessage, tf;
 		ASTNode ast;
-		NumberReference pos, t;
+		NumberReference pos;
 
 		tokens = new StringArrayReference();
-		errorMessage = new StringReference();
-		success = TokenizeArithmeticFormula(f, tokens, errorMessage);
+		success = TokenizeArithmeticFormula(f, tokens, message);
 
 		if(success){
 			/* Parse*/
 			ast = new ASTNode();
 			pos = CreateNumberReference(0d);
-			success = ParseArithmeticTokens(tokens, pos, ast, errorMessage);
+			success = ParseArithmeticTokens(tokens, pos, ast, message);
 
 			if(success){
-				tf = CreateStringReference("".toCharArray());
-				ASTToTFormFunctions(ast, tf, prefix, postfix, tprefix, parenthesis, semicolon, wrappedNumber, target);
-				af = tf.string;
-			}else{
-				af = errorMessage.string;
+				ASTToTFormFunctions(ast, result, prefix, postfix, tprefix, parenthesis, semicolon, wrappedNumber, target);
 			}
-		}else{
-			af = errorMessage.string;
 		}
 
-		return af;
+		return success;
 	}
 
   public static void delete(Object object){

@@ -152,7 +152,7 @@ public class BitwiseFormula{
 			success = TokenIs(tokens, cur, "<end>".toCharArray());
 
 			if(!success){
-				errorMessage.string = "Excpected the end of the formula".toCharArray();
+				errorMessage.string = "Expected the end of the formula.".toCharArray();
 			}
 		}
 

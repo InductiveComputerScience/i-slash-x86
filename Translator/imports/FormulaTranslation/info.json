@@ -1,6 +1,6 @@
 {
   "name": "FormulaTranslation",
-  "version": "0.1.6",
+  "version": "0.1.9",
   "organization namespace": "no.inductive.libraries",
   "scientific namespace": "computerscience.development.formulas",
   "imports": [

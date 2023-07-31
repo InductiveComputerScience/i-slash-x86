@@ -74,6 +74,7 @@ public class BooleanFormulaFunctionWriter{
 
 		t = CreateBooleanArrayReferenceLengthValue(0d, false);
 		assignedT = CreateNumberReference(0d);
+		tf.string = new char [0];
 
 		BooleanASTToTFormFunctionsInner(ast, tf, t, assignedT, prefix, postfix, tprefix, parenthesis, semicolon, wrappedNumber, target, 0d, endsWithIf);
 	}
@@ -96,6 +97,14 @@ public class BooleanFormulaFunctionWriter{
 				if(!ast.r.leaf){
 					BooleanASTToTFormFunctionsInner(ast.r, tf, ts, assignedT, prefix, postfix, tprefix, parenthesis, semicolon, wrappedNumber, target, level + 1d, endsWithIf);
 					tr = assignedT.numberValue;
+				}
+
+				if(!ast.l.leaf){
+					FreeTVariable(ts, tl);
+				}
+
+				if(!ast.r.leaf){
+					FreeTVariable(ts, tr);
 				}
 
 				functionName = BooleanBinarySymbolToFunctionName(ast.value);
@@ -144,8 +153,6 @@ public class BooleanFormulaFunctionWriter{
 					tf.string = AppendString(tf.string, tprefix);
 					numberString = nCreateStringDecimalFromNumber(tl);
 					tf.string = AppendString(tf.string, numberString);
-
-					FreeTVariable(ts, tl);
 				}
 				tf.string = AppendString(tf.string, ", ".toCharArray());
 				if(ast.r.leaf){
@@ -170,8 +177,6 @@ public class BooleanFormulaFunctionWriter{
 					tf.string = AppendString(tf.string, tprefix);
 					numberString = nCreateStringDecimalFromNumber(tr);
 					tf.string = AppendString(tf.string, numberString);
-
-					FreeTVariable(ts, tr);
 				}
 				if(parenthesis){
 					tf.string = AppendString(tf.string, ")".toCharArray());
@@ -188,6 +193,7 @@ public class BooleanFormulaFunctionWriter{
 				if(!ast.l.leaf){
 					BooleanASTToTFormFunctionsInner(ast.l, tf, ts, assignedT, prefix, postfix, tprefix, parenthesis, semicolon, wrappedNumber, target, level + 1d, endsWithIf);
 					tl = assignedT.numberValue;
+					FreeTVariable(ts, tl);
 				}
 
 				functionName = BooleanBinarySymbolToFunctionName(ast.value);
@@ -221,8 +227,6 @@ public class BooleanFormulaFunctionWriter{
 					tf.string = AppendString(tf.string, tprefix);
 					numberString = nCreateStringDecimalFromNumber(tl);
 					tf.string = AppendString(tf.string, numberString);
-
-					FreeTVariable(ts, tl);
 				}
 				if(parenthesis){
 					tf.string = AppendString(tf.string, ")".toCharArray());
@@ -298,36 +302,27 @@ public class BooleanFormulaFunctionWriter{
 		return f;
 	}
 
-	public static char [] BooleanFormulaToTFormFunctions(char [] f, char [] prefix, char [] postfix, char [] tprefix, boolean parenthesis, boolean semicolon, boolean wrappedNumber, char [] target, boolean endsWithIf){
-		char [] af;
+	public static boolean BooleanFormulaToTFormFunctions(char [] f, char [] prefix, char [] postfix, char [] tprefix, boolean parenthesis, boolean semicolon, boolean wrappedNumber, char [] target, boolean endsWithIf, StringReference tf, StringReference message){
 		StringArrayReference tokens;
 		boolean success;
-		StringReference errorMessage, tf;
 		ASTNode ast;
-		NumberReference pos, t;
+		NumberReference pos;
 
 		tokens = new StringArrayReference();
-		errorMessage = new StringReference();
-		success = TokenizeBooleanFormula(f, tokens, errorMessage);
+		success = TokenizeBooleanFormula(f, tokens, message);
 
 		if(success){
 			/* Parse*/
 			ast = new ASTNode();
 			pos = CreateNumberReference(0d);
-			success = ParseBooleanTokens(tokens, pos, ast, errorMessage);
+			success = ParseBooleanTokens(tokens, pos, ast, message);
 
 			if(success){
-				tf = CreateStringReference("".toCharArray());
 				BooleanASTToTFormFunctions(ast, tf, prefix, postfix, tprefix, parenthesis, semicolon, wrappedNumber, target, endsWithIf);
-				af = tf.string;
-			}else{
-				af = errorMessage.string;
 			}
-		}else{
-			af = errorMessage.string;
 		}
 
-		return af;
+		return success;
 	}
 
   public static void delete(Object object){

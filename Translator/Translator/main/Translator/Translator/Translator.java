@@ -49,6 +49,7 @@ public class Translator {
         // Pass 1
         for(i = 0d; i < lines.length && success; i = i + 1d){
             line = lines[(int)i].string;
+            line = MergeWhitespace(line);
             line = Trim(line);
 
             if(line.length != 0 && !StartsWith(line, ";".toCharArray())) {
@@ -92,6 +93,7 @@ public class Translator {
         state = 0;
         for(i = 0d; i < lines.length && success; i = i + 1d){
             line = lines[(int)i].string;
+            line = MergeWhitespace(line);
             line = Trim(line);
 
             if(line.length != 0 && !StartsWith(line, ";".toCharArray())) {
@@ -175,6 +177,20 @@ public class Translator {
         return success;
     }
 
+    public static char[] MergeWhitespace(char[] line) {
+        char [] newline;
+
+        newline = CopyString(line);
+        ReplaceCharacter(newline, '\t', ' ');
+        ReplaceCharacter(newline, '\r', ' ');
+
+        for(; ContainsString(newline, "  ".toCharArray());){
+            newline = ReplaceString(newline, "  ".toCharArray(), " ".toCharArray());
+        }
+
+        return newline;
+    }
+
     public static boolean GetEntryTypes(DataReference entryTypesRef, StringReference message) {
         char [] json;
         boolean success;
@@ -219,6 +235,14 @@ public class Translator {
                 "u8x16a": {"nasmType": "reso", "ctype": "__m128 *"},
                 "u8x32a": {"nasmType": "resy", "ctype": "__m256 *"},
                 "u8x64a": {"nasmType": "resz", "ctype": "__m512 *"},
+                "s8x8": {"nasmType": "resq", "ctype": "__m64"},
+                "s8x16": {"nasmType": "reso", "ctype": "__m128"},
+                "s8x32": {"nasmType": "resy", "ctype": "__m256"},
+                "s8x64": {"nasmType": "resz", "ctype": "__m512"},
+                "s8x8a": {"nasmType": "resq", "ctype": "__m64 *"},
+                "s8x16a": {"nasmType": "reso", "ctype": "__m128 *"},
+                "s8x32a": {"nasmType": "resy", "ctype": "__m256 *"},
+                "s8x64a": {"nasmType": "resz", "ctype": "__m512 *"},
                 "b8x8": {"nasmType": "resq", "ctype": "__m64"},
                 "b8x16": {"nasmType": "reso", "ctype": "__m128"},
                 "b8x32": {"nasmType": "resy", "ctype": "__m256"},
@@ -226,7 +250,19 @@ public class Translator {
                 "b8x8a": {"nasmType": "resq", "ctype": "__m64 *"},
                 "b8x16a": {"nasmType": "reso", "ctype": "__m128 *"},
                 "b8x32a": {"nasmType": "resy", "ctype": "__m256 *"},
-                "b8x64a": {"nasmType": "resz", "ctype": "__m512 *"}
+                "b8x64a": {"nasmType": "resz", "ctype": "__m512 *"},
+                "f32x4": {"nasmType": "reso", "ctype": "__m128"},
+                "f32x8": {"nasmType": "resy", "ctype": "__m256"},
+                "f32x16": {"nasmType": "resz", "ctype": "__m512"},
+                "f32x4a": {"nasmType": "reso", "ctype": "__m128 *"},
+                "f32x8a": {"nasmType": "resy", "ctype": "__m256 *"},
+                "f32x16a": {"nasmType": "resz", "ctype": "__m512 *"},
+                "f64x2": {"nasmType": "reso", "ctype": "__m128"},
+                "f64x4": {"nasmType": "resy", "ctype": "__m256"},
+                "f64x8": {"nasmType": "resz", "ctype": "__m512"},
+                "f64x2a": {"nasmType": "reso", "ctype": "__m128 *"},
+                "f64x4a": {"nasmType": "resy", "ctype": "__m256 *"},
+                "f64x8a": {"nasmType": "resz", "ctype": "__m512 *"}
             }
         """.toCharArray();
 
@@ -333,6 +369,7 @@ public class Translator {
         state = 0;
         for(i = 0d; i < lines.length && success; i = i + 1d){
             line = lines[(int)i].string;
+            line = MergeWhitespace(line);
             line = Trim(line);
 
             if(line.length != 0 && !StartsWith(line, ";".toCharArray())) {
@@ -1160,16 +1197,16 @@ public class Translator {
         boolean success;
         StringReference [] lines, parts, expandedLines;
         double i, j;
-        char [] line, name, orgline, expandedCode, target, type;
+        char [] line, name, orgline, target, type;
         Structure structure, function;
         double state, tabs;
         boolean done, loopIf;
         LinkedListCharacters cc;
+        StringReference expandedCode;
 
         cc = CreateLinkedListCharacter();
 
         success = true;
-        structure = new Structure();
         tabs = 1;
         loopIf = false;
 
@@ -1178,7 +1215,8 @@ public class Translator {
         state = 0;
         for(i = 0d; i < lines.length && success; i = i + 1d){
             orgline = lines[(int)i].string;
-            line = Trim(orgline);
+            line = MergeWhitespace(orgline);
+            line = Trim(line);
 
             if(line.length != 0 && !StartsWith(line, ";".toCharArray())) {
                 parts = SplitByCharacter(line, ' ');
@@ -1249,148 +1287,87 @@ public class Translator {
                             LinkedListCharactersAddString(cc, "\n".toCharArray());
 
                             line = Substring(line, "If exp b:".toCharArray().length, line.length);
-                            expandedCode = BooleanFormulaToTFormFunctions(line, "".toCharArray(), "".toCharArray(), "b1".toCharArray(), false, false, false, "".toCharArray(), true);
 
-                            expandedLines = SplitByString(expandedCode, "\n".toCharArray());
+                            expandedCode = new StringReference();
+                            success = BooleanFormulaToTFormFunctions(line, "".toCharArray(), "".toCharArray(), "b1".toCharArray(), false, false, false, "".toCharArray(), true, expandedCode, message);
 
-                            for(j = 0d; j < expandedLines.length - 1; j = j + 1d){
-                                if(loopIf) {
-                                    PrintTabs(cc, tabs + 1d);
-                                }else{
-                                    PrintTabs(cc, tabs);
+                            if(success) {
+                                expandedLines = SplitByString(expandedCode.string, "\n".toCharArray());
+
+                                for (j = 0d; j < expandedLines.length - 1; j = j + 1d) {
+                                    if (loopIf) {
+                                        PrintTabs(cc, tabs + 1d);
+                                    } else {
+                                        PrintTabs(cc, tabs);
+                                    }
+                                    LinkedListCharactersAddString(cc, expandedLines[(int) j].string);
+                                    LinkedListCharactersAddString(cc, "\n".toCharArray());
                                 }
-                                LinkedListCharactersAddString(cc, expandedLines[(int)j].string);
+
+                                PrintTabs(cc, tabs);
+                                LinkedListCharactersAddString(cc, expandedLines[(int) j].string);
                                 LinkedListCharactersAddString(cc, "\n".toCharArray());
                             }
-
-                            PrintTabs(cc, tabs);
-                            LinkedListCharactersAddString(cc, expandedLines[(int)j].string);
-                            LinkedListCharactersAddString(cc, "\n".toCharArray());
                         }else{
                             success = false;
-                            message.string = "Unkown expression type: ".toCharArray();
+                            message.string = "Unknown expression type in If, must be \"exp b\": ".toCharArray();
                             message.string = AppendString(message.string, parts[2].string);
                         }
                     }else if(StringsEqual(parts[0].string, "exp".toCharArray())){
-                        if(StringsEqual(parts[1].string, "bw32:".toCharArray())) {
-                            if(loopIf) {
-                                PrintTabs(cc, tabs + 1d);
-                            }else{
-                                PrintTabs(cc, tabs);
-                            }
-                            LinkedListCharactersAddString(cc, "; ".toCharArray());
-                            LinkedListCharactersAddString(cc, line);
-                            LinkedListCharactersAddString(cc, "\n".toCharArray());
+                        type = Substring(parts[2].string, 0d, parts[2].string.length - 1d);
 
-                            line = Substring(line, "exp bw32: ".toCharArray().length, line.length);
-
-                            line = Trim(line);
-                            target = parts[2].string;
-                            line = Substring(line, target.length, line.length);
-                            line = Trim(line);
-                            line = Substring(line, 1, line.length);
-                            line = Trim(line);
-
-                            expandedCode = BitwiseFormulaToTFormFunctions(line, "".toCharArray(), "".toCharArray(), "b32".toCharArray(), false, false, false, target);
-
-                            expandedLines = SplitByString(expandedCode, "\n".toCharArray());
-
-                            for(j = 0d; j < expandedLines.length - 1; j = j + 1d){
-                                if(loopIf) {
-                                    PrintTabs(cc, tabs + 1d);
-                                }else{
-                                    PrintTabs(cc, tabs);
-                                }
-                                LinkedListCharactersAddString(cc, expandedLines[(int)j].string);
-                                LinkedListCharactersAddString(cc, "\n".toCharArray());
-                            }
-
+                        if(loopIf) {
+                            PrintTabs(cc, tabs + 1d);
+                        }else{
                             PrintTabs(cc, tabs);
-                            LinkedListCharactersAddString(cc, expandedLines[(int)j].string);
-                            LinkedListCharactersAddString(cc, "\n".toCharArray());
-                        }else if(StartsWith(parts[1].string, "a".toCharArray()) && EndsWith(parts[1].string, ":".toCharArray())) {
-                            type = Substring(parts[1].string, 1d, parts[1].string.length - 1d);
+                        }
+                        LinkedListCharactersAddString(cc, "; ".toCharArray());
+                        LinkedListCharactersAddString(cc, line);
+                        LinkedListCharactersAddString(cc, "\n".toCharArray());
 
-                            if(loopIf) {
-                                PrintTabs(cc, tabs + 1d);
-                            }else{
-                                PrintTabs(cc, tabs);
-                            }
-                            LinkedListCharactersAddString(cc, "; ".toCharArray());
-                            LinkedListCharactersAddString(cc, line);
-                            LinkedListCharactersAddString(cc, "\n".toCharArray());
+                        line = Substring(line, parts[0].string.length + 1d + parts[1].string.length + 1d + parts[2].string.length, line.length);
 
-                            line = Substring(line, parts[0].string.length + 1d + parts[1].string.length, line.length);
+                        line = Trim(line);
+                        target = parts[3].string;
+                        line = Substring(line, target.length, line.length);
+                        line = Trim(line);
+                        line = Substring(line, 1, line.length);
+                        line = Trim(line);
 
-                            line = Trim(line);
-                            target = parts[2].string;
-                            line = Substring(line, target.length, line.length);
-                            line = Trim(line);
-                            line = Substring(line, 1, line.length);
-                            line = Trim(line);
+                        expandedCode = new StringReference();
 
-                            expandedCode = ArithmeticFormulaToTFormFunctions(line, "".toCharArray(), "".toCharArray(), type, false, false, false, target);
-
-                            expandedLines = SplitByString(expandedCode, "\n".toCharArray());
-
-                            for(j = 0d; j < expandedLines.length - 1; j = j + 1d){
-                                if(loopIf) {
-                                    PrintTabs(cc, tabs + 1d);
-                                }else{
-                                    PrintTabs(cc, tabs);
-                                }
-                                LinkedListCharactersAddString(cc, expandedLines[(int)j].string);
-                                LinkedListCharactersAddString(cc, "\n".toCharArray());
-                            }
-
-                            PrintTabs(cc, tabs);
-                            LinkedListCharactersAddString(cc, expandedLines[(int)j].string);
-                            LinkedListCharactersAddString(cc, "\n".toCharArray());
-                        }else if(StartsWith(parts[1].string, "b".toCharArray()) && EndsWith(parts[1].string, ":".toCharArray())) {
-                            type = Substring(parts[1].string, 1d, parts[1].string.length - 1d);
-
-                            PrintTabs(cc, tabs);
-                            LinkedListCharactersAddString(cc, "; ".toCharArray());
-                            LinkedListCharactersAddString(cc, line);
-                            LinkedListCharactersAddString(cc, "\n".toCharArray());
-
-                            line = Trim(line);
-                            line = Substring(line, "exp b".toCharArray().length, line.length);
-                            line = Substring(line, type.length, line.length);
-                            line = Substring(line, "b:".toCharArray().length, line.length);
-
-                            line = Trim(line);
-                            target = parts[2].string;
-                            line = Substring(line, target.length, line.length);
-                            line = Trim(line);
-                            line = Substring(line, 1, line.length);
-                            line = Trim(line);
-
+                        if(StringsEqual(parts[1].string, "bw".toCharArray()) && EndsWith(parts[2].string, ":".toCharArray())) {
+                            success = BitwiseFormulaToTFormFunctions(line, "".toCharArray(), "".toCharArray(), type, false, false, false, target, expandedCode, message);
+                        }else if(StringsEqual(parts[1].string, "a".toCharArray()) && EndsWith(parts[2].string, ":".toCharArray())) {
+                            success = ArithmeticFormulaToTFormFunctions(line, "".toCharArray(), "".toCharArray(), type, false, false, false, target, expandedCode, message);
+                        }else if(StringsEqual(parts[1].string, "b".toCharArray()) && EndsWith(parts[2].string, ":".toCharArray())) {
                             if(type.length == 0){
                                 type = "b1".toCharArray();
                             }
 
-                            expandedCode = BooleanFormulaToTFormFunctions(line, "".toCharArray(), "".toCharArray(), type, false, false, false, target, false);
+                            success = BooleanFormulaToTFormFunctions(line, "".toCharArray(), "".toCharArray(), type, false, false, false, target, false, expandedCode, message);
+                        }else{
+                            success = false;
+                            message.string = "Unknown expression type: ".toCharArray();
+                            message.string = AppendString(message.string, parts[1].string);
+                        }
 
-                            expandedLines = SplitByString(expandedCode, "\n".toCharArray());
+                        if(success) {
+                            expandedLines = SplitByString(expandedCode.string, "\n".toCharArray());
 
-                            for(j = 0d; j < expandedLines.length - 1; j = j + 1d){
-                                if(loopIf) {
+                            for (j = 0d; j < expandedLines.length - 1; j = j + 1d) {
+                                if (loopIf) {
                                     PrintTabs(cc, tabs + 1d);
-                                }else{
+                                } else {
                                     PrintTabs(cc, tabs);
                                 }
-                                LinkedListCharactersAddString(cc, expandedLines[(int)j].string);
+                                LinkedListCharactersAddString(cc, expandedLines[(int) j].string);
                                 LinkedListCharactersAddString(cc, "\n".toCharArray());
                             }
 
                             PrintTabs(cc, tabs);
-                            LinkedListCharactersAddString(cc, expandedLines[(int)j].string);
+                            LinkedListCharactersAddString(cc, expandedLines[(int) j].string);
                             LinkedListCharactersAddString(cc, "\n".toCharArray());
-                        }else{
-                            success = false;
-                            message.string = "Unkown expression type: ".toCharArray();
-                            message.string = AppendString(message.string, parts[1].string);
                         }
                     }else{
                         LinkedListCharactersAddString(cc, orgline);

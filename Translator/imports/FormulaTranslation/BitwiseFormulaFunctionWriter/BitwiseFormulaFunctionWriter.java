@@ -74,6 +74,7 @@ public class BitwiseFormulaFunctionWriter{
 
 		t = CreateBooleanArrayReferenceLengthValue(0d, false);
 		assignedT = CreateNumberReference(0d);
+		tf.string = new char [0];
 
 		BitwiseASTToTFormFunctionsInner(ast, tf, t, assignedT, prefix, postfix, tprefix, parenthesis, semicolon, wrappedNumber, target, 0d);
 	}
@@ -96,6 +97,14 @@ public class BitwiseFormulaFunctionWriter{
 				if(!ast.r.leaf){
 					BitwiseASTToTFormFunctionsInner(ast.r, tf, ts, assignedT, prefix, postfix, tprefix, parenthesis, semicolon, wrappedNumber, target, level + 1d);
 					tr = assignedT.numberValue;
+				}
+
+				if(!ast.l.leaf){
+					FreeTVariable(ts, tl);
+				}
+
+				if(!ast.r.leaf){
+					FreeTVariable(ts, tr);
 				}
 
 				functionName = BitwiseBinarySymbolToFunctionName(ast.value);
@@ -144,8 +153,6 @@ public class BitwiseFormulaFunctionWriter{
 					tf.string = AppendString(tf.string, tprefix);
 					numberString = nCreateStringDecimalFromNumber(tl);
 					tf.string = AppendString(tf.string, numberString);
-
-					FreeTVariable(ts, tl);
 				}
 				tf.string = AppendString(tf.string, ", ".toCharArray());
 				if(ast.r.leaf){
@@ -170,8 +177,6 @@ public class BitwiseFormulaFunctionWriter{
 					tf.string = AppendString(tf.string, tprefix);
 					numberString = nCreateStringDecimalFromNumber(tr);
 					tf.string = AppendString(tf.string, numberString);
-
-					FreeTVariable(ts, tr);
 				}
 				if(parenthesis){
 					tf.string = AppendString(tf.string, ")".toCharArray());
@@ -188,6 +193,7 @@ public class BitwiseFormulaFunctionWriter{
 				if(!ast.l.leaf){
 					BitwiseASTToTFormFunctionsInner(ast.l, tf, ts, assignedT, prefix, postfix, tprefix, parenthesis, semicolon, wrappedNumber, target, level + 1d);
 					tl = assignedT.numberValue;
+					FreeTVariable(ts, tl);
 				}
 
 				functionName = BitwiseBinarySymbolToFunctionName(ast.value);
@@ -221,8 +227,6 @@ public class BitwiseFormulaFunctionWriter{
 					tf.string = AppendString(tf.string, tprefix);
 					numberString = nCreateStringDecimalFromNumber(tl);
 					tf.string = AppendString(tf.string, numberString);
-
-					FreeTVariable(ts, tl);
 				}
 				if(parenthesis){
 					tf.string = AppendString(tf.string, ")".toCharArray());
@@ -268,37 +272,27 @@ public class BitwiseFormulaFunctionWriter{
 		return f;
 	}
 
-	public static char [] BitwiseFormulaToTFormFunctions(char [] f, char [] prefix, char [] postfix, char [] tprefix, boolean parenthesis, boolean semicolon, boolean wrappedNumber, char [] target){
-		char [] af;
+	public static boolean BitwiseFormulaToTFormFunctions(char [] f, char [] prefix, char [] postfix, char [] tprefix, boolean parenthesis, boolean semicolon, boolean wrappedNumber, char [] target, StringReference tf, StringReference message){
 		StringArrayReference tokens;
 		boolean success;
-		StringReference errorMessage, tf;
 		ASTNode ast;
-		NumberReference pos, t;
+		NumberReference pos;
 
 		tokens = new StringArrayReference();
-		errorMessage = new StringReference();
-		success = TokenizeBitwiseFormula(f, tokens, errorMessage);
+		success = TokenizeBitwiseFormula(f, tokens, message);
 
 		if(success){
 			/* Parse*/
 			ast = new ASTNode();
 			pos = CreateNumberReference(0d);
-			success = ParseBitwiseTokens(tokens, pos, ast, errorMessage);
+			success = ParseBitwiseTokens(tokens, pos, ast, message);
 
 			if(success){
-				tf = CreateStringReference("".toCharArray());
-				t = CreateNumberReference(0d);
 				BitwiseASTToTFormFunctions(ast, tf, prefix, postfix, tprefix, parenthesis, semicolon, wrappedNumber, target);
-				af = tf.string;
-			}else{
-				af = errorMessage.string;
 			}
-		}else{
-			af = errorMessage.string;
 		}
 
-		return af;
+		return success;
 	}
 
   public static void delete(Object object){
