@@ -75,11 +75,13 @@ Ret
 
 The input, output and local variables are set up in a structure with the same name as the function followed by `S`.
 
+```
 Bgs fS
   u64 x
   u64 a
   u64 b
 Ens
+```
 
 ### Calling Functions
 
