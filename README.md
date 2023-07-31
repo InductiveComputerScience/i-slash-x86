@@ -31,7 +31,7 @@ Div x, a, b
 
 ### Expression
 
-Or write inline expressions. Here a / b + c * d is the expression, "exp" marks the beginning of an expression, "a" marks the expression as an Arithmetic expression and finally, u64 says that the type of the expression is unsigned 64-bit.
+Or write inline expressions. Here `a / b + c * d` is the expression, `exp` marks the beginning of an expression, `a` marks the expression as an arithmetic expression and finally, `u64` says that the type of the expression is unsigned 64-bit.
 
 ```
 exp a u64: x = a / b + c * d
