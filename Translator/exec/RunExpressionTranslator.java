@@ -6,6 +6,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import static DataStructures.Array.Arrays.Arrays.CreateArray;
 import static Translator.Translator.Translator.*;
@@ -36,9 +37,9 @@ public class RunExpressionTranslator {
     }
 
     public static char [] ReadStringFromFile(char[] filename) throws IOException {
-        Path filePath = Path.of(new String(filename));
+        Path filePath = Paths.get(new String(filename));
 
-        char [] content = Files.readString(filePath).toCharArray();
+        char [] content = new String(Files.readAllBytes(filePath)).toCharArray();
 
         return content;
     }

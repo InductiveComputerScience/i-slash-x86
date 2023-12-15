@@ -195,76 +195,74 @@ public class Translator {
         char [] json;
         boolean success;
 
-        json = """
-            {
-                "u8": {"nasmType": "resb", "ctype": "uint8_t"},
-                "u16": {"nasmType": "resw", "ctype": "uint16_t"},
-                "u32": {"nasmType": "resd", "ctype": "uint32_t"},
-                "u64": {"nasmType": "resq", "ctype": "uint64_t"},
-                "s8": {"nasmType": "resb", "ctype": "int8_t"},
-                "s16": {"nasmType": "resw", "ctype": "int16_t"},
-                "s32": {"nasmType": "resd", "ctype": "int32_t"},
-                "s64": {"nasmType": "resq", "ctype": "int64_t"},
-                "b1": {"nasmType": "resb", "ctype": "uint8_t"},
-                "b8": {"nasmType": "resb", "ctype": "uint8_t"},
-                "b16": {"nasmType": "resw", "ctype": "uint16_t"},
-                "b32": {"nasmType": "resd", "ctype": "uint32_t"},
-                "b64": {"nasmType": "resq", "ctype": "uint64_t"},
-                "f32": {"nasmType": "resd", "ctype": "float"},
-                "f64": {"nasmType": "resq", "ctype": "double"},
-                "u8a": {"nasmType": "resq", "ctype": "uint8_t *"},
-                "u16a": {"nasmType": "resq", "ctype": "uint16_t *"},
-                "u32a": {"nasmType": "resq", "ctype": "uint32_t *"},
-                "u64a": {"nasmType": "resq", "ctype": "uint64_t *"},
-                "s8a": {"nasmType": "resq", "ctype": "int8_t *"},
-                "s16a": {"nasmType": "resq", "ctype": "int16_t *"},
-                "s32a": {"nasmType": "resq", "ctype": "int32_t *"},
-                "s64a": {"nasmType": "resq", "ctype": "int64_t *"},
-                "b1a": {"nasmType": "resq", "ctype": "uint8_t *"},
-                "b8a": {"nasmType": "resq", "ctype": "uint8_t *"},
-                "b16a": {"nasmType": "resq", "ctype": "uint16_t *"},
-                "b32a": {"nasmType": "resq", "ctype": "uint32_t *"},
-                "b64a": {"nasmType": "resq", "ctype": "uint64_t *"},
-                "f32a": {"nasmType": "resq", "ctype": "float *"},
-                "f64a": {"nasmType": "resq", "ctype": "double *"},
-                "u8x8": {"nasmType": "resq", "ctype": "__m64"},
-                "u8x16": {"nasmType": "reso", "ctype": "__m128"},
-                "u8x32": {"nasmType": "resy", "ctype": "__m256"},
-                "u8x64": {"nasmType": "resz", "ctype": "__m512"},
-                "u8x8a": {"nasmType": "resq", "ctype": "__m64 *"},
-                "u8x16a": {"nasmType": "reso", "ctype": "__m128 *"},
-                "u8x32a": {"nasmType": "resy", "ctype": "__m256 *"},
-                "u8x64a": {"nasmType": "resz", "ctype": "__m512 *"},
-                "s8x8": {"nasmType": "resq", "ctype": "__m64"},
-                "s8x16": {"nasmType": "reso", "ctype": "__m128"},
-                "s8x32": {"nasmType": "resy", "ctype": "__m256"},
-                "s8x64": {"nasmType": "resz", "ctype": "__m512"},
-                "s8x8a": {"nasmType": "resq", "ctype": "__m64 *"},
-                "s8x16a": {"nasmType": "reso", "ctype": "__m128 *"},
-                "s8x32a": {"nasmType": "resy", "ctype": "__m256 *"},
-                "s8x64a": {"nasmType": "resz", "ctype": "__m512 *"},
-                "b8x8": {"nasmType": "resq", "ctype": "__m64"},
-                "b8x16": {"nasmType": "reso", "ctype": "__m128"},
-                "b8x32": {"nasmType": "resy", "ctype": "__m256"},
-                "b8x64": {"nasmType": "resz", "ctype": "__m512"},
-                "b8x8a": {"nasmType": "resq", "ctype": "__m64 *"},
-                "b8x16a": {"nasmType": "reso", "ctype": "__m128 *"},
-                "b8x32a": {"nasmType": "resy", "ctype": "__m256 *"},
-                "b8x64a": {"nasmType": "resz", "ctype": "__m512 *"},
-                "f32x4": {"nasmType": "reso", "ctype": "__m128"},
-                "f32x8": {"nasmType": "resy", "ctype": "__m256"},
-                "f32x16": {"nasmType": "resz", "ctype": "__m512"},
-                "f32x4a": {"nasmType": "reso", "ctype": "__m128 *"},
-                "f32x8a": {"nasmType": "resy", "ctype": "__m256 *"},
-                "f32x16a": {"nasmType": "resz", "ctype": "__m512 *"},
-                "f64x2": {"nasmType": "reso", "ctype": "__m128"},
-                "f64x4": {"nasmType": "resy", "ctype": "__m256"},
-                "f64x8": {"nasmType": "resz", "ctype": "__m512"},
-                "f64x2a": {"nasmType": "reso", "ctype": "__m128 *"},
-                "f64x4a": {"nasmType": "resy", "ctype": "__m256 *"},
-                "f64x8a": {"nasmType": "resz", "ctype": "__m512 *"}
-            }
-        """.toCharArray();
+        json = ("{\n" +
+                "                \"u8\": {\"nasmType\": \"resb\", \"ctype\": \"uint8_t\"},\n" +
+                "                \"u16\": {\"nasmType\": \"resw\", \"ctype\": \"uint16_t\"},\n" +
+                "                \"u32\": {\"nasmType\": \"resd\", \"ctype\": \"uint32_t\"},\n" +
+                "                \"u64\": {\"nasmType\": \"resq\", \"ctype\": \"uint64_t\"},\n" +
+                "                \"s8\": {\"nasmType\": \"resb\", \"ctype\": \"int8_t\"},\n" +
+                "                \"s16\": {\"nasmType\": \"resw\", \"ctype\": \"int16_t\"},\n" +
+                "                \"s32\": {\"nasmType\": \"resd\", \"ctype\": \"int32_t\"},\n" +
+                "                \"s64\": {\"nasmType\": \"resq\", \"ctype\": \"int64_t\"},\n" +
+                "                \"b1\": {\"nasmType\": \"resb\", \"ctype\": \"uint8_t\"},\n" +
+                "                \"b8\": {\"nasmType\": \"resb\", \"ctype\": \"uint8_t\"},\n" +
+                "                \"b16\": {\"nasmType\": \"resw\", \"ctype\": \"uint16_t\"},\n" +
+                "                \"b32\": {\"nasmType\": \"resd\", \"ctype\": \"uint32_t\"},\n" +
+                "                \"b64\": {\"nasmType\": \"resq\", \"ctype\": \"uint64_t\"},\n" +
+                "                \"f32\": {\"nasmType\": \"resd\", \"ctype\": \"float\"},\n" +
+                "                \"f64\": {\"nasmType\": \"resq\", \"ctype\": \"double\"},\n" +
+                "                \"u8a\": {\"nasmType\": \"resq\", \"ctype\": \"uint8_t *\"},\n" +
+                "                \"u16a\": {\"nasmType\": \"resq\", \"ctype\": \"uint16_t *\"},\n" +
+                "                \"u32a\": {\"nasmType\": \"resq\", \"ctype\": \"uint32_t *\"},\n" +
+                "                \"u64a\": {\"nasmType\": \"resq\", \"ctype\": \"uint64_t *\"},\n" +
+                "                \"s8a\": {\"nasmType\": \"resq\", \"ctype\": \"int8_t *\"},\n" +
+                "                \"s16a\": {\"nasmType\": \"resq\", \"ctype\": \"int16_t *\"},\n" +
+                "                \"s32a\": {\"nasmType\": \"resq\", \"ctype\": \"int32_t *\"},\n" +
+                "                \"s64a\": {\"nasmType\": \"resq\", \"ctype\": \"int64_t *\"},\n" +
+                "                \"b1a\": {\"nasmType\": \"resq\", \"ctype\": \"uint8_t *\"},\n" +
+                "                \"b8a\": {\"nasmType\": \"resq\", \"ctype\": \"uint8_t *\"},\n" +
+                "                \"b16a\": {\"nasmType\": \"resq\", \"ctype\": \"uint16_t *\"},\n" +
+                "                \"b32a\": {\"nasmType\": \"resq\", \"ctype\": \"uint32_t *\"},\n" +
+                "                \"b64a\": {\"nasmType\": \"resq\", \"ctype\": \"uint64_t *\"},\n" +
+                "                \"f32a\": {\"nasmType\": \"resq\", \"ctype\": \"float *\"},\n" +
+                "                \"f64a\": {\"nasmType\": \"resq\", \"ctype\": \"double *\"},\n" +
+                "                \"u8x8\": {\"nasmType\": \"resq\", \"ctype\": \"__m64\"},\n" +
+                "                \"u8x16\": {\"nasmType\": \"reso\", \"ctype\": \"__m128\"},\n" +
+                "                \"u8x32\": {\"nasmType\": \"resy\", \"ctype\": \"__m256\"},\n" +
+                "                \"u8x64\": {\"nasmType\": \"resz\", \"ctype\": \"__m512\"},\n" +
+                "                \"u8x8a\": {\"nasmType\": \"resq\", \"ctype\": \"__m64 *\"},\n" +
+                "                \"u8x16a\": {\"nasmType\": \"reso\", \"ctype\": \"__m128 *\"},\n" +
+                "                \"u8x32a\": {\"nasmType\": \"resy\", \"ctype\": \"__m256 *\"},\n" +
+                "                \"u8x64a\": {\"nasmType\": \"resz\", \"ctype\": \"__m512 *\"},\n" +
+                "                \"s8x8\": {\"nasmType\": \"resq\", \"ctype\": \"__m64\"},\n" +
+                "                \"s8x16\": {\"nasmType\": \"reso\", \"ctype\": \"__m128\"},\n" +
+                "                \"s8x32\": {\"nasmType\": \"resy\", \"ctype\": \"__m256\"},\n" +
+                "                \"s8x64\": {\"nasmType\": \"resz\", \"ctype\": \"__m512\"},\n" +
+                "                \"s8x8a\": {\"nasmType\": \"resq\", \"ctype\": \"__m64 *\"},\n" +
+                "                \"s8x16a\": {\"nasmType\": \"reso\", \"ctype\": \"__m128 *\"},\n" +
+                "                \"s8x32a\": {\"nasmType\": \"resy\", \"ctype\": \"__m256 *\"},\n" +
+                "                \"s8x64a\": {\"nasmType\": \"resz\", \"ctype\": \"__m512 *\"},\n" +
+                "                \"b8x8\": {\"nasmType\": \"resq\", \"ctype\": \"__m64\"},\n" +
+                "                \"b8x16\": {\"nasmType\": \"reso\", \"ctype\": \"__m128\"},\n" +
+                "                \"b8x32\": {\"nasmType\": \"resy\", \"ctype\": \"__m256\"},\n" +
+                "                \"b8x64\": {\"nasmType\": \"resz\", \"ctype\": \"__m512\"},\n" +
+                "                \"b8x8a\": {\"nasmType\": \"resq\", \"ctype\": \"__m64 *\"},\n" +
+                "                \"b8x16a\": {\"nasmType\": \"reso\", \"ctype\": \"__m128 *\"},\n" +
+                "                \"b8x32a\": {\"nasmType\": \"resy\", \"ctype\": \"__m256 *\"},\n" +
+                "                \"b8x64a\": {\"nasmType\": \"resz\", \"ctype\": \"__m512 *\"},\n" +
+                "                \"f32x4\": {\"nasmType\": \"reso\", \"ctype\": \"__m128\"},\n" +
+                "                \"f32x8\": {\"nasmType\": \"resy\", \"ctype\": \"__m256\"},\n" +
+                "                \"f32x16\": {\"nasmType\": \"resz\", \"ctype\": \"__m512\"},\n" +
+                "                \"f32x4a\": {\"nasmType\": \"reso\", \"ctype\": \"__m128 *\"},\n" +
+                "                \"f32x8a\": {\"nasmType\": \"resy\", \"ctype\": \"__m256 *\"},\n" +
+                "                \"f32x16a\": {\"nasmType\": \"resz\", \"ctype\": \"__m512 *\"},\n" +
+                "                \"f64x2\": {\"nasmType\": \"reso\", \"ctype\": \"__m128\"},\n" +
+                "                \"f64x4\": {\"nasmType\": \"resy\", \"ctype\": \"__m256\"},\n" +
+                "                \"f64x8\": {\"nasmType\": \"resz\", \"ctype\": \"__m512\"},\n" +
+                "                \"f64x2a\": {\"nasmType\": \"reso\", \"ctype\": \"__m128 *\"},\n" +
+                "                \"f64x4a\": {\"nasmType\": \"resy\", \"ctype\": \"__m256 *\"},\n" +
+                "                \"f64x8a\": {\"nasmType\": \"resz\", \"ctype\": \"__m512 *\"}\n" +
+                "            }").toCharArray();
 
         success = ReadJSON(json, entryTypesRef, message);
 
@@ -275,45 +273,43 @@ public class Translator {
         char [] json;
         boolean success;
 
-        json = """
-            {
-              "Mov": {"args": 1, "typeDecider": 1},
-
-              "Add": {"args": 2, "typeDecider": 1},
-              "Sub": {"args": 2, "typeDecider": 1},
-              "Mul": {"args": 2, "typeDecider": 1},
-              "Div": {"args": 2, "typeDecider": 1},
-              "Mod": {"args": 2, "typeDecider": 1},
-              "DivMod": {"args": 3, "typeDecider": 1},
-              "MulDiv": {"args": 3, "typeDecider": 1},
-              "Inc": {"args": 0, "typeDecider": 1},
-              
-              "Not": {"args": 1, "typeDecider": 1},
-              "Shl": {"args": 2, "typeDecider": 1},
-              "ShiftLeft": {"args": 2, "typeDecider": 1, "alias": "Shl"},
-              "And": {"args": 2, "typeDecider": 1},
-              "Or": {"args": 2, "typeDecider": 1},
-              
-              "Lt": {"args": 2, "typeDecider": 0},
-              "Lte": {"args": 2, "typeDecider": 0},
-              "LessThanOrEqual": {"args": 2, "typeDecider": 0, "alias": "Lte"},
-              "LessThan": {"args": 2, "typeDecider": 0, "alias": "Lt"},
-              "Lt.iiu64": {"args": 2, "typeDecider": 0},
-              "Gt": {"args": 2, "typeDecider": 0},
-              "Gte": {"args": 2, "typeDecider": 0},
-              "MoreThanOrEqual": {"args": 2, "typeDecider": 0, "alias": "Gte"},
-              "Eq": {"args": 2, "typeDecider": 0},
-              "Equal": {"args": 2, "typeDecider": 0, "alias": "Eq"},
-              "Neq": {"args": 2, "typeDecider": 0},
-
-              "Idr": {"args": 2, "typeDecider": 2},
-              "Idw": {"args": 2, "typeDecider": 1},
-              
-              "Rdrand": {"args": 1, "typeDecider": 1},
-              
-              "Del": {"args": 0, "typeDecider": 1}
-            }
-        """.toCharArray();
+        json = ("{\n" +
+                "              \"Mov\": {\"args\": 1, \"typeDecider\": 1},\n" +
+                "\n" +
+                "              \"Add\": {\"args\": 2, \"typeDecider\": 1},\n" +
+                "              \"Sub\": {\"args\": 2, \"typeDecider\": 1},\n" +
+                "              \"Mul\": {\"args\": 2, \"typeDecider\": 1},\n" +
+                "              \"Div\": {\"args\": 2, \"typeDecider\": 1},\n" +
+                "              \"Mod\": {\"args\": 2, \"typeDecider\": 1},\n" +
+                "              \"DivMod\": {\"args\": 3, \"typeDecider\": 1},\n" +
+                "              \"MulDiv\": {\"args\": 3, \"typeDecider\": 1},\n" +
+                "              \"Inc\": {\"args\": 0, \"typeDecider\": 1},\n" +
+                "              \n" +
+                "              \"Not\": {\"args\": 1, \"typeDecider\": 1},\n" +
+                "              \"Shl\": {\"args\": 2, \"typeDecider\": 1},\n" +
+                "              \"ShiftLeft\": {\"args\": 2, \"typeDecider\": 1, \"alias\": \"Shl\"},\n" +
+                "              \"And\": {\"args\": 2, \"typeDecider\": 1},\n" +
+                "              \"Or\": {\"args\": 2, \"typeDecider\": 1},\n" +
+                "              \n" +
+                "              \"Lt\": {\"args\": 2, \"typeDecider\": 0},\n" +
+                "              \"Lte\": {\"args\": 2, \"typeDecider\": 0},\n" +
+                "              \"LessThanOrEqual\": {\"args\": 2, \"typeDecider\": 0, \"alias\": \"Lte\"},\n" +
+                "              \"LessThan\": {\"args\": 2, \"typeDecider\": 0, \"alias\": \"Lt\"},\n" +
+                "              \"Lt.iiu64\": {\"args\": 2, \"typeDecider\": 0},\n" +
+                "              \"Gt\": {\"args\": 2, \"typeDecider\": 0},\n" +
+                "              \"Gte\": {\"args\": 2, \"typeDecider\": 0},\n" +
+                "              \"MoreThanOrEqual\": {\"args\": 2, \"typeDecider\": 0, \"alias\": \"Gte\"},\n" +
+                "              \"Eq\": {\"args\": 2, \"typeDecider\": 0},\n" +
+                "              \"Equal\": {\"args\": 2, \"typeDecider\": 0, \"alias\": \"Eq\"},\n" +
+                "              \"Neq\": {\"args\": 2, \"typeDecider\": 0},\n" +
+                "\n" +
+                "              \"Idr\": {\"args\": 2, \"typeDecider\": 2},\n" +
+                "              \"Idw\": {\"args\": 2, \"typeDecider\": 1},\n" +
+                "              \n" +
+                "              \"Rdrand\": {\"args\": 1, \"typeDecider\": 1},\n" +
+                "              \n" +
+                "              \"Del\": {\"args\": 0, \"typeDecider\": 1}\n" +
+                "            }").toCharArray();
 
         success = ReadJSON(json, dataRef, message);
 

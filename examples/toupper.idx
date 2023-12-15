@@ -24,9 +24,9 @@ Bgs ToUpperILS
   u8x32 x32
   u8x32 x
   u8x32 lcm
-  b256 tb8x320
-  b256 tb8x321
-  b256 tb8x322
+  b8x32 tb8x320
+  b8x32 tb8x321
+  b8x32 tb8x322
   u8x32 padding
 Ens
 
@@ -43,7 +43,7 @@ Fnc ToUpperIL
   If exp b: i < len32
     Idr x, str, i
 
-    exp b b256: lcm = (x >= a & x <= z) & x32
+    exp b b8x32: lcm = (x >= a & x <= z) & x32
     exp a u8x32: x = x - lcm
 
     Idw str, i, x
