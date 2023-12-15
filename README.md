@@ -112,7 +112,7 @@ f(&s);
 
 1. The compiler traverses the code to convert all expressions to a series of instructions.
 2. The compiler traverses the code to identify the type of each instruction. The type includes:
- a) Wether the parameters are variables or literals.
+ a) Whether the parameters are variables or literals.
  b) The type of the operands.
 3. A C-header is generated.
 3. NASM processes the macros and assembles the code.
@@ -178,9 +178,9 @@ Bgs NumberReference
 Ens
 
 Bgs IndexOfCharacterS
-  u16a string
-  u16 character
-  u16 c
+  u32a string
+  u32 character
+  u32 c
   str NumberReference indexReference
   u8 retval
   u64 i
