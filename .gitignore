@@ -1,0 +1,7 @@
+Translator/out
+Translator/.idea
+Translator/Translator.iml
+*.o
+*.idx.1
+a.out
+*.jar
