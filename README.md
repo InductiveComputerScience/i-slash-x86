@@ -18,6 +18,8 @@ Benefits of the language includes:
 
 ## The Language
 
+[More about the language here.](language.md)
+
 ### Operations
 
 Use the operations in the x86 CPU directly like this:
@@ -213,5 +215,94 @@ Fnc RdrandGuaranteed
   EndLoop
 Ret
 ```
+
+### Converting a String to Upper Case Using SIMD
+
+```
+Bgs ToUpperILS
+  u8x32a str
+  u64 len
+  u64 len32
+  u64 len1
+  u64 i
+  b1 tb10
+  u8x32 a
+  u8x32 z
+  u8x32 x32
+  u8x32 x
+  u8x32 lcm
+  b8x32 tb8x320
+  b8x32 tb8x321
+  b8x32 tb8x322
+  u8x32 padding
+Ens
+
+Fnc ToUpperIL
+  Len len, str
+  Div len32, len, 32
+
+  Mov a, 'a'
+  Mov z, 'z'
+  Mov x32, 32
+
+  Mov i, 0
+  Loop
+  If exp b: i < len32
+    Idr x, str, i
+
+    exp b b8x32: lcm = (x >= a & x <= z) & x32
+    exp a u8x32: x = x - lcm
+
+    Idw str, i, x
+
+    Inc i
+  EndLoop
+Ret
+```
+## Building the Compiler/Translator
+To build the translator you need Java 8 or higher. Simply run the following command to compile, or use your favourite IDE.
+
+```
+cd Translator
+mkdir out
+javac exec/Run.java -cp exec:Translator/main:imports -d ./out
+```
+
+## Build and Run the Examples
+To build and run the examples, you need Java 8, GCC and NASM. First, make sure to build the compiler/translator as described above.
+
+```
+cd examples
+bash make.sh
+bash make-toupper.sh
+```
+
+This should give output similar to this:
+
+```
+Found: 1, Index: 4
+ToUpper (plain C -O3 AVX2): 39732 us
+ToUpperBL (C branchless v1 -O3 AVX2): 2973 us
+ToUpperBL2 (C branchless v2 -O3 AVX2): 2225 us
+ToUpper (I/x86 using AVX2): 5182 us
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
