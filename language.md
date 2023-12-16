@@ -1,7 +1,15 @@
-The following is a description of a simple way to create a powerful programming language. It uses few traditional techniques, but instead translates a program almost directly to assembly/machine code. 
+# A Simple Way to Create a Powerfull Language
+
+The following is a description of a simple way to create a powerful programming language. It uses few traditional techniques, but instead translates a program almost directly to assembly/machine code.
+
+The compiler/translator is available as open source [here](https://github.com/InductiveComputerScience/i-slash-x86).
+
+The way this document described the language is that we start with standard x86-64 assembly and removes part of it gradually as to become a real programming language. The compiler then works in reverse, gradually converting a program to assembly by simple steps.
+
+The way to create a programming language has significant benefits:
 
 * This makes the compiler a lot simpler, and we can be sure that the program does exactly what we tell it to: No undefined behavior, no unspecified behavior, no as-if rule, no surprising code removal. In this language, your wish is the computer's command.
-* The simplicity means the compiler and language is easier to understand, work with and extend.
+* The simplicity of the compiler means the compiler and language is easier to understand, work with and extend.
 
 ## Semantics -- The Meaning of Programs
 
@@ -23,7 +31,7 @@ Thus, we start with x86-64 assembly. We can use an assembler to convert assembly
 
 The first thing we would like to remove from our language, is the need to work with registers. Working with registers is too low level, and is covered at the end as further optimizations.
 
-For example, on the Intel x86-64, if we would like to compute `x = a / b`, we need to place 0 in rdx, a in rax, divide by b, and finally read the result from rax. Remembering this is tedious.
+For example, on the Intel x86-64, if we would like to compute `x = a / b`, we need to place `0` in `rdx`, `a` in `rax`, divide by `b`, and finally read the result from `rax`. Remembering this is tedious.
 
 ```
 mov rax, qword [a]
@@ -76,12 +84,12 @@ Div.iiu64 x, 6, 2
 
 ### Types
 
-It is annoying to having to put types on all our instructions. Instead, we can put type specifications in a separate structure and compute the types. We can also compute whether the operands are literals or memory. The convention is that for a function X, its structure is called XS. It contains the input, output and working memory (local variables) of the function.
+It is annoying to having to put types on all our instructions. Instead, we can put type specifications in a separate structure and compute the types. We can also compute whether the operands are literals or memory. The convention is that for a function `X`, its structure is called `XS`. It contains the input, output and working memory (local variables) of the function.
 
- * Bgs means "BeGin Structure". 
- * Ens means "ENd Structure".
- * Fnc means "begin FuNCtion"
- * Ret ends the function.
+ * `Bgs` means "BeGin Structure". 
+ * `Ens` means "ENd Structure".
+ * `Fnc` means "begin FuNCtion"
+ * `Ret` ends the function.
 
 ```
 Bgs fS
@@ -139,7 +147,7 @@ int main(){
 ```
 
 ### Labels
-Another aspect of the CPU is the use of labels for control flow. For example:
+Another aspect of assembly is the use of labels for control flow. For example:
 
 ```
 If c, L1
@@ -147,7 +155,7 @@ If c, L1
 Endb L1
 ```
 
-In this example, the "If" instruction continues if c is true and jumps to L1 if false. Endb simply ends with the label. Here are the macros:
+In this example, the `If` instruction continues if `c` is `true` and jumps to `L1` if  `c` is `false`. `Endb` simply ends with the label. Here are the macros:
 
 ```
 %macro If.mb1 2
@@ -162,7 +170,7 @@ In this example, the "If" instruction continues if c is true and jumps to L1 if 
 %endmacro
 ```
 
-We don't want to remember to match up those labels, so we will use a program that uses a stack to compute the labels. Thus, the label-free version becomes:
+We don't want to remember to match up those labels, so we will use a program to compute the labels. Thus, the label-free version becomes:
 
 ```
 If c
@@ -239,13 +247,13 @@ Mul t1, t3, q12
 Add h1, t0, t1 
 ```
 
-Let's instead use a formula translator that will automatically code this for us based on an expression. We start the line with "exp" indicating an expression. We then give the type "a" for "arithmetic" and the type "f64" for 64-bit floating point. 
+Let's instead use a formula translator that will automatically code this for us based on an expression. We start the line with `exp` indicating an expression. We then give the type `a` for "arithmetic" and the type `f64` for 64-bit floating point. 
 
 ```
 exp a f64: h1 = (x2 - x)/(x2 - x1)*q11 + (x - x1)/(x2 - x1)*q12
 ```
 
-This will then produce the following code. Notice that the expression is put in a comment above the automatically generated code. The temporary variables are named "t", followed by the type, followed by a number. We need four temporary variables to do this expression.
+This will then produce the following code. Notice that the expression is put in a comment above the automatically generated code. The temporary variables are named `t`, followed by the type, followed by a number. We need four temporary variables to do this expression.
 
 ```
 ; exp a f64: h1 = (x2 - x)/(x2 - x1)*q11 + (x - x1)/(x2 - x1)*q12
@@ -262,7 +270,7 @@ Add h1, tf640, tf641
 
 In order to convert the expression into the code above, we need to set up a lexer, parser and code generator. This is quite straight forwards for an expression of a single type with variables and literals of a single type.
 
-Other expression types include boolean-relational. "b1" is the default type, if none is given.
+Other expression types include boolean-relational. `b1` is the default type, if none is given.
 
 ```
 exp b: i < len & !found
@@ -277,7 +285,7 @@ Not tb11, found
 And tb12, tb10, tb11 
 ```
 
-and bitwise formulas. This one has 32 bits, and is a part of base64 encoding.
+and bitwise formulas. This one has 32 bits, and is a part of the base64 encoding algorithm.
 
 ```
 exp bw32: total = d2 | d1 << 8 | d0 << 16
@@ -293,7 +301,7 @@ Shl tb320, d0, 16
 Or total, tb321, tb320
 ```
 
-This can support all types and many, many more expression types. For example, arithmetic expressions can easily be extended to SIMD, u8x32 for example.
+This can support all types and many, many more expression types. For example, arithmetic expressions can easily be extended to SIMD, u8x32 for example, which is a type of 32 u8s, or bytes.
 
 ### Further Optimization
 We can use NASM to generate the final assembly for us. Then it is quite simple to hand-tune the assembly by using registers instead of temporary variables. It should be possible to create almost completely optimal assembly with this approach.
@@ -441,7 +449,7 @@ Both gives about the same number of instructions. However, in general, it only m
  * if one wants to use a simple language.
 
 ### Optimization of Bug-Free Code
-If one has developed code that is completely portable and bug-free using the progsbase language and development technique, then creating an optimized version of a function is ideal using this language. 
+If one has developed code that is completely portable and bug-free using the [progsbase language](https://www.progsbase.com) and development techniques, then creating an optimized version of a function is ideal using this language. 
 
  * The bug-free version can be used as a testing oracle for the optimized version.
  * We know that the implementation will not change as it is bug-free.
