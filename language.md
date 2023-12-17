@@ -2,7 +2,7 @@
 
 The following is a description of a simple way to create a powerful programming language. It uses few traditional techniques, but instead translates a program almost directly to assembly/machine code.
 
-The compiler/translator is available as open source [here](https://github.com/InductiveComputerScience/i-slash-x86).
+The compiler/translator is [available as open source here](https://github.com/InductiveComputerScience/i-slash-x86).
 
 The way this document described the language is that we start with standard x86-64 assembly and removes part of it gradually as to become a real programming language. The compiler then works in reverse, gradually converting a program to assembly by simple steps.
 
