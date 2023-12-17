@@ -5,3 +5,5 @@ Translator/Translator.iml
 *.idx.1
 a.out
 *.jar
+build
+Translator.jar

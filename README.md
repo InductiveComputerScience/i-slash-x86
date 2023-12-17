@@ -40,7 +40,7 @@ div qword [b]
 mov qword [x], rax
 ```
 
-### Expression
+### Expressions
 
 Or write inline expressions. Here `a / b + c * d` is the expression, `exp` marks the beginning of an expression, `a` marks the expression as an arithmetic expression and finally, `u64` says that the type of the expression is unsigned 64-bit.
 
@@ -272,16 +272,40 @@ Ret
 To build the translator you need Java 8 or higher. Simply run the following command to compile, or use your favourite IDE.
 
 ```
+mkdir build
 cd Translator
-mkdir out
-javac exec/Run.java -cp exec:Translator/main:imports -d ./out
+javac exec/Run.java -cp exec:Translator/main:imports -d ../build
 ```
 
 To then make an executable jar-file, run the following:
 
 ```
-cd out
+cd ../build
 jar cfe ../Translator.jar Run *
+```
+
+## Running the Translator/Compiler
+
+Running the translator/compiler using class files:
+
+```
+java -classpath build Run
+```
+
+Or run it using the jar file:
+
+```
+java -jar Translator.jar
+```
+
+It takes four arguments
+1) The input file with I/x86-code. e.g. `ioc.idx`
+2) The output file where expressions have been expanded. e.g. `ioc.idx.1`
+3) The assembly output file for NASM. e.g. `ioc.asm`
+4) The C header for calling the functions from C. e.g. `ioc.h`
+
+```
+java -jar Translator.jar ioc.idx ioc.idx.1 ioc.asm ioc.h
 ```
 
 ## Build and Run the Examples
