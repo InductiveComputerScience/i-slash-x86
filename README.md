@@ -14,7 +14,7 @@ Benefits of the language includes:
  * All behavior is defined and specified (No undefined or unspecified behavior.)
  * What you see is what you get. (No as-if rule.)
  * All the code is executed. (No surprising code removal.)
- * It is easy to further optimize the resulting assembly as the code will be a direct translation.
+ * It is easy to further optimize the resulting assembly as the code will be a direct translation. It is easy to recognize all the code.
 
 ## The Language
 
@@ -29,6 +29,15 @@ Add x, a, b
 Sub x, a, b
 Mul x, a, b
 Div x, a, b
+```
+
+For example, the Div instruction is translated like this:
+
+```
+mov rax, qword [a]
+mov rdx, 0
+div qword [b]
+mov qword [x], rax
 ```
 
 ### Expression
@@ -268,6 +277,13 @@ mkdir out
 javac exec/Run.java -cp exec:Translator/main:imports -d ./out
 ```
 
+To then make an executable jar-file, run the following:
+
+```
+cd out
+jar cfe ../Translator.jar Run *
+```
+
 ## Build and Run the Examples
 To build and run the examples, you need Java 8, GCC and NASM. First, make sure to build the compiler/translator as described above.
 
@@ -281,10 +297,10 @@ This should give output similar to this:
 
 ```
 Found: 1, Index: 4
-ToUpper (plain C -O3 AVX2): 39732 us
-ToUpperBL (C branchless v1 -O3 AVX2): 2973 us
-ToUpperBL2 (C branchless v2 -O3 AVX2): 2225 us
-ToUpper (I/x86 using AVX2): 5182 us
+ToUpper (plain C -O3 AVX2): 39599 us
+ToUpperBL (C branchless v1 -O3 AVX2): 3018 us
+ToUpperBL2 (C branchless v2 -O3 AVX2): 2207 us
+ToUpper (I/x86 using AVX2): 3447 us
 ```
 
 
