@@ -1,4 +1,4 @@
-# A Simple Way to Create a Powerfull Language
+# A Simple Way to Create a Powerful Language
 
 The following is a description of a simple way to create a powerful programming language. It uses few traditional techniques, but instead translates a program almost directly to assembly/machine code.
 
