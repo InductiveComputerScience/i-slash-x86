@@ -56,6 +56,13 @@
   mov qword [rdi + %1], rax
 %endmacro
 
+%macro Add.mis64 3
+  mov rax, qword [rdi + %2]
+  mov rdx, %3
+  add rax, rdx
+  mov qword [rdi + %1], rax
+%endmacro
+
 %macro Add.rrru64 3
   mov rax, %2
   add rax, %3
@@ -131,6 +138,13 @@
 %macro Sub.mmu64 3
   mov rax, qword [rdi + %2]
   mov rdx, qword [rdi + %3]
+  sub rax, rdx
+  mov qword [rdi + %1], rax
+%endmacro
+
+%macro Sub.mis64 3
+  mov rax, qword [rdi + %2]
+  mov rdx, %3
   sub rax, rdx
   mov qword [rdi + %1], rax
 %endmacro
@@ -376,6 +390,11 @@
 %endmacro
 
 %macro Mov.mu64 2
+  mov rax, qword [rdi + %2]
+  mov qword [rdi + %1], rax
+%endmacro
+
+%macro Mov.ms64 2
   mov rax, qword [rdi + %2]
   mov qword [rdi + %1], rax
 %endmacro

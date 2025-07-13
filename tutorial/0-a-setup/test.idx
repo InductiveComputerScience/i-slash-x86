@@ -1,0 +1,8 @@
+Bgs testS
+  u64 x
+	u64 retval
+Ens
+
+Fnc test
+  Mov retval, x
+Ret

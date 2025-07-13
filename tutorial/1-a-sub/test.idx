@@ -1,0 +1,10 @@
+Bgs testS
+  s64 x
+  s64 a
+	s64 retval
+Ens
+
+Fnc test
+  exp a u64: a = x - 5
+  Mov retval, a
+Ret
