@@ -20,6 +20,11 @@ Benefits of the language includes:
 
 [More about the language here.](language.md)
 
+## Uses
+
+ * You want a program that always does what you asked it to do. This is good for stability, robustness and security.
+ * You want to create an optimized versions of functions.
+
 ### Operations
 
 Use the operations in the x86 CPU directly like this:
