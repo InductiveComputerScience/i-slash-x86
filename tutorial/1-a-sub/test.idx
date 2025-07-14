@@ -1,7 +1,7 @@
 Bgs testS
   s64 x
   s64 a
-	s64 retval
+  s64 retval
 Ens
 
 Fnc test
