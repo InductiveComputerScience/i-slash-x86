@@ -6,7 +6,7 @@ A function has a start and an end. The start is the prefix `Fnc`, short for "FuN
 
 ```
 Fnc test
-	...
+  ...
 Ret
 ```
 
@@ -35,7 +35,7 @@ Since we are using two variables, we need to declare them in the function struct
 ```
 Bgs testS
   s64 x
-	s64 retval
+  s64 retval
 Ens
 ```
 
@@ -45,7 +45,7 @@ Here is the complete example:
 ```
 Bgs testS
   s64 x
-	s64 retval
+  s64 retval
 Ens
 
 Fnc test
@@ -105,11 +105,11 @@ Here is the complete code:
 #include "test.h"
 
 int main(){
-	struct testS ts;
-	ts.x = 21;
-	test(&ts);
-	printf("test(%ld) = %ld\n", ts.x, ts.retval);
-	return 0;
+  struct testS ts;
+  ts.x = 21;
+  test(&ts);
+  printf("test(%ld) = %ld\n", ts.x, ts.retval);
+  return 0;
 }
 ```
 
