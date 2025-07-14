@@ -1,4 +1,4 @@
-# 1.a. Expressions
+# 1.e. Expressions
 
 We can divide one number with another using the / operator. This line will divide one number with another using signed, 64-bit integer arithmetic.
 

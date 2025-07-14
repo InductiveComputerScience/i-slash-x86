@@ -1,4 +1,4 @@
-# 1.a. Multiply
+# 1.c. Multiply
 
 We can mulitply one number with another using the * operator. This line will multiply one number with another using signed, 64-bit integer arithmetic.
 

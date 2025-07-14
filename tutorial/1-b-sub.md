@@ -1,4 +1,4 @@
-# 1.a. Subtract
+# 1.b. Subtract
 
 We can subtract one number from another using the - operator. This line will subtract one number from another using signed, 64-bit integer arithmetic.
 
