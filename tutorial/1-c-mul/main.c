@@ -9,7 +9,7 @@ int main(){
 
 	test(&ts);
 
-	printf("test(%ld) = %ld\n", ts.x, ts.retval);
+	printf("test(%ld) = %ld\n", ts.x, ts.y);
 
 	return 0;
 }

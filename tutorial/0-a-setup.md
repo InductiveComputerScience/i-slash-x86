@@ -1,6 +1,6 @@
 # 0.a. Setup on Linux
 
-## I/86
+## I/x86 code
 
 A function has a start and an end. The start is the prefix `Fnc`, short for "FuNCtion" followed by the function name. The end is `Ret`, short for "return".
 
@@ -22,11 +22,11 @@ Ens
 
 ### Example
 
-Let us look at an example function. This function assigns the input variable `x` to the return variable `retval`. Before the colon, we specify that what is after the colon is an expression using signed, 64-bit arithmetic. "exp" stands for "EXPression", `a` for "Arithmetic" and s64 for 64-bit signed integer.
+Let us look at an example function. This function assigns the input variable `x` to the return variable `y`. Before the colon, we specify that what is after the colon is an expression using signed, 64-bit arithmetic. "exp" stands for "EXPression", `a` for "Arithmetic" and s64 for 64-bit signed integer.
 
 ```
 Fnc test
-  exp a s64: retval = x
+  exp a s64: y = x
 Ret
 ```
 
@@ -35,7 +35,7 @@ Since we are using two variables, we need to declare them in the function struct
 ```
 Bgs testS
   s64 x
-  s64 retval
+  s64 y
 Ens
 ```
 
@@ -45,11 +45,11 @@ Here is the complete example:
 ```
 Bgs testS
   s64 x
-  s64 retval
+  s64 y
 Ens
 
 Fnc test
-  exp a s64: retval = x
+  exp a s64: y = x
 Ret
 ```
 
@@ -95,7 +95,7 @@ A pointer to the structure is given as the only parameter to the function, provi
 Finally, we can output the output variable:
 
 ```
-printf("f(%ld) = %ld\n", ts.x, ts.retval);
+printf("f(%ld) = %ld\n", ts.x, ts.y);
 ```
 
 Here is the complete code:
@@ -108,7 +108,7 @@ int main(){
   struct testS ts;
   ts.x = 21;
   test(&ts);
-  printf("test(%ld) = %ld\n", ts.x, ts.retval);
+  printf("test(%ld) = %ld\n", ts.x, ts.y);
   return 0;
 }
 ```
@@ -146,19 +146,19 @@ We can see how the I/x86 code was translated by looking at the bottom of `test.l
 The assignment was turned into the following instruction:
 
 ```
-Mov retval, x
+Mov y, x
 ```
 
 Which is finally turned into x86 assembly in Intel syntax:
 
 ```
 
-mov rax, qword [rdi + %2]
-mov qword [rdi + %1], rax
+mov rax, qword [rdi + x]
+mov qword [rdi + y], rax
 
 ```
 
-First of all, we see rdi, which contains a pointer to the function structure. We add the offset of variable 2, to get the value of the varible `x`, we place it in `rax`. Then we copy this value into the variable at offset `retval`.
+First of all, we see register `rdi`, which contains a pointer to the variable structure. We add the offset of variable `x`, dereference the pointer and place the value in regoster `rax`. Then we copy this value into the variable at offset `y`.
 
 
 

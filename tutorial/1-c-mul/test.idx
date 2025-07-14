@@ -1,10 +1,8 @@
 Bgs testS
   s64 x
-  s64 a
-  s64 retval
+  s64 y
 Ens
 
 Fnc test
-  exp a s64: a = x * 5
-  exp a s64: retval = a
+  exp a s64: y = x * 5
 Ret
