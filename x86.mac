@@ -142,6 +142,13 @@
   mov qword [rdi + %1], rax
 %endmacro
 
+%macro Sub.mms64 3
+  mov rax, qword [rdi + %2]
+  mov rdx, qword [rdi + %3]
+  sub rax, rdx
+  mov qword [rdi + %1], rax
+%endmacro
+
 %macro Sub.mis64 3
   mov rax, qword [rdi + %2]
   mov rdx, %3
@@ -328,6 +335,14 @@
   mov rax, qword [rdi + %2]
   cqo
   mov rcx, %3
+  idiv rcx
+  mov qword [rdi + %1], rax
+%endmacro
+
+%macro Div.ims64 3
+  mov rax, %2
+  cqo
+  mov rcx, qword [rdi + %3]
   idiv rcx
   mov qword [rdi + %1], rax
 %endmacro

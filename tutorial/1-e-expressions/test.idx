@@ -1,0 +1,12 @@
+Bgs testS
+  s64 x
+  s64 a
+  s64 ts640
+  s64 ts641
+  s64 retval
+Ens
+
+Fnc test
+  exp a s64: a = x - x*3 + 5/x
+  exp a s64: retval = a
+Ret

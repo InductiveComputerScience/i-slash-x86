@@ -15,10 +15,10 @@ Sub a, x, 5
 Then to x86 instructions in Intel syntax:
 
 ```
-mov rax, qword [rdi + %2]
-mov rdx, %3
+mov rax, qword [rdi + x]
+mov rdx, 5
 sub rax, rdx
-mov qword [rdi + %1], rax
+mov qword [rdi + a], rax
 ```
 
 First, we value of variable 2, `x`, is placed in `rax`, then the literal 5 is placed in `rdx`. The sub instruction is used to subtract the value of `rdx` from `rax`. Finally, the value of `rax` is placed in the target variable 1, `a`.
