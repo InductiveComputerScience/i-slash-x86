@@ -8,6 +8,7 @@
   B. Subtract
   C. Multiply
   D. Divide
+  E. Expressions
 
 2. Number type conversions
   - u8 -> s/u16, s/u32, s/u64 (movzx)

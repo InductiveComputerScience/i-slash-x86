@@ -22,3 +22,9 @@ mov qword [rdi + %1], rax
 ```
 
 First, we value of variable 2, `x`, is placed in `rax`, then the literal 32 is placed in `rdx`. The add instruction is used to add the value of `rdx` into `rax`. Finally, the value of `rax` is placed in the target variable 1, `a`.
+
+The output is:
+
+```
+test(21) = 53
+```

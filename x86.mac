@@ -231,6 +231,34 @@
   mov qword [rdi + %1], rax
 %endmacro
 
+%macro Mul.mis64 3
+  mov rax, qword [rdi + %2]
+  mov rdx, %3
+  imul rax, rdx
+  mov qword [rdi + %1], rax
+%endmacro
+
+%macro Mul.mms64 3
+  mov rax, qword [rdi + %2]
+  mov rdx, qword [rdi + %3]
+  imul rax, rdx
+  mov qword [rdi + %1], rax
+%endmacro
+
+%macro Mul.ims64 3
+  mov rax, %2
+  mov rdx, qword [rdi + %3]
+  imul rax, rdx
+  mov qword [rdi + %1], rax
+%endmacro
+
+%macro Mul.iis64 3
+  mov rax, %2
+  mov rdx, %3
+  imul rax, rdx
+  mov qword [rdi + %1], rax
+%endmacro
+
 ; -----------------------------------------------------------------------------
 ; Div
 
@@ -294,6 +322,14 @@
   movsd xmm0, [rdi + %2]
   divsd xmm0, [rdi + %3]
   movsd [rdi + %1], xmm0
+%endmacro
+
+%macro Div.mis64 3
+  mov rax, qword [rdi + %2]
+  cqo
+  mov rcx, %3
+  idiv rcx
+  mov qword [rdi + %1], rax
 %endmacro
 
 ; -----------------------------------------------------------------------------

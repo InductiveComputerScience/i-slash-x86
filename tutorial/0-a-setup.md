@@ -135,6 +135,12 @@ Run it using:
 ./a.out
 ```
 
+The output is:
+
+```
+test(21) = 53
+```
+
 We can see how the I/x86 code was translated by looking at the bottom of `test.lst`:
 
 The assignment was turned into the following instruction:
@@ -153,8 +159,6 @@ mov qword [rdi + %1], rax
 ```
 
 First of all, we see rdi, which contains a pointer to the function structure. We add the offset of variable 2, to get the value of the varible `x`, we place it in `rax`. Then we copy this value into the variable at offset `retval`.
-
-
 
 
 
