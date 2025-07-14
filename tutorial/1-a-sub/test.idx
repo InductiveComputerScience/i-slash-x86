@@ -5,6 +5,6 @@ Bgs testS
 Ens
 
 Fnc test
-  exp a u64: a = x - 5
-  Mov retval, a
+  exp a s64: a = x - 5
+  exp a s64: retval = a
 Ret

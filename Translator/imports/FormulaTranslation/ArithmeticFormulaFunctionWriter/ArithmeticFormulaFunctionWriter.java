@@ -322,7 +322,10 @@ public class ArithmeticFormulaFunctionWriter{
 				tf.string = AppendString(tf.string, "<failed>".toCharArray());
 			}
 		}else{
-			tf.string = AppendString(tf.string, "<failed>".toCharArray());
+			tf.string = AppendString(tf.string, "Mov ".toCharArray());
+			tf.string = AppendString(tf.string, target);
+			tf.string = AppendString(tf.string, ", ".toCharArray());
+			tf.string = AppendString(tf.string, ast.value);
 		}
 	}
 
