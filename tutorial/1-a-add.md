@@ -9,7 +9,7 @@ exp a s64: a = x + 32
 This is translated to instructions as follows:
 
 ```
-Add.mis64 testS.a, testS.x, 32
+Add a, x, 32
 ```
 
 Then to x86 instructions in Intel syntax:

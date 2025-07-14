@@ -140,7 +140,7 @@ We can see how the I/x86 code was translated by looking at the bottom of `test.l
 The assignment was turned into the following instruction:
 
 ```
-Mov.ms64 testS.retval, testS.x
+Mov retval, x
 ```
 
 Which is finally turned into x86 assembly in Intel syntax:
