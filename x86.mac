@@ -1180,19 +1180,19 @@ extern free
 ; Usigned integer to larger unsigned types
 ; u8tou16, u16tou32, u32tou64
 
-%macro u8tou16.mm 2
+%macro u8tou16.m 2
   mov al, byte [rdi + %2]
   movzx ax, al
   mov word [rdi + %1], ax
 %endmacro
 
-%macro u16tou32.mm 2
+%macro u16tou32.m 2
   mov ax, word [rdi + %2]
   movzx eax, ax
   mov dword [rdi + %1], eax
 %endmacro
 
-%macro u32tou64.mm 2
+%macro u32tou64.m 2
   mov eax, dword [rdi + %2]
   movzx rax, eax
   mov qword [rdi + %1], rax
@@ -1255,9 +1255,9 @@ extern free
 %endmacro
 
 %macro s16tof32.m 2
-  mov ax, dword [rdi + %2]
+  mov ax, word [rdi + %2]
 	movsx eax, ax
-  cvtsi2sd xmm0, eax
+  cvtsi2ss xmm0, eax
   movss [rdi + %1], xmm0
 %endmacro
 
@@ -1278,11 +1278,109 @@ extern free
 ; Floats to larger types
 ; f32tof64
 
-%macro s32tof64.m 2
-  mov eax, dword [rdi + %2]
-  cvtsi2sd xmm0, eax
+%macro f32tof64.m 2
+  movss xmm0, dword [rdi + %2]
+  cvtss2sd xmm0, xmm0
   movsd [rdi + %1], xmm0
 %endmacro
+
+; -----------------------------------------------------------------------------
+; Usigned integer to smaller unsigned types
+; u16tou8, u32tou16, u64tou32
+
+%macro u16tou8.m 2
+  mov ax, word [rdi + %2]
+  mov byte [rdi + %1], al
+%endmacro
+
+%macro u32tou16.m 2
+  mov eax, dword [rdi + %2]
+  mov word [rdi + %1], ax
+%endmacro
+
+%macro u64tou32.m 2
+  mov rax, qword [rdi + %2]
+  mov dword [rdi + %1], eax
+%endmacro
+
+; -----------------------------------------------------------------------------
+; Usigned integer to smaller unsigned types
+; s16tou8, s32tou16, s64tou32
+
+%macro s16tou8.m 2
+  mov ax, word [rdi + %2]
+  mov byte [rdi + %1], al
+%endmacro
+
+%macro s32tou16.m 2
+  mov eax, dword [rdi + %2]
+  mov word [rdi + %1], ax
+%endmacro
+
+%macro s64tou32.m 2
+  mov rax, qword [rdi + %2]
+  mov dword [rdi + %1], eax
+%endmacro
+
+
+; -----------------------------------------------------------------------------
+; Signed integer to smaller signed types
+; s16tos8, s32tos16, s64tos32
+
+%macro s16tos8.m 2
+  mov ax, word [rdi + %2]
+  mov byte [rdi + %1], al
+%endmacro
+
+%macro s32tos16.m 2
+  mov eax, dword [rdi + %2]
+  mov word [rdi + %1], ax
+%endmacro
+
+%macro s64tos32.m 2
+  mov rax, qword [rdi + %2]
+  mov dword [rdi + %1], eax
+%endmacro
+
+; -----------------------------------------------------------------------------
+; floats to integers
+; f32tou16, f32tos16, f64tou32, f64tos32
+
+%macro f32tou16.m 2
+  movss xmm0, [rdi + %2]
+  cvttss2si eax, xmm0
+  mov word [rdi + %1], ax
+%endmacro
+
+%macro f32tos16.m 2
+  movss xmm0, [rdi + %2]
+  cvttss2si eax, xmm0
+  mov word [rdi + %1], ax
+%endmacro
+
+%macro f64tou32.m 2
+  movsd xmm0, [rdi + %2]
+  cvttsd2si eax, xmm0
+  mov dword [rdi + %1], eax
+%endmacro
+
+%macro f64tos32.m 2
+  movsd xmm0, [rdi + %2]
+  cvttsd2si eax, xmm0
+  mov dword [rdi + %1], eax
+%endmacro
+
+; -----------------------------------------------------------------------------
+; Floats to smaller floats
+; f64tof32
+
+%macro f64tof32.m 2
+  movsd xmm0, qword [rdi + %2]
+  cvtsd2ss xmm0, xmm0
+  movss dword [rdi + %1], xmm0
+%endmacro
+
+
 
 
 

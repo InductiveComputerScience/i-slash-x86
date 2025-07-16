@@ -308,7 +308,13 @@ public class Translator {
                 "              \n" +
                 "              \"Rdrand\": {\"args\": 1, \"typeDecider\": 1},\n" +
                 "              \n" +
-                "              \"Del\": {\"args\": 0, \"typeDecider\": 1}\n" +
+                "              \"Del\": {\"args\": 0, \"typeDecider\": 1},\n" +
+                "              \"s8tos16\": {\"args\": 1, \"typeDecider\": 0, \"noTypePostfix\": true},\n" +
+                "              \"s16tof32\": {\"args\": 1, \"typeDecider\": 0, \"noTypePostfix\": true},\n" +
+                "              \"f32tof64\": {\"args\": 1, \"typeDecider\": 0, \"noTypePostfix\": true},\n" +
+                "              \"s16tos8\": {\"args\": 1, \"typeDecider\": 0, \"noTypePostfix\": true},\n" +
+                "              \"f32tos16\": {\"args\": 1, \"typeDecider\": 0, \"noTypePostfix\": true},\n" +
+                "              \"f64tof32\": {\"args\": 1, \"typeDecider\": 0, \"noTypePostfix\": true}\n" +
                 "            }").toCharArray();
 
         success = ReadJSON(json, dataRef, message);
@@ -457,6 +463,7 @@ public class Translator {
                         ins = GetStructFromStruct(instructions, iname);
                         args = GetNumberFromStruct(ins, "args".toCharArray());
                         typeDecider = GetNumberFromStruct(ins, "typeDecider".toCharArray());
+                        boolean noTypePostfix = GetBooleanFromStruct(ins, "noTypePostfix".toCharArray());
                         if(StructHasKey(ins, "alias".toCharArray())){
                             iname = GetStringFromStruct(ins, "alias".toCharArray());
                         }
@@ -470,7 +477,7 @@ public class Translator {
                             parts[1].string = RemoveComma(parts[1].string);
                             PrintTabs(cc, tabs);
                             LinkedListCharactersAddString(cc, iname);
-                            AppendBinaryArguments(cc, parts[1].string, parts[2].string, fname, structure, typeDecider);
+                            AppendBinaryArguments(cc, parts[1].string, parts[2].string, fname, structure, typeDecider, noTypePostfix);
                             LinkedListCharactersAddString(cc, "\n".toCharArray());
                         }else if(args == 2){
                             parts[1].string = RemoveComma(parts[1].string);
@@ -799,9 +806,9 @@ public class Translator {
         return signature;
     }
 
-    public static void AppendBinaryArguments(LinkedListCharacters cc, char [] arg1, char [] arg2, char[] fname, Structure structure, double typeDecider) {
+    public static void AppendBinaryArguments(LinkedListCharacters cc, char [] arg1, char [] arg2, char[] fname, Structure structure, double typeDecider, boolean noTypePostfix) {
         char[] signature;
-        signature = GetBinarySignature(arg1, arg2, structure, typeDecider);
+        signature = GetBinarySignature(arg1, arg2, structure, typeDecider, noTypePostfix);
 
         LinkedListCharactersAddString(cc, signature);
 
@@ -839,7 +846,7 @@ public class Translator {
         return string;
     }
 
-    public static char[] GetBinarySignature(char[] arg1, char[] arg2, Structure structure, double typeDecider) {
+    public static char[] GetBinarySignature(char[] arg1, char[] arg2, Structure structure, double typeDecider, boolean noTypePostfix) {
         boolean lit1, lit2;
         char [] type;
         char [] signature;
@@ -868,7 +875,9 @@ public class Translator {
             signature = AppendString(signature, "m".toCharArray());
         }
 
-        signature = AppendString(signature, type);
+        if(!noTypePostfix) {
+            signature = AppendString(signature, type);
+        }
 
         return signature;
     }

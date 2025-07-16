@@ -1,0 +1,12 @@
+Bgs testS
+  f64 x
+  s8 y
+	f32 a
+	s16 b
+Ens
+
+Fnc test
+  f64tof32 a, x
+  f32tos16 b, a
+  s16tos8 y, b
+Ret
