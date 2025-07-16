@@ -2,33 +2,19 @@
 
 We can convert the data of one variable into one with a lower range. In this example, we have four variables. A signed 8-bit value is passed in as input, the output is a 64-bit binary floating point. In the code, the s8 is convered to an s16, then to an f32, and then finally to an f64.
 
-```
-Bgs testS
-  s8 x
-  f64 y
-	s16 a
-	f32 b
-Ens
-
-Fnc test
-  s8tos16 a, x
-  s16tof32 b, a
-  f32tof64 y, b
-Ret
-```
 
 ```
 Bgs testS
-  s8 x
-  f64 y
-	s16 a
-	f32 b
+  f64 x
+  s8 y
+  f32 a
+  s16 b
 Ens
 
 Fnc test
-  s8tos16 a, x
-  s16tof32 b, a
-  f32tof64 y, b
+  f64tof32 a, x
+  f32tos16 b, a
+  s16tos8 y, b
 Ret
 ```
 

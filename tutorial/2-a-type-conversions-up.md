@@ -6,23 +6,8 @@ We can convert the data of one variable into one with a wider range. In this exa
 Bgs testS
   s8 x
   f64 y
-	s16 a
-	f32 b
-Ens
-
-Fnc test
-  s8tos16 a, x
-  s16tof32 b, a
-  f32tof64 y, b
-Ret
-```
-
-```
-Bgs testS
-  s8 x
-  f64 y
-	s16 a
-	f32 b
+  s16 a
+  f32 b
 Ens
 
 Fnc test

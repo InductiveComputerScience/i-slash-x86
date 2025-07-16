@@ -1,8 +1,8 @@
 Bgs testS
   s8 x
   f64 y
-	s16 a
-	f32 b
+  s16 a
+  f32 b
 Ens
 
 Fnc test
