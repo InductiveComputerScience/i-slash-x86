@@ -1176,6 +1176,114 @@ extern free
   mov qword [rdi + %1], rax
 %endmacro
 
+; -----------------------------------------------------------------------------
+; Usigned integer to larger unsigned types
+; u8tou16, u16tou32, u32tou64
+
+%macro u8tou16.mm 2
+  mov al, byte [rdi + %2]
+  movzx ax, al
+  mov word [rdi + %1], ax
+%endmacro
+
+%macro u16tou32.mm 2
+  mov ax, word [rdi + %2]
+  movzx eax, ax
+  mov dword [rdi + %1], eax
+%endmacro
+
+%macro u32tou64.mm 2
+  mov eax, dword [rdi + %2]
+  movzx rax, eax
+  mov qword [rdi + %1], rax
+%endmacro
+
+; -----------------------------------------------------------------------------
+; Usigned integer to larger signed types
+; u8tos16, u16tos32, u32tos64
+
+%macro u8tos16.m 2
+  mov al, byte [rdi + %2]
+  movzx ax, al
+  mov word [rdi + %1], ax
+%endmacro
+
+%macro u16tos32.m 2
+  mov ax, word [rdi + %2]
+  movzx eax, ax
+  mov dword [rdi + %1], eax
+%endmacro
+
+%macro u32tos64.m 2
+  mov eax, dword [rdi + %2]
+  movzx rax, eax
+  mov qword [rdi + %1], rax
+%endmacro
+
+
+; -----------------------------------------------------------------------------
+; Signed integer to larger signed types
+; s8tos16, s16tos32, s32tos64
+
+%macro s8tos16.m 2
+  mov al, byte [rdi + %2]
+  movsx ax, al
+  mov word [rdi + %1], ax
+%endmacro
+
+%macro s16tos32.m 2
+  mov ax, word [rdi + %2]
+  movsx eax, ax
+  mov dword [rdi + %1], eax
+%endmacro
+
+%macro s32tos64.m 2
+  mov eax, dword [rdi + %2]
+  movsxd rax, eax
+  mov qword [rdi + %1], rax
+%endmacro
+
+; -----------------------------------------------------------------------------
+; Integer to floats
+; u16tof32, s16tof32, u32tof64, s32tof64
+
+%macro u16tof32.m 2
+  mov ax, word [rdi + %2]
+	movzx eax, ax
+  cvtsi2ss xmm0, eax
+  movss [rdi + %1], xmm0
+%endmacro
+
+%macro s16tof32.m 2
+  mov ax, dword [rdi + %2]
+	movsx eax, ax
+  cvtsi2sd xmm0, eax
+  movss [rdi + %1], xmm0
+%endmacro
+
+%macro u32tof64.m 2
+  mov eax, dword [rdi + %2]
+	movzx rax, eax
+  cvtsi2sd xmm0, rax
+  movsd [rdi + %1], xmm0
+%endmacro
+
+%macro s32tof64.m 2
+  mov eax, dword [rdi + %2]
+  cvtsi2sd xmm0, eax
+  movsd [rdi + %1], xmm0
+%endmacro
+
+; -----------------------------------------------------------------------------
+; Floats to larger types
+; f32tof64
+
+%macro s32tof64.m 2
+  mov eax, dword [rdi + %2]
+  cvtsi2sd xmm0, eax
+  movsd [rdi + %1], xmm0
+%endmacro
+
 
 
 
