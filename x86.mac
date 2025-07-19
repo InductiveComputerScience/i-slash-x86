@@ -833,6 +833,22 @@
   vmovdqu %1, yword [%2 + rdx]
 %endmacro
 
+%macro Idr.mif64a 3
+  mov rax, qword [rdi + %2]
+  mov rdx, %3
+  mov rax, qword [rax + rdx * 8]
+  mov qword [rdi + %1], rax
+%endmacro
+
+%macro Idr.mista 3
+  mov rax, qword [rdi + %2]
+  mov rdx, %3
+  mov rax, qword [rax + rdx * 8]
+  mov qword [rdi + %1], rax
+%endmacro
+
+
+
 ; -----------------------------------------------------------------------------
 ; Eq
 
@@ -1002,6 +1018,12 @@
   mov rax, [rdi + %2]
   mov al, byte [rax + %3]
   mov [rdi + %1], al
+%endmacro
+
+%macro Acr.mmf64 3
+  mov rax, [rdi + %2]
+  mov rax, [rax + %3]
+  mov [rdi + %1], rax
 %endmacro
 
 ; -----------------------------------------------------------------------------

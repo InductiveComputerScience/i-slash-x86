@@ -131,7 +131,7 @@ public class Translator {
                         AddStringToStruct(entry, "type".toCharArray(), parts[0].string);
                         AddStringToStruct(entry, "name".toCharArray(), parts[1].string);
                         AddStructToArray(entries, entry);
-                    }else if(StringsEqual(parts[0].string, "str".toCharArray())){
+                    }else if(StringsEqual(parts[0].string, "str".toCharArray()) || StringsEqual(parts[0].string, "sta".toCharArray())){
                         entry = CreateStructure();
                         AddStringToStruct(entry, "type".toCharArray(), parts[0].string);
                         AddStringToStruct(entry, "typeName".toCharArray(), parts[1].string);
@@ -432,7 +432,7 @@ public class Translator {
                         LinkedListCharactersAddString(cc, nasmType);
                         LinkedListCharactersAddString(cc, " 1".toCharArray());
                         LinkedListCharactersAddString(cc, "\n".toCharArray());
-                    }else if(StringsEqual(parts[0].string, "str".toCharArray())){
+                    }else if(StringsEqual(parts[0].string, "str".toCharArray()) || StringsEqual(parts[0].string, "sta".toCharArray())){
                         LinkedListCharactersAddString(cc, "  .".toCharArray());
                         LinkedListCharactersAddString(cc, parts[2].string);
                         LinkedListCharactersAddString(cc, ": resq 1".toCharArray());
@@ -1153,6 +1153,11 @@ public class Translator {
                     LinkedListCharactersAddString(cc, "struct ".toCharArray());
                     LinkedListCharactersAddString(cc, type);
                     LinkedListCharactersAddString(cc, " *".toCharArray());
+                }else if(StringsEqual(type, "sta".toCharArray())){
+                    type = GetStringFromStruct(entry, "typeName".toCharArray());
+                    LinkedListCharactersAddString(cc, "struct ".toCharArray());
+                    LinkedListCharactersAddString(cc, type);
+                    LinkedListCharactersAddString(cc, " **".toCharArray());
                 } else {
                     LinkedListCharactersAddString(cc, MapType(type, entryTypes));
                     LinkedListCharactersAddString(cc, " ".toCharArray());
