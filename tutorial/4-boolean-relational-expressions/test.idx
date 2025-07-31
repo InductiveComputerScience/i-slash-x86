@@ -1,0 +1,15 @@
+Bgs testS
+  f64 a
+  f64 b
+  f64 c
+  f64 y
+  b1 tb10
+Ens
+
+Fnc test
+  If exp b: a < 50.0
+    exp a f64: y = 1.0
+  Else
+    exp a f64: y = 2.0
+  Endb
+Ret

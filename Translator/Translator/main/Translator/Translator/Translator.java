@@ -545,6 +545,24 @@ public class Translator {
                         LinkedListCharactersAddString(cc, "\n".toCharArray());
 
                         tabs = tabs + 1d;
+                    }else if(StringsEqual(parts[0].string, "Else".toCharArray())){
+                        PrintTabs(cc, tabs - 1d);
+                        LinkedListCharactersAddString(cc, "Else ".toCharArray());
+
+                        label = ArrayPopNumber(ifStack);
+                        LinkedListCharactersAddString(cc, "L".toCharArray());
+                        labelString = nCreateStringDecimalFromNumber(label);
+                        LinkedListCharactersAddString(cc, labelString);
+
+                        label = GetNextLabel(labels);
+                        ArrayPushNumber(ifStack, label);
+
+                        LinkedListCharactersAddString(cc, ", ".toCharArray());
+                        LinkedListCharactersAddString(cc, "L".toCharArray());
+                        labelString = nCreateStringDecimalFromNumber(label);
+                        LinkedListCharactersAddString(cc, labelString);
+
+                        LinkedListCharactersAddString(cc, "\n".toCharArray());
                     }else if(StringsEqual(parts[0].string, "Endb".toCharArray())){
                         tabs = tabs - 1d;
 

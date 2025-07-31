@@ -17,7 +17,9 @@
 # 3. Arrays
  - a. Array indexing
  - b. Structure access
- - c. Array index structure
+ - c. Array indexing structure
+
+# 4. Boolean relational expressions
 
 
 

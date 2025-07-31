@@ -590,6 +590,16 @@
   vmovdqu yword [rdi + %1], ymm0
 %endmacro
 
+%macro Lt.mif64 3
+  movsd xmm0, [rdi + %2]
+  mov rax, __?float64?__(%3)
+  movq xmm1, rax
+  cmpltsd xmm0, xmm1
+  movq rax, xmm0
+  cmp al, 255
+  sete [rdi + %1]
+%endmacro
+
 ; -----------------------------------------------------------------------------
 ; Lte
 
