@@ -295,6 +295,8 @@ public class Translator {
                 "              \"Lte\": {\"args\": 2, \"typeDecider\": 0},\n" +
                 "              \"LessThanOrEqual\": {\"args\": 2, \"typeDecider\": 0, \"alias\": \"Lte\"},\n" +
                 "              \"LessThan\": {\"args\": 2, \"typeDecider\": 0, \"alias\": \"Lt\"},\n" +
+                "              \"MoreThanOrEqual\": {\"args\": 2, \"typeDecider\": 0, \"alias\": \"Gte\"},\n" +
+                "              \"MoreThan\": {\"args\": 2, \"typeDecider\": 0, \"alias\": \"Gt\"},\n" +
                 "              \"Lt.iiu64\": {\"args\": 2, \"typeDecider\": 0},\n" +
                 "              \"Gt\": {\"args\": 2, \"typeDecider\": 0},\n" +
                 "              \"Gte\": {\"args\": 2, \"typeDecider\": 0},\n" +
@@ -692,12 +694,28 @@ public class Translator {
 
     public static char[] TranslateLiteral(char[] arg) {
         char [] lit;
+        double i;
+        boolean onlyNums;
 
         if(StringsEqual(arg, "true".toCharArray())){
             lit = "1".toCharArray();
         }else if(StringsEqual(arg, "false".toCharArray())){
             lit = "0".toCharArray();
         }else{
+            /*onlyNums = true;
+            for(i = 0d; i < arg.length; i = i + 1d){
+                if(!charIsNumber(arg[(int)i])){
+                    onlyNums = false;
+                }
+            }
+
+            if(onlyNums){
+                lit = CopyString(arg);
+                lit = AppendString(lit, ".0".toCharArray());
+            }else{
+                lit = CopyString(arg);
+            }*/
+
             lit = CopyString(arg);
         }
 

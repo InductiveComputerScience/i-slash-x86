@@ -6,11 +6,11 @@
 int main(){
 	struct testS ts;
 
-	ts.a = 75;
+	ts.a = 5;
 
 	test(&ts);
 
-	printf("test(...) = %d\n", ts.y);
+	printf("test(...) = %f\n", ts.y);
 
 	return 0;
 }

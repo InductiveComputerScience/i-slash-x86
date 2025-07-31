@@ -600,6 +600,14 @@
   sete [rdi + %1]
 %endmacro
 
+%macro Lt.mis64 3
+  mov rax, qword [rdi + %2]
+  mov rdx, %3
+  cmp rax, rdx
+  setl al
+  mov byte [rdi + %1], al
+%endmacro
+
 ; -----------------------------------------------------------------------------
 ; Lte
 
@@ -639,6 +647,24 @@
   vpbroadcastb ymm1, xmm2
   vpcmpgtb ymm0, ymm0, ymm1
   vmovdqu yword [rdi + %1], ymm0
+%endmacro
+
+%macro Gt.mif64 3
+  movsd xmm0, [rdi + %2]
+  mov rax, __?float64?__(%3)
+  movq xmm1, rax
+  cmpnlesd xmm0, xmm1
+  movq rax, xmm0
+  cmp al, 255
+  sete [rdi + %1]
+%endmacro
+
+%macro Gt.mis64 3
+  mov rax, qword [rdi + %2]
+  mov rdx, %3
+  cmp rax, rdx
+  setg al
+  mov byte [rdi + %1], al
 %endmacro
 
 ; -----------------------------------------------------------------------------

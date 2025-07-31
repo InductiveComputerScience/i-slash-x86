@@ -1,6 +1,6 @@
 # 1.e. Expressions
 
-We can divide one number with another using the / operator. This line will divide one number with another using signed, 64-bit integer arithmetic.
+We can get the compiler to automatically create a list of operations from an expression. We can start the line with "exp", for expression, followed by "a" for arithmetic expression and then the type, s64.
 
 ```
 exp a s64: y = x - x*3 + 45/x
