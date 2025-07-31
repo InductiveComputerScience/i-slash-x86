@@ -9,7 +9,7 @@ Bgs C
 Ens
 
 Bgs testS
-	str C c
+  str C c
   f64 y
 Ens
 
@@ -30,4 +30,4 @@ The output is:
 
 ```
 test(...) = 1.234567
-```	
+```
