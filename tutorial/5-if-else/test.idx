@@ -1,6 +1,6 @@
 Bgs testS
   s64 a
-  f64 y
+  s64 y
   b1 tb10
   b1 x
 Ens
@@ -9,8 +9,8 @@ Fnc test
 	Lt x, a, 50
 
   If x
-    Mov y, 1.0
+    Mov y, 1
   Else
-    Mov y, 2.0
+    Mov y, 2
   Endb
 Ret

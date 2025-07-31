@@ -15,10 +15,10 @@ Sub y, x, 5
 Then to x86 instructions in Intel syntax:
 
 ```
-mov rax, qword [rdi + x]
+mov rax, [rdi + x]
 mov rdx, 5
 sub rax, rdx
-mov qword [rdi + y], rax
+mov [rdi + y], rax
 ```
 
 First, the value of variable `x` is placed in register `rax`, then the literal 5 is placed in register `rdx`. The `sub` instruction is used for this. Finally, the value of register `rax` is placed in the variable `y`.

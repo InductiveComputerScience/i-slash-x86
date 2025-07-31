@@ -10,7 +10,7 @@ int main(){
 
 	test(&ts);
 
-	printf("test(...) = %f\n", ts.y);
+	printf("test(...) = %ld\n", ts.y);
 
 	return 0;
 }

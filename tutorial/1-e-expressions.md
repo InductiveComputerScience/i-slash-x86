@@ -18,26 +18,26 @@ Add y, t0, t1
 The result will be a this list of x86 instructions.
 
 ```
-mov rax, qword [rdi + x]
+mov rax, [rdi + x]
 mov rdx, 3
 imul rax, rdx
-mov qword [rdi + t0], rax
+mov [rdi + t0], rax
 
-mov rax, qword [rdi + x]
-mov rdx, qword [rdi + t0]
+mov rax, [rdi + x]
+mov rdx, [rdi + t0]
 sub rax, rdx
-mov qword [rdi + t0], rax
+mov [rdi + t0], rax
 
 mov rax, 45
 cqo
-mov rcx, qword [rdi + x]
+mov rcx, [rdi + x]
 idiv rcx
-mov qword [rdi + t1], rax
+mov [rdi + t1], rax
 
-mov rax, qword [rdi + t0]
-mov rdx, qword [rdi + t1]
+mov rax, [rdi + t0]
+mov rdx, [rdi + t1]
 add rax, rdx
-mov qword [rdi + y], rax
+mov [rdi + y], rax
 ```
 
 The output is:

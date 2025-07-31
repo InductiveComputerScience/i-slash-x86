@@ -153,8 +153,8 @@ Which is finally turned into x86 assembly in Intel syntax:
 
 ```
 
-mov rax, qword [rdi + x]
-mov qword [rdi + y], rax
+mov rax, [rdi + x]
+mov [rdi + y], rax
 
 ```
 

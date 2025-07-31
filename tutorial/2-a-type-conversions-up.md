@@ -20,7 +20,7 @@ Ret
 The result will be a this list of x86 instructions (the intermediate stores are not shown.)
 
 ```
-mov al, byte [rdi + x]
+mov al, [rdi + x]
 movsx ax, al
 movsx eax, ax
 cvtsi2ss xmm0, eax

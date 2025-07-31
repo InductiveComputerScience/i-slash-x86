@@ -21,10 +21,10 @@ Ret
 The result will be a this list of x86 instructions (the intermediate stores are not shown.)
 
 ```
-movsd xmm0, qword [rdi + x]
+movsd xmm0, [rdi + x]
 cvtsd2ss xmm0, xmm0
 cvttss2si eax, xmm0
-mov byte [rdi + %1], al
+mov [rdi + %1], al
 ```
 
 The output is:

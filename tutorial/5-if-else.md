@@ -12,7 +12,7 @@ Bgs testS
 Ens
 
 Fnc test
-	Lt x, a, 50
+  Lt x, a, 50
 
   If x
     Mov y, 1.0
@@ -37,15 +37,14 @@ and ah, 1
 cmp al, ah
 je L1
 
-mov rax, __?float64?__(1.0)
-mov qword [rdi + y], rax
+  mov rax, 1
+  mov qword [rdi + y], rax
 
 jmp L2
 L1:
 
-mov rax, __?float64?__(2.0)
-
-mov qword [rdi + y], rax
+  mov rax, 2
+  mov qword [rdi + y], rax
 
 L2:
 ```
@@ -54,4 +53,4 @@ The output is:
 
 ```
 test(...) = 1
-```	
+```  

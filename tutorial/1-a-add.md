@@ -15,10 +15,10 @@ Add y, x, 32
 Then to x86 instructions in Intel syntax:
 
 ```
-mov rax, qword [rdi + x]
+mov rax, [rdi + x]
 mov rdx, 32
 add rax, rdx
-mov qword [rdi + y], rax
+mov [rdi + y], rax
 ```
 
 First, we place the value of variable `x` in register `rax`, then the literal 32 is placed in register `rdx`. The `add` instruction is used for this. Finally, the value of `rax` is placed in the variable `y`.
