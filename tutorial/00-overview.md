@@ -26,5 +26,6 @@
  - b. Loops
  - c. Function calls
 
+# 6. Bitwise expressions
 
 

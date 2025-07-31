@@ -1,0 +1,13 @@
+Bgs testS
+	b32 d0
+	b32 d1
+	b32 d2
+  b32 y
+	b32 tb320
+	b32 tb321
+	b32 tb322
+Ens
+
+Fnc test
+  exp bw b32: y = d2 | d1 << 8 | d0 << 16
+Ret
