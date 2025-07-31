@@ -35,16 +35,12 @@ mov ah, byte [rdi + x]
 and ah, 1
 cmp al, ah
 je L1
-
   mov rax, 1
   mov qword [rdi + y], rax
-
 jmp L2
 L1:
-
   mov rax, 2
   mov qword [rdi + y], rax
-
 L2:
 ```
 

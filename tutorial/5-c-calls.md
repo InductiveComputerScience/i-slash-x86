@@ -1,56 +1,33 @@
-# 5 If, else
+# 5.c Calls
 
-We can get the compiler to automatically generate the list of instructions for a boolean-relational formula. The line starts with "exp" for expression, followed by "b" for boolean-relational followed by the type "b1", the result of the expression.
+This is how functions are called.
 
 
 ```
-Bgs testS
-  s64 a
-  f64 y
-  b1 tb10
-  b1 x
-Ens
-
-Fnc test
-  Lt x, a, 50
-
-  If x
-    Mov y, 1.0
-  Else
-    Mov y, 2.0
-  Endb
-Ret
+Acw fns, x, x
+Call fn, fns
+Acr y, fns, x
 ```
 
 Which will translate to the following x86 assembly:
 
 ```
-mov rax, qword [rdi + a]
-mov rdx, 50
-cmp rax, rdx
-setl al
-mov byte [rdi + x], al
+mov rax, qword [rdi + fns]
+mov rdx, qword [rdi + x]
+mov qword [rdx + x], rax
 
-mov al, 0
-mov ah, byte [rdi + x]
-and ah, 1
-cmp al, ah
-je L1
+push rdi
+mov rdi, [rdi + fns]
+call fn
+pop rdi
 
-  mov rax, 1
-  mov qword [rdi + y], rax
-
-jmp L2
-L1:
-
-  mov rax, 2
-  mov qword [rdi + y], rax
-
-L2:
+mov rax, [rdi + fns]
+mov rax, [rax + x]
+mov [rdi + y], rax
 ```
 
 The output is:
 
 ```
 test(...) = 1
-```  
+```

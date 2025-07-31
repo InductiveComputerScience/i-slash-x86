@@ -3,23 +3,12 @@
 Use Loops as follows.
 
 ```
-Bgs testS
-  s64 x
-  s64 i
-  s64 y
-  b1 tb10
-Ens
-
-Fnc test
-  Mov y, 0
-
-  Mov i, 0
-  Loop
-  If exp b: i < x
-    exp a s64: y = y + i
-    Inc i
-  EndLoop
-Ret
+Mov i, 0
+Loop
+If exp b: i < x
+  exp a s64: y = y + i
+  Inc i
+EndLoop
 ```
 
 Which will translate to the following x86 assembly:
