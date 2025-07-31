@@ -608,6 +608,14 @@
   mov byte [rdi + %1], al
 %endmacro
 
+%macro Lt.mms64 3
+  mov rax, qword [rdi + %2]
+  mov rdx, qword [rdi + %3]
+  cmp rax, rdx
+  setl al
+  mov byte [rdi + %1], al
+%endmacro
+
 ; -----------------------------------------------------------------------------
 ; Lte
 
@@ -1035,6 +1043,12 @@
   mov qword [rdx + %2], rax
 %endmacro
 
+%macro Acw.mms64 3
+  mov rax, qword [rdi + %3]
+  mov rdx, qword [rdi + %1]
+  mov qword [rdx + %2], rax
+%endmacro
+
 %macro Acw.miu64 3
   mov rax, %3
   mov rdx, qword [rdi + %1]
@@ -1045,6 +1059,12 @@
 ; Acr
 
 %macro Acr.mmu64 3
+  mov rax, [rdi + %2]
+  mov rax, [rax + %3]
+  mov [rdi + %1], rax
+%endmacro
+
+%macro Acr.mms64 3
   mov rax, [rdi + %2]
   mov rax, [rax + %3]
   mov [rdi + %1], rax
@@ -1066,6 +1086,10 @@
 ; Inc
 
 %macro Inc.mu64 1
+  inc qword [rdi + %1]
+%endmacro
+
+%macro Inc.ms64 1
   inc qword [rdi + %1]
 %endmacro
 

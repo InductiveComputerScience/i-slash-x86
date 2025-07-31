@@ -1,0 +1,19 @@
+Bgs testS
+  s64 x
+  s64 y
+  str fnS fns
+Ens
+
+Fnc test
+  Acw fns, x, x
+  Call fn, fns
+  Acr y, fns, x
+Ret
+
+Bgs fnS
+  s64 x
+Ens
+
+Fnc fn
+  Mul x, x, 3
+Ret

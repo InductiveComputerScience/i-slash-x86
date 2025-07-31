@@ -21,5 +21,10 @@
 
 # 4. Boolean relational expressions
 
+# 5. Control flow
+ - a. If-else
+ - b. Loops
+ - c. Function calls
+
 
 
