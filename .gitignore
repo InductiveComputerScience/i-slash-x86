@@ -7,3 +7,7 @@ a.out
 *.jar
 build
 Translator.jar
+*.lst
+test.asm
+test.h
+
