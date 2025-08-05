@@ -28,4 +28,44 @@
 
 # 6. Bitwise expressions
 
+# 7. Various computational instructions
+ - a. Conditional move (branchless programming)
+ - b. Conditional set (branchless programming)
+ - c. DivMod and MulDiv
+ - e. Increase and decrease
+ - f. Exchange and add
+ - g. Rotate
+ - h. Byte swap
+ - i. Exchange (XCHG)
+ - j. Bit test
+ - k. Bit scan
+ - l. Byte order swap
+ - m. Compare and exchange
+ - n. CRC32
 
+# 8. Bit computations
+ - a. Population count
+ - b. Leading zero count
+ - c. Trailing zero count
+ - d. Bitwise AND-NOT
+ - e. Bitfield extract.
+ - f. Extract lowest set bit
+ - g. Generate a bitmask
+ - h. Copy all bits of the source argument, then clear the lowest set bit.
+ - i. Zero out high-order bits
+ - j. mulx
+ - k. Parallel Bit Deposit.
+ - l. Parallel Bit Extract.
+
+# 9. String instructions
+ - LODX
+ - MOVSX
+ - SCASX
+ - STOSX
+ - CMPSX
+
+# 10. Various infrastructural instructions
+ - RDTSC
+ - RDPMC
+ - RDRAND
+ - CPUID

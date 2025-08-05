@@ -1,4 +1,4 @@
-# 4 Boolean Relational Expressions
+# 6. Boolean Relational Expressions
 
 We can get the compiler to automatically generate the list of instructions for a boolean-relational formula. The line starts with "exp" for expression, followed by "b" for boolean-relational followed by the type "b1", the result of the expression.
 

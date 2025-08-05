@@ -1,0 +1,13 @@
+Bgs testS
+  s64 x
+  s64 a
+  s64 b
+  s64 y
+  s64 z
+	b1 c
+Ens
+
+Fnc test
+	Eq c, a, b
+  Cmov y, x, c
+Ret

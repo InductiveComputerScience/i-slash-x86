@@ -368,6 +368,15 @@
   mov qword [rdi + %2], rdx
 %endmacro
 
+%macro DivMod.mms64 4
+  mov rax, qword [rdi + %3]
+  cqo
+  mov rcx, qword [rdi + %4]
+  idiv rcx
+  mov qword [rdi + %1], rax
+  mov qword [rdi + %2], rdx
+%endmacro
+
 ; -----------------------------------------------------------------------------
 ; Mod
 
@@ -388,6 +397,15 @@
   mul rdx
   mov rcx, qword [rdi + %4]
   div rcx
+  mov qword [rdi + %1], rax
+%endmacro
+
+%macro MulDiv.mms64 4
+  mov rax, qword [rdi + %2]
+  mov rdx, qword [rdi + %3]
+  imul rdx
+  mov rcx, qword [rdi + %4]
+  idiv rcx
   mov qword [rdi + %1], rax
 %endmacro
 
@@ -952,6 +970,14 @@
   mov byte [rdi + %1], al
 %endmacro
 
+%macro Eq.mms64 3
+  mov rax, qword [rdi + %2]
+  mov rdx, qword [rdi + %3]
+  cmp rax, rdx
+  sete al
+  mov byte [rdi + %1], al
+%endmacro
+
 %macro Eq.miu64 3
   mov rax, qword [rdi + %2]
   mov rdx, %3
@@ -1462,8 +1488,41 @@ extern free
   movss dword [rdi + %1], xmm0
 %endmacro
 
+; -----------------------------------------------------------------------------
+; Ror
 
+%macro Ror.mib32 3
+  mov eax, dword [rdi + %2]
+  ror eax, %3
+  mov dword [rdi + %1], eax
+%endmacro
 
+; -----------------------------------------------------------------------------
+; Rol
 
+%macro Rol.mib32 3
+  mov eax, dword [rdi + %2]
+  rol eax, %3
+  mov dword [rdi + %1], eax
+%endmacro
 
+; -----------------------------------------------------------------------------
+; Cmovcc
+
+%macro Cmov.mms64 3
+  mov rdx, qword [rdi + %2]
+  mov al, byte [rdi + %3]
+	test al, al
+  cmovnz rax, rdx
+  mov qword [rdi + %1], rax
+%endmacro
+
+%macro Cmoveq.mms64 4
+  mov rax, qword [rdi + %3]
+  mov rdx, qword [rdi + %4]
+  mov rcx, qword [rdi + %2]
+  cmp rax, rdx
+  cmovz rax, rcx
+  mov qword [rdi + %1], rax
+%endmacro
 

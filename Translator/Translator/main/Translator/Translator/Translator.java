@@ -297,7 +297,6 @@ public class Translator {
                 "              \"LessThan\": {\"args\": 2, \"typeDecider\": 0, \"alias\": \"Lt\"},\n" +
                 "              \"MoreThanOrEqual\": {\"args\": 2, \"typeDecider\": 0, \"alias\": \"Gte\"},\n" +
                 "              \"MoreThan\": {\"args\": 2, \"typeDecider\": 0, \"alias\": \"Gt\"},\n" +
-                "              \"Lt.iiu64\": {\"args\": 2, \"typeDecider\": 0},\n" +
                 "              \"Gt\": {\"args\": 2, \"typeDecider\": 0},\n" +
                 "              \"Gte\": {\"args\": 2, \"typeDecider\": 0},\n" +
                 "              \"MoreThanOrEqual\": {\"args\": 2, \"typeDecider\": 0, \"alias\": \"Gte\"},\n" +
@@ -316,7 +315,9 @@ public class Translator {
                 "              \"f32tof64\": {\"args\": 1, \"typeDecider\": 0, \"noTypePostfix\": true},\n" +
                 "              \"s16tos8\": {\"args\": 1, \"typeDecider\": 0, \"noTypePostfix\": true},\n" +
                 "              \"f32tos16\": {\"args\": 1, \"typeDecider\": 0, \"noTypePostfix\": true},\n" +
-                "              \"f64tof32\": {\"args\": 1, \"typeDecider\": 0, \"noTypePostfix\": true}\n" +
+                "              \"f64tof32\": {\"args\": 1, \"typeDecider\": 0, \"noTypePostfix\": true},\n" +
+                "              \"Cmov\": {\"args\": 2, \"typeDecider\": 1},\n" +
+                "              \"Set\": {\"args\": 1, \"typeDecider\": 1}\n" +
                 "            }").toCharArray();
 
         success = ReadJSON(json, dataRef, message);
