@@ -284,12 +284,19 @@ public class Translator {
                 "              \"DivMod\": {\"args\": 3, \"typeDecider\": 1},\n" +
                 "              \"MulDiv\": {\"args\": 3, \"typeDecider\": 1},\n" +
                 "              \"Inc\": {\"args\": 0, \"typeDecider\": 1},\n" +
+                "              \"Dec\": {\"args\": 0, \"typeDecider\": 1},\n" +
                 "              \n" +
                 "              \"Not\": {\"args\": 1, \"typeDecider\": 1},\n" +
                 "              \"Shl\": {\"args\": 2, \"typeDecider\": 1},\n" +
                 "              \"ShiftLeft\": {\"args\": 2, \"typeDecider\": 1, \"alias\": \"Shl\"},\n" +
                 "              \"And\": {\"args\": 2, \"typeDecider\": 1},\n" +
                 "              \"Or\": {\"args\": 2, \"typeDecider\": 1},\n" +
+                "              \"Ror\": {\"args\": 2, \"typeDecider\": 1},\n" +
+                "              \"Rol\": {\"args\": 2, \"typeDecider\": 1},\n" +
+                "              \"Bswap\": {\"args\": 1, \"typeDecider\": 1},\n" +
+                "              \"Bsf\": {\"args\": 1, \"typeDecider\": 1},\n" +
+                "              \"Bsr\": {\"args\": 1, \"typeDecider\": 1},\n" +
+                "              \"Bt\": {\"args\": 2, \"typeDecider\": 1},\n" +
                 "              \n" +
                 "              \"Lt\": {\"args\": 2, \"typeDecider\": 0},\n" +
                 "              \"Lte\": {\"args\": 2, \"typeDecider\": 0},\n" +
@@ -303,7 +310,7 @@ public class Translator {
                 "              \"Eq\": {\"args\": 2, \"typeDecider\": 0},\n" +
                 "              \"Equal\": {\"args\": 2, \"typeDecider\": 0, \"alias\": \"Eq\"},\n" +
                 "              \"Neq\": {\"args\": 2, \"typeDecider\": 0},\n" +
-                "\n" +
+                "              \n" +
                 "              \"Idr\": {\"args\": 2, \"typeDecider\": 2},\n" +
                 "              \"Idw\": {\"args\": 2, \"typeDecider\": 1},\n" +
                 "              \n" +
@@ -317,7 +324,9 @@ public class Translator {
                 "              \"f32tos16\": {\"args\": 1, \"typeDecider\": 0, \"noTypePostfix\": true},\n" +
                 "              \"f64tof32\": {\"args\": 1, \"typeDecider\": 0, \"noTypePostfix\": true},\n" +
                 "              \"Cmov\": {\"args\": 2, \"typeDecider\": 1},\n" +
-                "              \"Set\": {\"args\": 1, \"typeDecider\": 1}\n" +
+                "              \"Set\": {\"args\": 1, \"typeDecider\": 1},\n" +
+                "              \"Xchg\": {\"args\": 1, \"typeDecider\": 1},\n" +
+                "              \"Xadd\": {\"args\": 1, \"typeDecider\": 1}\n" +
                 "            }").toCharArray();
 
         success = ReadJSON(json, dataRef, message);

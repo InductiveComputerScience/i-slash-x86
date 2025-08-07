@@ -1,0 +1,16 @@
+Bgs testS
+  s64 x
+  s64 y
+  s64 z
+
+  s64 a
+  s64 b
+  s64 c
+  s64 d
+  s64 e
+Ens
+
+Fnc test
+  Inc a
+  Dec b
+Ret

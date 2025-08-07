@@ -32,16 +32,16 @@
  - a. Conditional move (branchless programming)
  - b. Conditional set (branchless programming)
  - c. DivMod and MulDiv
- - e. Increase and decrease
+ - d. Increase and decrease
+ - e. Exchange (XCHG)
  - f. Exchange and add
  - g. Rotate
  - h. Byte swap
- - i. Exchange (XCHG)
+ - i. Bit scan
  - j. Bit test
- - k. Bit scan
- - l. Byte order swap
- - m. Compare and exchange
- - n. CRC32
+ - k. Byte order swap
+ - l. Compare and exchange
+ - m. CRC32
 
 # 8. Bit computations
  - a. Population count

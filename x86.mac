@@ -1124,6 +1124,21 @@
 %endmacro
 
 ; -----------------------------------------------------------------------------
+; Dec
+
+%macro Dec.mu64 1
+  dec qword [rdi + %1]
+%endmacro
+
+%macro Dec.ms64 1
+  dec qword [rdi + %1]
+%endmacro
+
+%macro Dec.ru64 1
+  dec %1
+%endmacro
+
+; -----------------------------------------------------------------------------
 ; Shl
 
 %macro Shl.mib32 3
@@ -1497,13 +1512,25 @@ extern free
   mov dword [rdi + %1], eax
 %endmacro
 
+%macro Ror.mib64 3
+  mov rax, qword [rdi + %2]
+  ror rax, %3
+  mov qword [rdi + %1], rax
+%endmacro
+
 ; -----------------------------------------------------------------------------
 ; Rol
 
 %macro Rol.mib32 3
   mov eax, dword [rdi + %2]
   rol eax, %3
-  mov dword [rdi + %1], eax
+  mov dword [rdi + %1], rax
+%endmacro
+
+%macro Rol.mib64 3
+  mov rax, qword [rdi + %2]
+  rol rax, %3
+  mov qword [rdi + %1], rax
 %endmacro
 
 ; -----------------------------------------------------------------------------
@@ -1525,4 +1552,76 @@ extern free
   cmovz rax, rcx
   mov qword [rdi + %1], rax
 %endmacro
+
+; -----------------------------------------------------------------------------
+; Xchg
+
+%macro Xchg.ms64 2
+  mov rax, qword [rdi + %2]
+  xchg rax, qword [rdi + %1]
+  mov qword [rdi + %2], rax
+%endmacro
+
+; -----------------------------------------------------------------------------
+; Xadd
+
+%macro Xadd.ms64 2
+  mov rax, qword [rdi + %2]
+  xadd qword [rdi + %1], rax
+  mov qword [rdi + %2], rax
+%endmacro
+
+; -----------------------------------------------------------------------------
+; Bswap
+
+%macro Bswap.mb64 2
+  mov rax, qword [rdi + %2]
+  bswap rax
+  mov qword [rdi + %1], rax
+%endmacro
+
+%macro Bswap.mb32 2
+  mov eax, dword [rdi + %2]
+  bswap eax
+  mov dword [rdi + %1], eax
+%endmacro
+
+%macro Bswap.mb16 2
+  mov ax, word [rdi + %2]
+  xchg ah, al
+  mov word [rdi + %1], ax
+%endmacro
+
+; -----------------------------------------------------------------------------
+; Bsf -- Bit scan forward, find first set bit rightwards
+
+%macro Bsf.mb64 2
+  mov rax, qword [rdi + %2]
+  bsf rax, rax
+  mov qword [rdi + %1], rax
+%endmacro
+
+; -----------------------------------------------------------------------------
+; Bsr -- Bit scan reverse, find first set bit leftwards
+
+%macro Bsr.mb64 2
+  mov rax, qword [rdi + %2]
+  bsr rax, rax
+  mov qword [rdi + %1], rax
+%endmacro
+
+; -----------------------------------------------------------------------------
+; Bt -- Bit test
+
+%macro Bt.miu64 3
+  mov rax, qword [rdi + %2]
+  bt rax, %3
+	setc al
+	movzx rax, al
+  mov qword [rdi + %1], rax
+%endmacro
+
+
+
+
 

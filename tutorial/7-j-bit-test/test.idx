@@ -1,0 +1,10 @@
+Bgs testS
+  b64 x
+  u64 y
+  u64 z
+Ens
+
+Fnc test
+  Bt y, x, 20
+  Bt z, x, 19
+Ret

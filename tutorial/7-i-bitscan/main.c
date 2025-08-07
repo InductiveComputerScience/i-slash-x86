@@ -6,19 +6,16 @@
 int main(){
 	struct testS ts;
 
-	ts.a = 14;
-	ts.b = 3;
-
-	ts.c = 0xAFFFFFFFFFFFFF;
-	ts.d = 0xBFFFFFFFFFFFFF;
-	ts.e = 0xCFFFFFFFFFFFFF;
+  //                 .
+	ts.x = 0x0000001000100000ULL;
+  //        .
+	ts.y = 0x0100000000010000ULL;
 
 	test(&ts);
 
 	printf("test(...) = %ld, %ld\n", ts.x, ts.y);
-	printf("test(...) = %lx\n", ts.z);
 
-	if(ts.x == 4 && ts.y == 2 && ts.z == 0xa2762762762761){
+	if(ts.x == 20 && ts.y == 56){
 		printf("success\n");
 	}else{
 		printf("fail\n");
