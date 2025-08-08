@@ -1621,6 +1621,33 @@ extern free
   mov qword [rdi + %1], rax
 %endmacro
 
+; -----------------------------------------------------------------------------
+; CmpXchg -- Compare and Exchange
+
+%macro CmpXchg.mms64 4
+  mov rax, qword [rdi + %2]
+  mov rcx, qword [rdi + %3]
+  mov rdx, qword [rdi + %4]
+  cmpxchg rcx, rdx
+	setz r8b
+  mov byte [rdi + %1], r8b
+  mov qword [rdi + %2], rax
+  mov qword [rdi + %3], rcx
+%endmacro
+
+; -----------------------------------------------------------------------------
+; Crc32 -- Cyclic redundancy check
+
+%macro Crc32.mu32 2
+  mov eax, dword [rdi + %1]
+  mov ecx, dword [rdi + %2]
+  crc32 eax, ecx
+  mov dword [rdi + %1], eax
+%endmacro
+
+
+
+
 
 
 

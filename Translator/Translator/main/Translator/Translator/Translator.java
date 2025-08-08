@@ -326,7 +326,9 @@ public class Translator {
                 "              \"Cmov\": {\"args\": 2, \"typeDecider\": 1},\n" +
                 "              \"Set\": {\"args\": 1, \"typeDecider\": 1},\n" +
                 "              \"Xchg\": {\"args\": 1, \"typeDecider\": 1},\n" +
-                "              \"Xadd\": {\"args\": 1, \"typeDecider\": 1}\n" +
+                "              \"Xadd\": {\"args\": 1, \"typeDecider\": 1},\n" +
+                "              \"CmpXchg\": {\"args\": 3, \"typeDecider\": 2},\n" +
+                "              \"Crc32\": {\"args\": 1, \"typeDecider\": 1}\n" +
                 "            }").toCharArray();
 
         success = ReadJSON(json, dataRef, message);

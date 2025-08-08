@@ -1,0 +1,10 @@
+Bgs testS
+  s64 a
+  s64 b
+  s64 c
+  b1 y
+Ens
+
+Fnc test
+  CmpXchg y, a, b, c
+Ret

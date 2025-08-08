@@ -39,9 +39,8 @@
  - h. Byte swap
  - i. Bit scan
  - j. Bit test
- - k. Byte order swap
- - l. Compare and exchange
- - m. CRC32
+ - k. Compare and exchange
+ - l. CRC32
 
 # 8. Bit computations
  - a. Population count
