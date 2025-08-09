@@ -1,0 +1,11 @@
+Bgs testS
+  u8a x
+  u8a y
+	u64 l
+  b1 c
+Ens
+
+Fnc test
+	Len l, x
+  Cmps c, y, x, l
+Ret

@@ -1,0 +1,10 @@
+Bgs testS
+  u8a x
+  u8a y
+	u64 l
+Ens
+
+Fnc test
+	Len l, x
+  Movs y, x, l
+Ret

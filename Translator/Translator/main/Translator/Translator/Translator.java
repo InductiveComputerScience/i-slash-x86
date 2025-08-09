@@ -328,7 +328,10 @@ public class Translator {
                 "              \"Xchg\": {\"args\": 1, \"typeDecider\": 1},\n" +
                 "              \"Xadd\": {\"args\": 1, \"typeDecider\": 1},\n" +
                 "              \"CmpXchg\": {\"args\": 3, \"typeDecider\": 2},\n" +
-                "              \"Crc32\": {\"args\": 1, \"typeDecider\": 1}\n" +
+                "              \"Crc32\": {\"args\": 1, \"typeDecider\": 1},\n" +
+                "              \"Movs\": {\"args\": 2, \"typeDecider\": 1},\n" +
+                "              \"Cmps\": {\"args\": 3, \"typeDecider\": 2},\n" +
+                "              \"Scas\": {\"args\": 3, \"typeDecider\": 3}\n" +
                 "            }").toCharArray();
 
         success = ReadJSON(json, dataRef, message);

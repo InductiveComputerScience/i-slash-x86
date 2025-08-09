@@ -1645,6 +1645,87 @@ extern free
   mov dword [rdi + %1], eax
 %endmacro
 
+; -----------------------------------------------------------------------------
+; Movs -- Move String, Block copy
+
+%macro Movs.mmu8a 3
+  cld
+  mov rsi, qword [rdi + %2]
+  mov rcx, qword [rdi + %3]
+  mov rbx, rdi
+  mov rdi, qword [rdi + %1]
+  rep movsb
+  mov rdi, rbx
+%endmacro
+
+%macro Movs.mmu16a 3
+  cld
+  mov rsi, qword [rdi + %2]
+  mov rcx, qword [rdi + %3]
+  mov rbx, rdi
+  mov rdi, qword [rdi + %1]
+  rep movsw
+  mov rdi, rbx
+%endmacro
+
+%macro Movs.mmu32a 3
+  cld
+  mov rsi, qword [rdi + %2]
+  mov rcx, qword [rdi + %3]
+  mov rbx, rdi
+  mov rdi, qword [rdi + %1]
+  rep movsd
+  mov rdi, rbx
+%endmacro
+
+%macro Movs.mmu64a 3
+  cld
+  mov rsi, qword [rdi + %2]
+  mov rcx, qword [rdi + %3]
+  mov rbx, rdi
+  mov rdi, qword [rdi + %1]
+  rep movsq
+  mov rdi, rbx
+%endmacro
+
+; -----------------------------------------------------------------------------
+; Cmps -- Compare strings
+
+%macro Cmps.mmu8a 4
+  cld
+  mov rsi, qword [rdi + %3]
+  mov rcx, qword [rdi + %4]
+  mov rbx, rdi
+  mov rdi, qword [rdi + %2]
+  rep cmpsb
+  mov rdi, rbx
+  setz byte [rdi + %1]
+%endmacro
+
+; -----------------------------------------------------------------------------
+; Scas -- Block scan, find index of byte %3 in array %2
+
+%macro Scas.mmu8a 4
+  cld
+  mov al, byte [rdi + %3]
+  mov rcx, qword [rdi + %4]
+  mov rbx, rdi
+  mov rdi, qword [rdi + %2]
+  repne scasb
+	sete r8b
+	movzx r8, r8b
+  mov rdi, rbx
+	sub rcx, qword [rdi + %4]
+  neg rcx
+	sub rcx, r8
+  mov qword [rdi + %1], rcx
+%endmacro
+
+
+
+
+
+
 
 
 

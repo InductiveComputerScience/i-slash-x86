@@ -36,32 +36,30 @@
  - e. Exchange (XCHG)
  - f. Exchange and add
  - g. Rotate
- - h. Byte swap
- - i. Bit scan
- - j. Bit test
- - k. Compare and exchange
- - l. CRC32
+ - h. Compare and exchange
+ - i. CRC32
 
 # 8. Bit computations
- - a. Population count
- - b. Leading zero count
- - c. Trailing zero count
- - d. Bitwise AND-NOT
- - e. Bitfield extract.
- - f. Extract lowest set bit
- - g. Generate a bitmask
- - h. Copy all bits of the source argument, then clear the lowest set bit.
- - i. Zero out high-order bits
- - j. mulx
- - k. Parallel Bit Deposit.
- - l. Parallel Bit Extract.
+ - a. Byte swap
+ - b. Bit scan
+ - c. Bit test
+ - d. Population count
+ - e. Leading zero count
+ - f. Trailing zero count
+ - g. Bitwise AND-NOT
+ - h. Bitfield extract.
+ - i. Extract lowest set bit
+ - j. Generate a bitmask
+ - k. Copy all bits of the source argument, then clear the lowest set bit.
+ - l. Zero out high-order bits
+ - m. Parallel Bit Deposit.
+ - n. Parallel Bit Extract.
 
 # 9. String instructions
- - LODX
- - MOVSX
- - SCASX
- - STOSX
- - CMPSX
+ - a. MOVSX -- block move
+ - b. CMPSX -- check if blocks are equal
+ - c. SCASX -- repeat until something is found
+ - d. LODX and STOSX -- store or load into ax
 
 # 10. Various infrastructural instructions
  - RDTSC
