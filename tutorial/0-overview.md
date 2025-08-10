@@ -33,10 +33,10 @@
  - b. Conditional set (branchless programming)
  - c. DivMod and MulDiv
  - d. Increase and decrease
- - e. Exchange (XCHG)
- - f. Exchange and add
+ - e. Exchange (xchg) (concurrency)
+ - f. Exchange and add  (concurrency)
  - g. Rotate
- - h. Compare and exchange
+ - h. Compare and exchange (concurrency)
  - i. CRC32
 
 # 8. Bit computations
@@ -57,12 +57,22 @@
 
 # 9. String instructions
  - a. MOVSX -- block move
- - b. CMPSX -- check if blocks are equal
- - c. SCASX -- repeat until something is found
- - d. LODX and STOSX -- store or load into ax
+ - b. CMPSX -- block compare
+ - c. SCASX -- find index of value in block
+ - ??(d. LODX and STOSX -- load into or store from ax)
 
 # 10. Various infrastructural instructions
- - RDTSC
- - RDPMC
- - RDRAND
+ - RDTSC -- Read time stamp counter
+ - RDPMC -- Read performance counters
+ - RDRAND -- Read random number
  - CPUID
+
+# 11. Various other instructions
+ - Nop -- No operation
+
+
+
+
+
+
+

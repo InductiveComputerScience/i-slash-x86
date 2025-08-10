@@ -1,0 +1,8 @@
+Bgs testS
+	u64 y
+	b1 c
+Ens
+
+Fnc test
+	Rdrand y, c
+Ret

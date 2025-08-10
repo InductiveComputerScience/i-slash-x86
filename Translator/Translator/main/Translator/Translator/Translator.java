@@ -288,7 +288,9 @@ public class Translator {
                 "              \n" +
                 "              \"Not\": {\"args\": 1, \"typeDecider\": 1},\n" +
                 "              \"Shl\": {\"args\": 2, \"typeDecider\": 1},\n" +
+                "              \"Shr\": {\"args\": 2, \"typeDecider\": 1},\n" +
                 "              \"ShiftLeft\": {\"args\": 2, \"typeDecider\": 1, \"alias\": \"Shl\"},\n" +
+                "              \"ShiftRight\": {\"args\": 2, \"typeDecider\": 1, \"alias\": \"Shr\"},\n" +
                 "              \"And\": {\"args\": 2, \"typeDecider\": 1},\n" +
                 "              \"Or\": {\"args\": 2, \"typeDecider\": 1},\n" +
                 "              \"Ror\": {\"args\": 2, \"typeDecider\": 1},\n" +
@@ -331,7 +333,13 @@ public class Translator {
                 "              \"Crc32\": {\"args\": 1, \"typeDecider\": 1},\n" +
                 "              \"Movs\": {\"args\": 2, \"typeDecider\": 1},\n" +
                 "              \"Cmps\": {\"args\": 3, \"typeDecider\": 2},\n" +
-                "              \"Scas\": {\"args\": 3, \"typeDecider\": 3}\n" +
+                "              \"Scas\": {\"args\": 3, \"typeDecider\": 3},\n" +
+                "              \"Popcnt\": {\"args\": 1, \"typeDecider\": 0},\n" +
+                "              \"Lzcnt\": {\"args\": 1, \"typeDecider\": 0},\n" +
+                "              \"Tzcnt\": {\"args\": 1, \"typeDecider\": 0},\n" +
+                "              \"Rdtsc\": {\"args\": 0},\n" +
+                "              \"Nop\": {\"args\": 0},\n" +
+                "              \"Rdpmc\": {\"args\": 1, \"typeDecider\": 0}\n" +
                 "            }").toCharArray();
 
         success = ReadJSON(json, dataRef, message);

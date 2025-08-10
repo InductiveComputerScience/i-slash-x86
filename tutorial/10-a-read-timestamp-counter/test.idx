@@ -1,0 +1,15 @@
+Bgs testS
+  u64 t1
+	u64 t2
+	u64 y
+Ens
+
+Fnc test
+  Rdtsc t1
+	Add y, t1, t2
+	Add y, t1, t2
+	Add y, t1, t2
+	Add y, t1, t2
+  Rdtsc t2
+	Sub y, t2, t1
+Ret

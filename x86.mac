@@ -1148,7 +1148,22 @@
 %endmacro
 
 ; -----------------------------------------------------------------------------
-; Shl
+; Shr
+
+%macro Shr.miu32 3
+  mov eax, dword [rdi + %2]
+  shr eax, %3
+  mov dword [rdi + %1], eax
+%endmacro
+
+%macro Shr.miu64 3
+  mov rax, qword [rdi + %2]
+  shr rax, %3
+  mov qword [rdi + %1], rax
+%endmacro
+
+; -----------------------------------------------------------------------------
+; Or
 
 %macro Or.mmb32 3
   mov eax, dword [rdi + %2]
@@ -1721,7 +1736,62 @@ extern free
   mov qword [rdi + %1], rcx
 %endmacro
 
+; -----------------------------------------------------------------------------
+; Popcnt -- Population count -- count ones set
 
+%macro Popcnt.mb64 2
+  mov rax, qword [rdi + %2]
+	popcnt rax, rax
+  mov qword [rdi + %1], rax
+%endmacro
+
+; -----------------------------------------------------------------------------
+; Lzcnt -- Leading zero count
+
+%macro Lzcnt.mb64 2
+  mov rax, qword [rdi + %2]
+	lzcnt rax, rax
+  mov qword [rdi + %1], rax
+%endmacro
+
+; -----------------------------------------------------------------------------
+; Tzcnt -- Trailing zero count
+
+%macro Tzcnt.mb64 2
+  mov rax, qword [rdi + %2]
+	tzcnt rax, rax
+  mov qword [rdi + %1], rax
+%endmacro
+
+; -----------------------------------------------------------------------------
+; Rdtsc -- Read time stamp counter
+
+%macro Rdtsc.mu64 1
+	rdtsc
+	shl rdx, 32
+	or rax, rdx
+  mov qword [rdi + %1], rax
+%endmacro
+
+; -----------------------------------------------------------------------------
+; Rdpmc -- Read performance counter
+
+%macro Rdpmc.mu64 2
+	mov rcx, qword [rdi + %2]
+	rdpmc
+	shl rdx, 32
+	or rax, rdx
+  mov qword [rdi + %1], rax
+%endmacro
+
+
+
+; -----------------------------------------------------------------------------
+; Nop -- No operation
+
+%macro Nop 0
+	nop
+%endmacro
 
 
 

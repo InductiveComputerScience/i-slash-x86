@@ -1,0 +1,11 @@
+Bgs testS
+	u64a a
+	u64 x
+	u64 c
+Ens
+
+Fnc test
+	Mov c, 1
+	Shr c, c, 30
+  Rdpmc x, c
+Ret
