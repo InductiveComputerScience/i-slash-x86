@@ -1,0 +1,22 @@
+Bgs testS
+  u32a a
+  u64 al
+	u32a b
+  u64 bl
+	b1 equal
+Ens
+
+Fnc test
+	Eq equal, al, bl
+	If equal
+		Cmps equal, a, b, al
+	Endb
+Ret
+
+Bgs GetTSS
+  u64 t
+Ens
+
+Fnc GetTS
+	Rdtsc t
+Ret
