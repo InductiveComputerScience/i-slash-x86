@@ -344,7 +344,8 @@ public class Translator {
                 "              \"Bextr\": {\"args\": 3, \"typeDecider\": 1},\n" +
                 "              \"Blsi\": {\"args\": 1, \"typeDecider\": 0},\n" +
                 "              \"Blsmsk\": {\"args\": 1, \"typeDecider\": 0},\n" +
-                "              \"Blsr\": {\"args\": 1, \"typeDecider\": 0}\n" +
+                "              \"Blsr\": {\"args\": 1, \"typeDecider\": 0},\n" +
+                "              \"Bzhi\": {\"args\": 2, \"typeDecider\": 0}\n" +
                 "            }").toCharArray();
 
         success = ReadJSON(json, dataRef, message);

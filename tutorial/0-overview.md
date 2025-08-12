@@ -46,14 +46,14 @@
  - d. Population count
  - e. Leading zero count
  - f. Trailing zero count
- - g. Bitwise AND-NOT
- - h. Bitfield extract.
+ - g. Bitwise and-not
+ - h. Bitfield extract
  - i. Extract lowest set bit
  - j. Generate a bitmask
- - k. Copy all bits of the source argument, then clear the lowest set bit.
+ - k. Clear the lowest set bit
  - l. Zero out high-order bits
- - m. Parallel Bit Deposit.
- - n. Parallel Bit Extract.
+ - m. Parallel Bit Deposit
+ - n. Parallel Bit Extract
 
 # 9. String instructions
  - a. Block move (MOVSX)

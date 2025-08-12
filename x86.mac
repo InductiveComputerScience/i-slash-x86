@@ -1873,6 +1873,16 @@ extern free
   mov qword [rdi + %1], rdx
 %endmacro
 
+; -----------------------------------------------------------------------------
+; Bzhi -- Clear high order bits
+
+%macro Bzhi.mmb64 3
+	mov rax, 0
+	mov al, byte [rdi + %3]
+	mov rdx, qword [rdi + %2]
+	bzhi rcx, rdx, rax
+  mov qword [rdi + %1], rcx
+%endmacro
 
 
 
