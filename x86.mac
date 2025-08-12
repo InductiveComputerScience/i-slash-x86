@@ -799,6 +799,16 @@
 %endmacro
 
 ; -----------------------------------------------------------------------------
+; Andnot - y = !a & b
+
+%macro Andnot.mmb64 3
+  mov rax, qword [rdi + %2]
+  mov rcx, qword [rdi + %3]
+  andn rdx, rax, rcx
+  mov qword [rdi + %1], rdx
+%endmacro
+
+; -----------------------------------------------------------------------------
 ; If
 
 %macro If.mb1 2
@@ -1817,14 +1827,55 @@ extern free
   mov qword [rdi + %1], rax
 %endmacro
 
-
-
 ; -----------------------------------------------------------------------------
 ; Nop -- No operation
 
 %macro Nop 0
 	nop
 %endmacro
+
+; -----------------------------------------------------------------------------
+; Bextr -- Bitfield extract -- dest = bits a length b from src
+
+%macro Bextr.mmb64 4
+	mov rax, 0
+	mov al, byte [rdi + %3]
+	mov ah, byte [rdi + %4]
+  mov rcx, qword [rdi + %2]
+	bextr rdx, rcx, rax
+  mov qword [rdi + %1], rdx
+%endmacro
+
+; -----------------------------------------------------------------------------
+; Blsi -- Extract Lowest Set Isolated Bit
+
+%macro Blsi.mb64 2
+	mov rax, qword [rdi + %2]
+	blsi rdx, rax
+  mov qword [rdi + %1], rdx
+%endmacro
+
+; -----------------------------------------------------------------------------
+; Blsmsk -- Generate bitmask
+
+%macro Blsmsk.mb64 2
+	mov rax, qword [rdi + %2]
+	blsmsk rdx, rax
+  mov qword [rdi + %1], rdx
+%endmacro
+
+; -----------------------------------------------------------------------------
+; Blsr -- Clear lowest bit set
+
+%macro Blsr.mb64 2
+	mov rax, qword [rdi + %2]
+	blsr rdx, rax
+  mov qword [rdi + %1], rdx
+%endmacro
+
+
+
+
 
 
 

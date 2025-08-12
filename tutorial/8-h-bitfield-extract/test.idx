@@ -1,0 +1,10 @@
+Bgs testS
+  b64 a
+  b64 y
+	u8 s
+  u8 l
+Ens
+
+Fnc test
+  Bextr y, a, s, l
+Ret

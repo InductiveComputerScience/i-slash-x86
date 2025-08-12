@@ -56,9 +56,9 @@
  - n. Parallel Bit Extract.
 
 # 9. String instructions
- - a. MOVSX -- block move
- - b. CMPSX -- block compare
- - c. SCASX -- find index of value in block
+ - a. Block move (MOVSX)
+ - b. Block compare (CMPSX)
+ - c. Find index of value in block (SCASX)
  - ??(d. LODX and STOSX -- load into or store from ax)
 
 # 10. Various infrastructural instructions

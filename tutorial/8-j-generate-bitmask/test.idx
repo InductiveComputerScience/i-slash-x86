@@ -1,0 +1,8 @@
+Bgs testS
+  b64 x
+  b64 y
+Ens
+
+Fnc test
+  Blsmsk y, x
+Ret

@@ -1,0 +1,9 @@
+Bgs testS
+  b64 a
+  b64 b
+  b64 y
+Ens
+
+Fnc test
+  Andnot y, a, b
+Ret

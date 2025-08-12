@@ -292,6 +292,7 @@ public class Translator {
                 "              \"ShiftLeft\": {\"args\": 2, \"typeDecider\": 1, \"alias\": \"Shl\"},\n" +
                 "              \"ShiftRight\": {\"args\": 2, \"typeDecider\": 1, \"alias\": \"Shr\"},\n" +
                 "              \"And\": {\"args\": 2, \"typeDecider\": 1},\n" +
+                "              \"Andnot\": {\"args\": 2, \"typeDecider\": 1},\n" +
                 "              \"Or\": {\"args\": 2, \"typeDecider\": 1},\n" +
                 "              \"Ror\": {\"args\": 2, \"typeDecider\": 1},\n" +
                 "              \"Rol\": {\"args\": 2, \"typeDecider\": 1},\n" +
@@ -339,7 +340,11 @@ public class Translator {
                 "              \"Tzcnt\": {\"args\": 1, \"typeDecider\": 0},\n" +
                 "              \"Rdtsc\": {\"args\": 0},\n" +
                 "              \"Nop\": {\"args\": 0},\n" +
-                "              \"Rdpmc\": {\"args\": 1, \"typeDecider\": 0}\n" +
+                "              \"Rdpmc\": {\"args\": 1, \"typeDecider\": 0},\n" +
+                "              \"Bextr\": {\"args\": 3, \"typeDecider\": 1},\n" +
+                "              \"Blsi\": {\"args\": 1, \"typeDecider\": 0},\n" +
+                "              \"Blsmsk\": {\"args\": 1, \"typeDecider\": 0},\n" +
+                "              \"Blsr\": {\"args\": 1, \"typeDecider\": 0}\n" +
                 "            }").toCharArray();
 
         success = ReadJSON(json, dataRef, message);

@@ -18,22 +18,22 @@ int main(){
 	ts.b[99] = 1;
 
 	GetTS(&t1);
-	test(&ts);
-	GetTS(&t2);
-
-	printf("test(...) = %lu, %lu, %lu, %d\n", t1.t, t2.t, t2.t - t1.t, ts.equal);
-
-	GetTS(&t1);
 	ts.equal = StringsEqual(ts.a, ts.al, ts.b, ts.bl);
 	GetTS(&t2);
 
-	printf("test(...) = %lu, %lu, %lu, %d\n", t1.t, t2.t, t2.t - t1.t, ts.equal);
+	printf("progsbase: %lu, %d\n", t2.t - t1.t, ts.equal);
 
 	GetTS(&t1);
-	ts.equal = memcmp(ts.a, ts.b, ts.al);
+	test(&ts);
 	GetTS(&t2);
 
-	printf("test(...) = %lu, %lu, %lu, %d\n", t1.t, t2.t, t2.t - t1.t, ts.equal);
+	printf("new:       %lu, %d\n", t2.t - t1.t, ts.equal);
+
+	GetTS(&t1);
+	ts.equal = memcmp(ts.a, ts.b, ts.al/4);
+	GetTS(&t2);
+
+	printf("memcpy:    %lu, %d\n",  t2.t - t1.t, ts.equal);
 
 	return 0;
 }
