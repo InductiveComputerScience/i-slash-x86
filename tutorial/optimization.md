@@ -16,3 +16,4 @@
  * xmm0 - xmm31 (16 byte) or
  * ymm0 - ymm31 (32 byte) or
  * zmm0 - zmm31 (64 byte)
+ * tmm0 - tmm7

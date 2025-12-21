@@ -38,6 +38,8 @@
  - g. Rotate
  - h. Compare and exchange (concurrency)
  - i. CRC32
+ - j. Convert with saturate
+ - k. Saturated addition and subtraction
 
 # 8. Bit computations
  - a. Byte swap
@@ -65,12 +67,14 @@
  - RDTSC -- Read time stamp counter
  - RDPMC -- Read performance counters
  - RDRAND -- Read random number
- - CPUID
+ - ??(CPUID)
 
 # 11. Various other instructions
  - Nop -- No operation
 
-
+# 12. SIMD basics
+ - a. Interleave (PUNPCKL/H)
+ - b. Multiply and add
 
 
 

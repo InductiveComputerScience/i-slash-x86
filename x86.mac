@@ -1397,21 +1397,21 @@ extern free
 
 %macro u16tof32.m 2
   mov ax, word [rdi + %2]
-	movzx eax, ax
+  movzx eax, ax
   cvtsi2ss xmm0, eax
   movss [rdi + %1], xmm0
 %endmacro
 
 %macro s16tof32.m 2
   mov ax, word [rdi + %2]
-	movsx eax, ax
+  movsx eax, ax
   cvtsi2ss xmm0, eax
   movss [rdi + %1], xmm0
 %endmacro
 
 %macro u32tof64.m 2
   mov eax, dword [rdi + %2]
-	movzx rax, eax
+  movzx rax, eax
   cvtsi2sd xmm0, rax
   movsd [rdi + %1], xmm0
 %endmacro
@@ -1564,7 +1564,7 @@ extern free
 %macro Cmov.mms64 3
   mov rdx, qword [rdi + %2]
   mov al, byte [rdi + %3]
-	test al, al
+  test al, al
   cmovnz rax, rdx
   mov qword [rdi + %1], rax
 %endmacro
@@ -1641,8 +1641,8 @@ extern free
 %macro Bt.miu64 3
   mov rax, qword [rdi + %2]
   bt rax, %3
-	setc al
-	movzx rax, al
+  setc al
+  movzx rax, al
   mov qword [rdi + %1], rax
 %endmacro
 
@@ -1654,7 +1654,7 @@ extern free
   mov rcx, qword [rdi + %3]
   mov rdx, qword [rdi + %4]
   cmpxchg rcx, rdx
-	setz r8b
+  setz r8b
   mov byte [rdi + %1], r8b
   mov qword [rdi + %2], rax
   mov qword [rdi + %3], rcx
@@ -1770,12 +1770,12 @@ extern free
   mov rbx, rdi
   mov rdi, qword [rdi + %2]
   repne scasb
-	sete r8b
-	movzx r8, r8b
+  sete r8b
+  movzx r8, r8b
   mov rdi, rbx
-	sub rcx, qword [rdi + %4]
+  sub rcx, qword [rdi + %4]
   neg rcx
-	sub rcx, r8
+  sub rcx, r8
   mov qword [rdi + %1], rcx
 %endmacro
 
@@ -1784,7 +1784,7 @@ extern free
 
 %macro Popcnt.mb64 2
   mov rax, qword [rdi + %2]
-	popcnt rax, rax
+  popcnt rax, rax
   mov qword [rdi + %1], rax
 %endmacro
 
@@ -1793,7 +1793,7 @@ extern free
 
 %macro Lzcnt.mb64 2
   mov rax, qword [rdi + %2]
-	lzcnt rax, rax
+  lzcnt rax, rax
   mov qword [rdi + %1], rax
 %endmacro
 
@@ -1802,7 +1802,7 @@ extern free
 
 %macro Tzcnt.mb64 2
   mov rax, qword [rdi + %2]
-	tzcnt rax, rax
+  tzcnt rax, rax
   mov qword [rdi + %1], rax
 %endmacro
 
@@ -1810,9 +1810,9 @@ extern free
 ; Rdtsc -- Read time stamp counter
 
 %macro Rdtsc.mu64 1
-	rdtsc
-	shl rdx, 32
-	or rax, rdx
+  rdtsc
+  shl rdx, 32
+  or rax, rdx
   mov qword [rdi + %1], rax
 %endmacro
 
@@ -1820,10 +1820,10 @@ extern free
 ; Rdpmc -- Read performance counter
 
 %macro Rdpmc.mu64 2
-	mov rcx, qword [rdi + %2]
-	rdpmc
-	shl rdx, 32
-	or rax, rdx
+  mov rcx, qword [rdi + %2]
+  rdpmc
+  shl rdx, 32
+  or rax, rdx
   mov qword [rdi + %1], rax
 %endmacro
 
@@ -1831,18 +1831,18 @@ extern free
 ; Nop -- No operation
 
 %macro Nop 0
-	nop
+  nop
 %endmacro
 
 ; -----------------------------------------------------------------------------
 ; Bextr -- Bitfield extract -- dest = bits a length b from src
 
 %macro Bextr.mmb64 4
-	mov rax, 0
-	mov al, byte [rdi + %3]
-	mov ah, byte [rdi + %4]
+  mov rax, 0
+  mov al, byte [rdi + %3]
+  mov ah, byte [rdi + %4]
   mov rcx, qword [rdi + %2]
-	bextr rdx, rcx, rax
+  bextr rdx, rcx, rax
   mov qword [rdi + %1], rdx
 %endmacro
 
@@ -1850,8 +1850,8 @@ extern free
 ; Blsi -- Extract Lowest Set Isolated Bit
 
 %macro Blsi.mb64 2
-	mov rax, qword [rdi + %2]
-	blsi rdx, rax
+  mov rax, qword [rdi + %2]
+  blsi rdx, rax
   mov qword [rdi + %1], rdx
 %endmacro
 
@@ -1859,8 +1859,8 @@ extern free
 ; Blsmsk -- Generate bitmask
 
 %macro Blsmsk.mb64 2
-	mov rax, qword [rdi + %2]
-	blsmsk rdx, rax
+  mov rax, qword [rdi + %2]
+  blsmsk rdx, rax
   mov qword [rdi + %1], rdx
 %endmacro
 
@@ -1868,8 +1868,8 @@ extern free
 ; Blsr -- Clear lowest bit set
 
 %macro Blsr.mb64 2
-	mov rax, qword [rdi + %2]
-	blsr rdx, rax
+  mov rax, qword [rdi + %2]
+  blsr rdx, rax
   mov qword [rdi + %1], rdx
 %endmacro
 
@@ -1877,12 +1877,39 @@ extern free
 ; Bzhi -- Clear high order bits
 
 %macro Bzhi.mmb64 3
-	mov rax, 0
-	mov al, byte [rdi + %3]
-	mov rdx, qword [rdi + %2]
-	bzhi rcx, rdx, rax
+  mov rax, 0
+  mov al, byte [rdi + %3]
+  mov rdx, qword [rdi + %2]
+  bzhi rcx, rdx, rax
   mov qword [rdi + %1], rcx
 %endmacro
+
+; -----------------------------------------------------------------------------
+; Pdep -- Parallel bit deposit
+
+%macro Pdep.mmb64 3
+  mov rdx, qword [rdi + %2]
+  mov rax, qword [rdi + %3]
+  pdep rcx, rdx, rax
+  mov qword [rdi + %1], rcx
+%endmacro
+
+; -----------------------------------------------------------------------------
+; Pext -- Parallel bit extract
+
+%macro Pext.mmb64 3
+  mov rdx, qword [rdi + %2]
+  mov rax, qword [rdi + %3]
+  pext rcx, rdx, rax
+  mov qword [rdi + %1], rcx
+%endmacro
+
+
+
+
+
+
+
 
 
 
