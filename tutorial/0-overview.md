@@ -73,16 +73,23 @@
  - Nop -- No operation
 
 # 12. SIMD basics
- - a. Interleave (PUNPCKL/H)
- - b. Multiply and add
- - c. Shuffle (PSHUF)
+ - a. Add, subtract, multiply, absolute (PABS)
+ - b. Bitwise operations
+ - c. Multiply-and-add
  - d. Array index SIMD (PINSR, PEXTR)
- - e. Create bit mask (PMOVMSKB)
- - f. Horizontal min, max, average (PMIN, PMAX, PAVG)
- - g. Horizontal multiply (PMULH)
- - h. Sum of absolute difference (PSADBW)
- - i. Move selected values (MASKMOVQ).
+ - e. Horizontal min, max, average (PMIN, PMAX, PAVG)
 
+# 13. SIMD advanced
+ - a. Interleave (PUNPCKL/H)
+ - b. Shuffle (PSHUF)
+ - c. Create bit mask (PMOVMSKB)
+ - d. Horizontal multiply (PMULH)
+ - e. Sum of absolute difference (PSADBW)
+ - f. Move selected values based on mask (MASKMOVQ).
+ - g. Pairwise horizontal add and subtract (PHADD, PHSUB)
+ - h. Pairwiser multiply-and-add (PMADDUB)
+ - i. Change sign (PSIGN)
+ - j. Combine two packed (PALIGNR)
 
 
 
