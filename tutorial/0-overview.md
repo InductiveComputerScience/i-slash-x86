@@ -75,6 +75,13 @@
 # 12. SIMD basics
  - a. Interleave (PUNPCKL/H)
  - b. Multiply and add
+ - c. Shuffle (PSHUF)
+ - d. Array index SIMD (PINSR, PEXTR)
+ - e. Create bit mask (PMOVMSKB)
+ - f. Horizontal min, max, average (PMIN, PMAX, PAVG)
+ - g. Horizontal multiply (PMULH)
+ - h. Sum of absolute difference (PSADBW)
+ - i. Move selected values (MASKMOVQ).
 
 
 

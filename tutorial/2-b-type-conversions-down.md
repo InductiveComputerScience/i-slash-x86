@@ -1,6 +1,6 @@
 # 2.a Type Conversions to Types with Less Range
 
-We can convert the data of one variable into one with a lower range. In this example, we have four variables. A signed 8-bit value is passed in as input, the output is a 64-bit binary floating point. In the code, the s8 is convered to an s16, then to an f32, and then finally to an f64.
+We can convert the data of one variable into one with a lower range. In this example, we have four variables. A double precision floating point is passed in as a parameter. It is then converted down to an f32. During this process, the number will be rounded. If the number cannot fit an f32, pluss or minus infinity will be used instead. Next, the f32 will be converted to a signed 16-bit integer. If the number does not fit, an indefinate value will be set (0x8000?).	If it fits, the value will be truncated.
 
 
 ```
