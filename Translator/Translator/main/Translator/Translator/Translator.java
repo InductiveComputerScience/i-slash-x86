@@ -234,6 +234,14 @@ public class Translator {
                 "                \"u8x16a\": {\"nasmType\": \"reso\", \"ctype\": \"__m128 *\"},\n" +
                 "                \"u8x32a\": {\"nasmType\": \"resy\", \"ctype\": \"__m256 *\"},\n" +
                 "                \"u8x64a\": {\"nasmType\": \"resz\", \"ctype\": \"__m512 *\"},\n" +
+                "                \"u16x4\": {\"nasmType\": \"resq\", \"ctype\": \"__m64\"},\n" +
+                "                \"u16x8\": {\"nasmType\": \"reso\", \"ctype\": \"__m128\"},\n" +
+                "                \"u16x16\": {\"nasmType\": \"resy\", \"ctype\": \"__m256\"},\n" +
+                "                \"u16x32\": {\"nasmType\": \"resz\", \"ctype\": \"__m512\"},\n" +
+                "                \"u16x4a\": {\"nasmType\": \"resq\", \"ctype\": \"__m64 *\"},\n" +
+                "                \"u16x8a\": {\"nasmType\": \"reso\", \"ctype\": \"__m128 *\"},\n" +
+                "                \"u16x16a\": {\"nasmType\": \"resy\", \"ctype\": \"__m256 *\"},\n" +
+                "                \"u16x32a\": {\"nasmType\": \"resz\", \"ctype\": \"__m512 *\"},\n" +
                 "                \"s8x8\": {\"nasmType\": \"resq\", \"ctype\": \"__m64\"},\n" +
                 "                \"s8x16\": {\"nasmType\": \"reso\", \"ctype\": \"__m128\"},\n" +
                 "                \"s8x32\": {\"nasmType\": \"resy\", \"ctype\": \"__m256\"},\n" +
@@ -275,6 +283,8 @@ public class Translator {
 
         json = ("{\n" +
                 "              \"Mov\": {\"args\": 1, \"typeDecider\": 1},\n" +
+                "              \"Ptr\": {\"args\": 1, \"typeDecider\": 2},\n" +
+                "              \"Ptw\": {\"args\": 1, \"typeDecider\": 1},\n" +
                 "\n" +
                 "              \"Add\": {\"args\": 2, \"typeDecider\": 1},\n" +
                 "              \"Sub\": {\"args\": 2, \"typeDecider\": 1},\n" +
@@ -313,6 +323,7 @@ public class Translator {
                 "              \"Eq\": {\"args\": 2, \"typeDecider\": 0},\n" +
                 "              \"Equal\": {\"args\": 2, \"typeDecider\": 0, \"alias\": \"Eq\"},\n" +
                 "              \"Neq\": {\"args\": 2, \"typeDecider\": 0},\n" +
+                "              \"Unequal\": {\"args\": 2, \"typeDecider\": 0, \"alias\": \"Neq\"},\n" +
                 "              \n" +
                 "              \"Idr\": {\"args\": 2, \"typeDecider\": 2},\n" +
                 "              \"Idw\": {\"args\": 2, \"typeDecider\": 1},\n" +
