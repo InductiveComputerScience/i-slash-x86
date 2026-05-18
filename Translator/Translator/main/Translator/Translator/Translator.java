@@ -285,6 +285,7 @@ public class Translator {
                 "              \"Mov\": {\"args\": 1, \"typeDecider\": 1},\n" +
                 "              \"Ptr\": {\"args\": 1, \"typeDecider\": 2},\n" +
                 "              \"Ptw\": {\"args\": 1, \"typeDecider\": 1},\n" +
+                "              \"Ptm\": {\"args\": 1, \"typeDecider\": 1},\n" +
                 "\n" +
                 "              \"Add\": {\"args\": 2, \"typeDecider\": 1},\n" +
                 "              \"Sub\": {\"args\": 2, \"typeDecider\": 1},\n" +
@@ -327,6 +328,7 @@ public class Translator {
                 "              \n" +
                 "              \"Idr\": {\"args\": 2, \"typeDecider\": 2},\n" +
                 "              \"Idw\": {\"args\": 2, \"typeDecider\": 1},\n" +
+                "              \"Idro\": {\"args\": 3, \"typeDecider\": 1},\n" +
                 "              \n" +
                 "              \"Rdrand\": {\"args\": 1, \"typeDecider\": 1},\n" +
                 "              \n" +

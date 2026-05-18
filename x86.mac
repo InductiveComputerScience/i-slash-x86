@@ -552,7 +552,12 @@
 ; -----------------------------------------------------------------------------
 ; Ptm -- Pointer Move
 
-%macro Ptm.mu16a 2
+%macro Ptm.mu16x8a 2
+  mov rax, qword [rdi + %2]
+  mov qword [rdi + %1], rax
+%endmacro
+
+%macro Ptm.mu16x16a 2
   mov rax, qword [rdi + %2]
   mov qword [rdi + %1], rax
 %endmacro
@@ -811,6 +816,14 @@
   vmovdqu yword [rdi + %1], ymm0
 %endmacro
 
+; TODO: This should be And.mmb128
+%macro And.mmu16x8 3
+  movq xmm0, [rdi + %2]
+  movq xmm1, [rdi + %3]
+  pand xmm0, xmm1
+  movq [rdi + %1], xmm0
+%endmacro
+
 ; TODO: This should be And.mmb256
 %macro And.mmu16x16 3
   vmovdqu ymm0, yword [rdi + %2]
@@ -984,7 +997,15 @@
 ; -----------------------------------------------------------------------------
 ; Idro -- Index Read Array with offset
 
-%macro Idro.mmiu16x16a 4
+%macro Idro.miu16x8a 4
+  mov rax, qword [rdi + %2]
+  mov rdx, qword [rdi + %3]
+  shl rdx, 4
+  movq xmm0, [rax + rdx + %4 * 16]
+  movq [rdi + %1], xmm0
+%endmacro
+
+%macro Idro.miu16x16a 4
   mov rax, qword [rdi + %2]
   mov rdx, qword [rdi + %3]
   shl rdx, 5
@@ -1133,6 +1154,13 @@
   movq rax, xmm0
   cmp al, 255
   sete [rdi + %1]
+%endmacro
+
+%macro Eq.mmu16x8 3
+  movq xmm0, [rdi + %2]
+  movq xmm1, [rdi + %3]
+  pcmpeqb xmm0, xmm1
+  movq [rdi + %1], xmm0
 %endmacro
 
 %macro Eq.mmu16x16 3
@@ -2039,6 +2067,13 @@ extern free
 ; Emask -- Extract Byte Mask
 
 extern f
+
+; TODO: This should be Emask.mu8x16?
+%macro Emask.mu16x8 2
+  movq xmm1, [rdi + %2]
+  vpmovmskb rax, xmm1
+  mov [rdi + %1], rax
+%endmacro
 
 ; TODO: This should be Emask.mu8x32?
 %macro Emask.mu16x16 2
