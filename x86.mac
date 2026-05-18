@@ -803,6 +803,14 @@
   vmovdqu yword [rdi + %1], ymm0
 %endmacro
 
+; TODO: This should be And.mmb256
+%macro And.mmu16x16 3
+  vmovdqu ymm0, yword [rdi + %2]
+  vmovdqu ymm1, yword [rdi + %3]
+  vpand ymm0, ymm0, ymm1
+  vmovdqu yword [rdi + %1], ymm0
+%endmacro
+
 %macro And.rrru8x32 3
   vpand %1, %2, %3
 %endmacro
@@ -1110,6 +1118,13 @@
   sete [rdi + %1]
 %endmacro
 
+%macro Eq.mmu16x16 3
+  vmovdqu ymm0, yword [rdi + %2]
+  vmovdqu ymm1, yword [rdi + %3]
+  vpcmpeqb ymm0, ymm0, ymm1
+  vmovdqu yword [rdi + %1], ymm0
+%endmacro
+
 ; -----------------------------------------------------------------------------
 ; Neq
 
@@ -1129,7 +1144,23 @@
   mov byte [rdi + %1], al
 %endmacro
 
-%macro Neq.mmu16x16 3
+%macro Neq.miu64 3
+  mov rax, qword [rdi + %2]
+  mov rdx, %3
+  cmp rax, rdx
+  setne al
+  mov byte [rdi + %1], al
+%endmacro
+
+%macro Neq.mib1 3
+  mov al, byte [rdi + %2]
+  mov dl, %3
+  cmp al, dl
+  setne al
+  mov byte [rdi + %1], al
+%endmacro
+
+%macro Neq.mmb256 3
   vmovdqu ymm0, yword [rdi + %2]
   vmovdqu ymm1, yword [rdi + %3]
   vpxor ymm2, ymm0, ymm1
@@ -1138,11 +1169,11 @@
   mov byte [rdi + %1], al
 %endmacro
 
-%macro Neq.mmu16x32 3
+%macro Neq.mmb512 3
   vmovdqu64 zmm0, zword [rdi + %2]
   vmovdqu64 zmm1, zword [rdi + %3]
   vpxorq zmm2, zmm0, zmm1
-  ;vptest zmm2, zmm2
+  vptest zmm2, zmm2
   setnz al
   mov byte [rdi + %1], al
 %endmacro
@@ -1987,8 +2018,17 @@ extern free
   mov qword [rdi + %1], rcx
 %endmacro
 
+; -----------------------------------------------------------------------------
+; Emask -- Extract Byte Mask
 
+extern f
 
+; TODO: This should be Emask.mu8x32?
+%macro Emask.mu16x16 2
+  vmovdqu ymm0, yword [rdi + %2]
+  vpmovmskb rax, ymm0
+  mov qword [rdi + %1], rax
+%endmacro
 
 
 
