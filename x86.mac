@@ -524,7 +524,7 @@
 %endmacro
 
 ; -----------------------------------------------------------------------------
-; Ptr
+; Ptr -- Pointer read, same as x = &a in C.
 
 %macro Ptr.mu16a 2
   mov rax, qword [rdi + %2]
@@ -532,7 +532,7 @@
 %endmacro
 
 ; -----------------------------------------------------------------------------
-; Ptw
+; Ptw -- Pointer write
 
 %macro Ptw.mu16x16a 2
   mov rax, qword [rdi + %2]
@@ -545,6 +545,14 @@
 %endmacro
 
 %macro Ptw.mu64a 2
+  mov rax, qword [rdi + %2]
+  mov qword [rdi + %1], rax
+%endmacro
+
+; -----------------------------------------------------------------------------
+; Ptm -- Pointer Move
+
+%macro Ptm.mu16a 2
   mov rax, qword [rdi + %2]
   mov qword [rdi + %1], rax
 %endmacro
@@ -973,7 +981,16 @@
   mov qword [rdi + %1], rax
 %endmacro
 
+; -----------------------------------------------------------------------------
+; Idro -- Index Read Array with offset
 
+%macro Idro.mmiu16x16a 4
+  mov rax, qword [rdi + %2]
+  mov rdx, qword [rdi + %3]
+  shl rdx, 5
+  vmovdqu ymm0, yword [rax + rdx + %4 * 32]
+  vmovdqu yword [rdi + %1], ymm0
+%endmacro
 
 ; -----------------------------------------------------------------------------
 ; Eq

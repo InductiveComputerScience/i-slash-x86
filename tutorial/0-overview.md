@@ -73,7 +73,9 @@
  - Nop -- No operation
 
 # 12. SIMD basics
- - a. Add, subtract, multiply, absolute (PABS)
+ - a. Add, subtract, multiply, division, absolute, round
+ - a. Compare
+ - a. Conversions
  - b. Bitwise operations
  - c. Multiply-and-add
  - d. Array index SIMD (PINSR, PEXTR)
@@ -90,6 +92,8 @@
  - h. Pairwiser multiply-and-add (PMADDUB)
  - i. Change sign (PSIGN)
  - j. Combine two packed (PALIGNR)
+ - k. Blend (PBLENDV)
+ - l. Dot-product (DPPS)
 
 
 
