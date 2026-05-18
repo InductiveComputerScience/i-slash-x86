@@ -20,8 +20,8 @@
 
 %macro Add.mmu8 3
   mov al, byte [rdi + %2]
-  mov ah, byte [rdi + %3]
-  add al, ah
+  mov cl, byte [rdi + %3]
+  add al, cl
   mov byte [rdi + %1], al
 %endmacro
 
@@ -84,8 +84,8 @@
 
 %macro Add.mms8 3
   mov al, byte [rdi + %2]
-  mov ah, byte [rdi + %3]
-  add al, ah
+  mov cl, byte [rdi + %3]
+  add al, cl
   mov byte [rdi + %1], al
 %endmacro
 
@@ -127,8 +127,8 @@
 
 %macro Sub.mmu8 3
   mov al, byte [rdi + %2]
-  mov ah, byte [rdi + %3]
-  sub al, ah
+  mov cl, byte [rdi + %3]
+  sub al, cl
   mov byte [rdi + %1], al
 %endmacro
 
@@ -197,8 +197,8 @@
 
 %macro Mul.mmu8 3
   mov al, byte [rdi + %2]
-  mov ah, byte [rdi + %3]
-  mul ah
+  mov cl, byte [rdi + %3]
+  mul cl
   mov byte [rdi + %1], al
 %endmacro
 
@@ -795,16 +795,16 @@
 
 %macro And.mmb1 3
   mov al, byte [rdi + %2]
-  mov ah, byte [rdi + %3]
-  and al, ah
+  mov cl, byte [rdi + %3]
+  and al, cl
   and al, 1
   mov byte [rdi + %1], al
 %endmacro
 
 %macro And.mmu8 3
   mov al, byte [rdi + %2]
-  mov ah, byte [rdi + %3]
-  and al, ah
+  mov cl, byte [rdi + %3]
+  and al, cl
   and al, 1
   mov byte [rdi + %1], al
 %endmacro
@@ -872,9 +872,9 @@
 
 %macro If.mb1 2
   mov al, 0
-  mov ah, byte [rdi + %1]
-  and ah, 1
-  cmp al, ah
+  mov cl, byte [rdi + %1]
+  and cl, 1
+  cmp al, cl
   je %2
 %endmacro
 
@@ -888,8 +888,8 @@
 
 %macro If.mu8 2
   mov al, 0
-  mov ah, byte [rdi + %1]
-  cmp al, ah
+  mov cl, byte [rdi + %1]
+  cmp al, cl
   je %2
 %endmacro
 
