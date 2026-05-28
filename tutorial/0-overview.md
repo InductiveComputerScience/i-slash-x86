@@ -94,6 +94,7 @@
  - j. Combine two packed (PALIGNR)
  - k. Blend (PBLENDV)
  - l. Dot-product (DPPS)
+ - m. PMULLW and PMULHW -- multiply and store low and high part of result
 
 
 
