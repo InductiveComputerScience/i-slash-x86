@@ -477,6 +477,15 @@
 %endmacro
 
 ; -----------------------------------------------------------------------------
+; Round -- Round number to nearest integer
+
+%macro Round.mmf32x8 2
+  vmovdqu ymm0, yword [rdi + %2]
+  vroundps ymm0, ymm0, 0
+  vmovdqu yword [rdi + %1], ymm0
+%endmacro
+
+; -----------------------------------------------------------------------------
 ; Mov
 
 %macro Mov.mb1 2
