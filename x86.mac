@@ -122,6 +122,20 @@
   movsd qword [rdi + %1], xmm0
 %endmacro
 
+%macro Add.mmu8x32 3
+  vmovdqu ymm0, yword [rdi + %2]
+  vmovdqu ymm1, yword [rdi + %3]
+  vpaddb ymm0, ymm0, ymm1
+  vmovdqu yword [rdi + %1], ymm0
+%endmacro
+
+%macro Add.mmf32x8 3
+  vmovdqu ymm0, yword [rdi + %2]
+  vmovdqu ymm1, yword [rdi + %3]
+  vaddps ymm0, ymm0, ymm1
+  vmovdqu yword [rdi + %1], ymm0
+%endmacro
+
 ; -----------------------------------------------------------------------------
 ; Sub
 
@@ -189,6 +203,13 @@
   movq xmm2, rax
   vpbroadcastb ymm1, xmm2
   vpsubb ymm0, ymm0, ymm1
+  vmovdqu yword [rdi + %1], ymm0
+%endmacro
+
+%macro Sub.mmf32x8 3
+  vmovdqu ymm0, yword [rdi + %2]
+  vmovdqu ymm1, yword [rdi + %3]
+  vsubps ymm0, ymm0, ymm1
   vmovdqu yword [rdi + %1], ymm0
 %endmacro
 
@@ -274,6 +295,13 @@
   vmovdqu ymm0, yword [rdi + %2]
   vmovdqu ymm1, yword [rdi + %3]
   vpmullw ymm0, ymm0, ymm1
+  vmovdqu yword [rdi + %1], ymm0
+%endmacro
+
+%macro Mul.mmf32x8 3
+  vmovdqu ymm0, yword [rdi + %2]
+  vmovdqu ymm1, yword [rdi + %3]
+  vmulps ymm0, ymm0, ymm1
   vmovdqu yword [rdi + %1], ymm0
 %endmacro
 
@@ -366,6 +394,13 @@
   mov rcx, qword [rdi + %3]
   idiv rcx
   mov qword [rdi + %1], rax
+%endmacro
+
+%macro Div.mmf32x8 3
+  vmovdqu ymm0, yword [rdi + %2]
+  vmovdqu ymm1, yword [rdi + %3]
+  vdivps ymm0, ymm0, ymm1
+  vmovdqu yword [rdi + %1], ymm0
 %endmacro
 
 ; -----------------------------------------------------------------------------
@@ -846,10 +881,10 @@
 
 ; TODO: This should be And.mmb128
 %macro And.mmu16x8 3
-  movdqu xmm0, [rdi + %2]
-  movdqu xmm1, [rdi + %3]
+  movdqu xmm0, oword [rdi + %2]
+  movdqu xmm1, oword [rdi + %3]
   pand xmm0, xmm1
-  movdqu [rdi + %1], xmm0
+  movdqu oword [rdi + %1], xmm0
 %endmacro
 
 ; TODO: This should be And.mmb256
@@ -1185,10 +1220,10 @@
 %endmacro
 
 %macro Eq.mmu16x8 3
-  movdqu xmm0, [rdi + %2]
-  movdqu xmm1, [rdi + %3]
+  movdqu xmm0, oword [rdi + %2]
+  movdqu xmm1, oword [rdi + %3]
   pcmpeqb xmm0, xmm1
-  movdqu [rdi + %1], xmm0
+  movdqu oword [rdi + %1], xmm0
 %endmacro
 
 %macro Eq.mmu16x16 3
@@ -1369,6 +1404,7 @@
   mov dword [rdi + %1], eax
 %endmacro
 
+; TODO: This should be Or.mmb256
 %macro Or.mmu8x32 3
   vmovdqu ymm0, yword [rdi + %2]
   vmovdqu ymm1, yword [rdi + %3]
@@ -1463,10 +1499,10 @@ extern free
 %endmacro
 
 %macro Idw.miiu32x4 3
-  vmovdqu xmm0, oword [rdi + %1]
+  movdqu xmm0, oword [rdi + %1]
   mov eax, %3
   vpinsrd xmm0, eax, %2
-  vmovdqu oword [rax + rcx], xmm0
+  movdqu oword [rax + rcx], xmm0
 %endmacro
 
 %macro Idw.miiu32x8 3
@@ -2146,6 +2182,15 @@ extern f
   vmovdqu yword [rdi + %1], ymm0
 %endmacro
 
+; -----------------------------------------------------------------------------
+; Blend -- Conditionally copy from one SIMD register to another
+
+%macro Blend.mmu8x32 3
+  vmovdqu ymm0, yword [rdi + %2]
+  vmovdqu ymm1, yword [rdi + %3]
+  vpblendvb ymm0, ymm0, ymm1
+  vmovdqu yword [rdi + %1], ymm0
+%endmacro
 
 
 
