@@ -270,6 +270,23 @@
   mov qword [rdi + %1], rax
 %endmacro
 
+%macro Mul.mmu16x16 3
+  vmovdqu ymm0, yword [rdi + %2]
+  vmovdqu ymm1, yword [rdi + %3]
+  vpmullw ymm0, ymm0, ymm1
+  vmovdqu yword [rdi + %1], ymm0
+%endmacro
+
+; -----------------------------------------------------------------------------
+; MulFull -- Multiply two x-bit numbers and store the full 2x-bit result
+
+%macro MulFull.mmu8 3
+  mov al, byte [rdi + %2]
+  mov cl, byte [rdi + %3]
+  mul cl
+  mov word [rdi + %1], ax
+%endmacro
+
 ; -----------------------------------------------------------------------------
 ; Div
 
@@ -349,6 +366,17 @@
   mov rcx, qword [rdi + %3]
   idiv rcx
   mov qword [rdi + %1], rax
+%endmacro
+
+; -----------------------------------------------------------------------------
+; DivFull -- Divide a 2x-bit number by an x-bit number
+
+%macro DivFull.mmu8 3
+  mov ax, word [rdi + %2]
+  mov dl, byte [rdi + %3]
+  mov dh, 0
+  div dl
+  mov byte [rdi + %1], al
 %endmacro
 
 ; -----------------------------------------------------------------------------
@@ -2108,8 +2136,15 @@ extern f
   movdqu oword [rdi + %1], xmm0
 %endmacro
 
+; -----------------------------------------------------------------------------
+; MulStoreHigh -- Multiply Store high
 
-
+%macro MulStoreHigh.mmu16x16 3
+  vmovdqu ymm0, yword [rdi + %2]
+  vmovdqu ymm1, yword [rdi + %3]
+  vpmulhw ymm0, ymm0, ymm1
+  vmovdqu yword [rdi + %1], ymm0
+%endmacro
 
 
 
