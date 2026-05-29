@@ -1434,6 +1434,22 @@ extern free
   vmovdqu yword [%1 + rcx], %3
 %endmacro
 
+%macro Idw.miiu32x4 3
+  vmovdqu xmm0, oword [rdi + %1]
+  mov eax, %3
+  vpinsrd xmm0, eax, %2
+  vmovdqu oword [rax + rcx], xmm0
+%endmacro
+
+%macro Idw.miiu32x8 3
+  vmovdqu ymm0, yword [rdi + %1]
+  vextracti128 xmm1, ymm0, %3 / 8
+  mov eax, %3
+  vpinsrd xmm1, eax, %2 % 8
+  vinserti128 ymm0, xmm1, %3 / 8
+  vmovdqu yword [rdi + %1], ymm0
+%endmacro
+
 ; -----------------------------------------------------------------------------
 ; Rdrand
 
@@ -2082,6 +2098,15 @@ extern f
   mov qword [rdi + %1], rax
 %endmacro
 
+; -----------------------------------------------------------------------------
+; Shuffle -- Shuffle data
+
+%macro Shuffle.mmu8x32 3
+  movdqu xmm0, oword [rdi + %2]
+  movdqu xmm1, oword [rdi + %3]
+  vpshufb xmm0, xmm0, xmm1
+  movdqu oword [rdi + %1], xmm0
+%endmacro
 
 
 
