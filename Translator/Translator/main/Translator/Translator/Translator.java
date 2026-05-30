@@ -200,32 +200,40 @@ public class Translator {
                 "                \"u16\": {\"nasmType\": \"resw\", \"ctype\": \"uint16_t\"},\n" +
                 "                \"u32\": {\"nasmType\": \"resd\", \"ctype\": \"uint32_t\"},\n" +
                 "                \"u64\": {\"nasmType\": \"resq\", \"ctype\": \"uint64_t\"},\n" +
+
                 "                \"s8\": {\"nasmType\": \"resb\", \"ctype\": \"int8_t\"},\n" +
                 "                \"s16\": {\"nasmType\": \"resw\", \"ctype\": \"int16_t\"},\n" +
                 "                \"s32\": {\"nasmType\": \"resd\", \"ctype\": \"int32_t\"},\n" +
                 "                \"s64\": {\"nasmType\": \"resq\", \"ctype\": \"int64_t\"},\n" +
+
                 "                \"b1\": {\"nasmType\": \"resb\", \"ctype\": \"uint8_t\"},\n" +
                 "                \"b8\": {\"nasmType\": \"resb\", \"ctype\": \"uint8_t\"},\n" +
                 "                \"b16\": {\"nasmType\": \"resw\", \"ctype\": \"uint16_t\"},\n" +
                 "                \"b32\": {\"nasmType\": \"resd\", \"ctype\": \"uint32_t\"},\n" +
                 "                \"b64\": {\"nasmType\": \"resq\", \"ctype\": \"uint64_t\"},\n" +
+
                 "                \"f32\": {\"nasmType\": \"resd\", \"ctype\": \"float\"},\n" +
                 "                \"f64\": {\"nasmType\": \"resq\", \"ctype\": \"double\"},\n" +
+
                 "                \"u8a\": {\"nasmType\": \"resq\", \"ctype\": \"uint8_t *\"},\n" +
                 "                \"u16a\": {\"nasmType\": \"resq\", \"ctype\": \"uint16_t *\"},\n" +
                 "                \"u32a\": {\"nasmType\": \"resq\", \"ctype\": \"uint32_t *\"},\n" +
                 "                \"u64a\": {\"nasmType\": \"resq\", \"ctype\": \"uint64_t *\"},\n" +
+
                 "                \"s8a\": {\"nasmType\": \"resq\", \"ctype\": \"int8_t *\"},\n" +
                 "                \"s16a\": {\"nasmType\": \"resq\", \"ctype\": \"int16_t *\"},\n" +
                 "                \"s32a\": {\"nasmType\": \"resq\", \"ctype\": \"int32_t *\"},\n" +
                 "                \"s64a\": {\"nasmType\": \"resq\", \"ctype\": \"int64_t *\"},\n" +
+
                 "                \"b1a\": {\"nasmType\": \"resq\", \"ctype\": \"uint8_t *\"},\n" +
                 "                \"b8a\": {\"nasmType\": \"resq\", \"ctype\": \"uint8_t *\"},\n" +
                 "                \"b16a\": {\"nasmType\": \"resq\", \"ctype\": \"uint16_t *\"},\n" +
                 "                \"b32a\": {\"nasmType\": \"resq\", \"ctype\": \"uint32_t *\"},\n" +
                 "                \"b64a\": {\"nasmType\": \"resq\", \"ctype\": \"uint64_t *\"},\n" +
+
                 "                \"f32a\": {\"nasmType\": \"resq\", \"ctype\": \"float *\"},\n" +
                 "                \"f64a\": {\"nasmType\": \"resq\", \"ctype\": \"double *\"},\n" +
+
                 "                \"u8x8\": {\"nasmType\": \"resq\", \"ctype\": \"__m64\"},\n" +
                 "                \"u8x16\": {\"nasmType\": \"reso\", \"ctype\": \"__m128\"},\n" +
                 "                \"u8x32\": {\"nasmType\": \"resy\", \"ctype\": \"__m256\"},\n" +
@@ -234,6 +242,7 @@ public class Translator {
                 "                \"u8x16a\": {\"nasmType\": \"reso\", \"ctype\": \"__m128 *\"},\n" +
                 "                \"u8x32a\": {\"nasmType\": \"resy\", \"ctype\": \"__m256 *\"},\n" +
                 "                \"u8x64a\": {\"nasmType\": \"resz\", \"ctype\": \"__m512 *\"},\n" +
+
                 "                \"u16x4\": {\"nasmType\": \"resq\", \"ctype\": \"__m64\"},\n" +
                 "                \"u16x8\": {\"nasmType\": \"reso\", \"ctype\": \"__m128\"},\n" +
                 "                \"u16x16\": {\"nasmType\": \"resy\", \"ctype\": \"__m256\"},\n" +
@@ -242,6 +251,23 @@ public class Translator {
                 "                \"u16x8a\": {\"nasmType\": \"reso\", \"ctype\": \"__m128 *\"},\n" +
                 "                \"u16x16a\": {\"nasmType\": \"resy\", \"ctype\": \"__m256 *\"},\n" +
                 "                \"u16x32a\": {\"nasmType\": \"resz\", \"ctype\": \"__m512 *\"},\n" +
+
+                "                \"u32x2\": {\"nasmType\": \"resq\", \"ctype\": \"__m64\"},\n" +
+                "                \"u32x4\": {\"nasmType\": \"reso\", \"ctype\": \"__m128\"},\n" +
+                "                \"u32x8\": {\"nasmType\": \"resy\", \"ctype\": \"__m256\"},\n" +
+                "                \"u32x16\": {\"nasmType\": \"resz\", \"ctype\": \"__m512\"},\n" +
+                "                \"u32x2a\": {\"nasmType\": \"resq\", \"ctype\": \"__m64 *\"},\n" +
+                "                \"u32x4a\": {\"nasmType\": \"reso\", \"ctype\": \"__m128 *\"},\n" +
+                "                \"u32x8a\": {\"nasmType\": \"resy\", \"ctype\": \"__m256 *\"},\n" +
+                "                \"u32x16a\": {\"nasmType\": \"resz\", \"ctype\": \"__m512 *\"},\n" +
+
+                "                \"u64x2\": {\"nasmType\": \"reso\", \"ctype\": \"__m128\"},\n" +
+                "                \"u64x4\": {\"nasmType\": \"resy\", \"ctype\": \"__m256\"},\n" +
+                "                \"u64x8\": {\"nasmType\": \"resz\", \"ctype\": \"__m512\"},\n" +
+                "                \"u64x2a\": {\"nasmType\": \"reso\", \"ctype\": \"__m128 *\"},\n" +
+                "                \"u64x4a\": {\"nasmType\": \"resy\", \"ctype\": \"__m256 *\"},\n" +
+                "                \"u64x8a\": {\"nasmType\": \"resz\", \"ctype\": \"__m512 *\"},\n" +
+
                 "                \"s8x8\": {\"nasmType\": \"resq\", \"ctype\": \"__m64\"},\n" +
                 "                \"s8x16\": {\"nasmType\": \"reso\", \"ctype\": \"__m128\"},\n" +
                 "                \"s8x32\": {\"nasmType\": \"resy\", \"ctype\": \"__m256\"},\n" +
@@ -250,6 +276,7 @@ public class Translator {
                 "                \"s8x16a\": {\"nasmType\": \"reso\", \"ctype\": \"__m128 *\"},\n" +
                 "                \"s8x32a\": {\"nasmType\": \"resy\", \"ctype\": \"__m256 *\"},\n" +
                 "                \"s8x64a\": {\"nasmType\": \"resz\", \"ctype\": \"__m512 *\"},\n" +
+
                 "                \"b8x8\": {\"nasmType\": \"resq\", \"ctype\": \"__m64\"},\n" +
                 "                \"b8x16\": {\"nasmType\": \"reso\", \"ctype\": \"__m128\"},\n" +
                 "                \"b8x32\": {\"nasmType\": \"resy\", \"ctype\": \"__m256\"},\n" +
@@ -361,7 +388,8 @@ public class Translator {
                 "              \"Bzhi\": {\"args\": 2, \"typeDecider\": 0},\n" +
                 "              \"Pdep\": {\"args\": 2, \"typeDecider\": 0},\n" +
                 "              \"Pext\": {\"args\": 2, \"typeDecider\": 0},\n" +
-                "              \"Emask\": {\"args\": 1, \"typeDecider\": 0}\n" +
+                "              \"Emask\": {\"args\": 1, \"typeDecider\": 0},\n" +
+                "              \"Shuffle\": {\"args\": 2, \"typeDecider\": 0}\n" +
                 "            }").toCharArray();
 
         success = ReadJSON(json, dataRef, message);
@@ -1196,6 +1224,7 @@ public class Translator {
         success = true;
 
         LinkedListCharactersAddString(cc, "#include <stdint.h>\n\n".toCharArray());
+        //LinkedListCharactersAddString(cc, "#include <immintrin.h>\n\n".toCharArray());
 
         for(i = 0d; i < ArrayLength(structures); i = i + 1d){
             structure = ArrayIndex(structures, i).structure;

@@ -1,0 +1,12 @@
+Bgs testS
+  u32x4 y
+  u32x4 x
+Ens
+
+Fnc test
+  Idw x, 0, 4
+  Idw x, 1, 3
+  Idw x, 2, 2
+  Idw x, 3, 1
+  Shuffle y, x, 0|(0<<6)|(1<<4)|(2<<2)|(3<<0)
+Ret

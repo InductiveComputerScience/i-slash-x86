@@ -1507,14 +1507,14 @@ extern free
   vmovdqu yword [%1 + rcx], %3
 %endmacro
 
-%macro Idw.miiu32x4 3
+%macro Idw.iiu32x4 3
   movdqu xmm0, oword [rdi + %1]
   mov eax, %3
   vpinsrd xmm0, eax, %2
-  movdqu oword [rax + rcx], xmm0
+  movdqu oword [rdi + %1], xmm0
 %endmacro
 
-%macro Idw.miiu32x8 3
+%macro Idw.iiu32x8 3
   vmovdqu ymm0, yword [rdi + %1]
   vextracti128 xmm1, ymm0, %3 / 8
   mov eax, %3
@@ -2172,12 +2172,19 @@ extern f
 %endmacro
 
 ; -----------------------------------------------------------------------------
-; Shuffle -- Shuffle data
+; Shuffle -- Shuffle data -- TODO: Includes which to copy
 
-%macro Shuffle.mmu8x32 3
+%macro Shuffle.miu8x32 2
+  movdqu xmm0, oword [rdi + %1]
   movdqu xmm0, oword [rdi + %2]
-  movdqu xmm1, oword [rdi + %3]
-  vpshufb xmm0, xmm0, xmm1
+  vpshufb xmm0, xmm1, %3
+  movdqu oword [rdi + %1], xmm0
+%endmacro
+
+%macro Shuffle.miu32x4 3
+  movdqu xmm0, oword [rdi + %1]
+  movdqu xmm1, oword [rdi + %2]
+  vpshufd xmm0, xmm1, %3
   movdqu oword [rdi + %1], xmm0
 %endmacro
 
