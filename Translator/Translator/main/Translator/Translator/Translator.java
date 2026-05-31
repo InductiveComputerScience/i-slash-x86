@@ -753,6 +753,9 @@ public class Translator {
 
     public static void AppendTernaryArguments(LinkedListCharacters cc, char[] arg1, char[] arg2, char[] arg3, char[] fname, Structure structure, double typeDecider) {
         char[] signature;
+        double i;
+        StringReference[] subparts;
+
         signature = GetTernarySignature(arg1, arg2, arg3, structure, typeDecider);
         LinkedListCharactersAddString(cc, signature);
         LinkedListCharactersAddString(cc, " ".toCharArray());
@@ -761,8 +764,19 @@ public class Translator {
         LinkedListCharactersAddString(cc, ", ".toCharArray());
         AppendArgument(cc, arg2, fname);
 
-        LinkedListCharactersAddString(cc, ", ".toCharArray());
-        AppendArgument(cc, arg3, fname);
+        if(ContainsCharacter(arg3, ':')){
+            // This is used for e.g. Shuffle
+
+            subparts = SplitByCharacter(arg3, ':');
+
+            for(i = 0d; i < subparts.length; i = i + 1d) {
+                LinkedListCharactersAddString(cc, ", ".toCharArray());
+                AppendArgument(cc, subparts[(int)i].string, fname);
+            }
+        }else {
+            LinkedListCharactersAddString(cc, ", ".toCharArray());
+            AppendArgument(cc, arg3, fname);
+        }
     }
 
     public static char[] TranslateLiteral(char[] arg) {

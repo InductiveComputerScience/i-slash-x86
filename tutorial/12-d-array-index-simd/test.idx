@@ -1,6 +1,9 @@
 Bgs testS
   u32x4 y
   u32x4 x
+  u8x16 a
+  u8x16 b
+  u8x16 z
 Ens
 
 Fnc test
@@ -8,5 +11,42 @@ Fnc test
   Idw x, 1, 3
   Idw x, 2, 2
   Idw x, 3, 1
-  Shuffle y, x, 0|(0<<6)|(1<<4)|(2<<2)|(3<<0)
+  Shuffle y, x, 0:3:2:1
+  
+  Idw a, 0, 1
+  Idw a, 1, 2
+  Idw a, 2, 3
+  Idw a, 3, 4
+  Idw a, 4, 5
+  Idw a, 5, 6
+  Idw a, 6, 7
+  Idw a, 7, 8
+  Idw a, 8, 9
+  Idw a, 9, 10
+  Idw a, 10, 11
+  Idw a, 11, 12
+  Idw a, 12, 13
+  Idw a, 13, 14
+  Idw a, 14, 15
+  Idw a, 15, 16
+  
+  Idw b, 0, 15
+  Idw b, 1, 14
+  Idw b, 2, 13
+  Idw b, 3, 12
+  Idw b, 4, 11
+  Idw b, 5, 10
+  Idw b, 6, 9
+  Idw b, 7, 8
+  Idw b, 8, 7
+  Idw b, 9, 6
+  Idw b, 10, 5
+  Idw b, 11, 4
+  Idw b, 12, 3
+  Idw b, 13, 2
+  Idw b, 14, 1
+  Idw b, 15, 0
+  
+  Shuffle z, a, b
+          
 Ret
