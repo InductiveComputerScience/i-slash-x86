@@ -389,7 +389,10 @@ public class Translator {
                 "              \"Pdep\": {\"args\": 2, \"typeDecider\": 0},\n" +
                 "              \"Pext\": {\"args\": 2, \"typeDecider\": 0},\n" +
                 "              \"Emask\": {\"args\": 1, \"typeDecider\": 0},\n" +
-                "              \"Shuffle\": {\"args\": 2, \"typeDecider\": 0}\n" +
+                "              \"Shuffle\": {\"args\": 2, \"typeDecider\": 0},\n" +
+                "              \"MulStoreHigh\": {\"args\": 2, \"typeDecider\": 0},\n" +
+                "              \"SubSaturated\": {\"args\": 2, \"typeDecider\": 0}\n" +
+
                 "            }").toCharArray();
 
         success = ReadJSON(json, dataRef, message);

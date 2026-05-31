@@ -1,0 +1,41 @@
+Bgs testS
+  f32x4 x
+  f32x4 y
+  f32x4 z
+  u32x4 a
+  u32x4 b
+  u32x4 c
+Ens
+
+Fnc test
+  ; f32x4 tests
+  Idw x, 0, 1.0
+  Idw x, 1, 2.0
+  Idw x, 2, 3.0
+  Idw x, 3, 4.0
+  
+  Idw y, 0, 7.0
+  Idw y, 1, 1.0
+  Idw y, 2, 5.0
+  Idw y, 3, 3.0
+  
+  Add z, x, y
+  Sub z, x, y
+  Mul z, x, y
+  Div z, x, y
+  
+  ; u32x4 tests
+  Idw a, 0, 1000
+  Idw a, 1, 2000
+  Idw a, 2, 3000
+  Idw a, 3, 4000
+  
+  Idw b, 0, 7000
+  Idw b, 1, 1000
+  Idw b, 2, 5000
+  Idw b, 3, 3000
+  
+  Add c, a, b
+  Sub c, a, b
+  Mul c, a, b
+Ret

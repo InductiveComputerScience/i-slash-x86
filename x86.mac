@@ -129,6 +129,27 @@
   vmovdqu yword [rdi + %1], ymm0
 %endmacro
 
+%macro Add.mmu32x4 3
+  movdqu xmm0, oword [rdi + %2]
+  movdqu xmm1, oword [rdi + %3]
+  vpaddd xmm0, xmm0, xmm1
+  movdqu oword [rdi + %1], xmm0
+%endmacro
+
+%macro Add.mmu8x16 3
+  movdqu xmm0, oword [rdi + %2]
+  movdqu xmm1, oword [rdi + %3]
+  vpaddb xmm0, xmm0, xmm1
+  movdqu oword [rdi + %1], xmm0
+%endmacro
+
+%macro Add.mmf32x4 3
+  movdqu xmm0, oword [rdi + %2]
+  movdqu xmm1, oword [rdi + %3]
+  vaddps xmm0, xmm0, xmm1
+  movdqu oword [rdi + %1], xmm0
+%endmacro
+
 %macro Add.mmf32x8 3
   vmovdqu ymm0, yword [rdi + %2]
   vmovdqu ymm1, yword [rdi + %3]
@@ -193,6 +214,13 @@
   vmovdqu yword [rdi + %1], ymm0
 %endmacro
 
+%macro Sub.mmu32x4 3
+  movdqu xmm0, oword [rdi + %2]
+  movdqu xmm1, oword [rdi + %3]
+  vpsubd xmm0, xmm0, xmm1
+  movdqu oword [rdi + %1], xmm0
+%endmacro
+
 %macro Sub.rrru8x32 3
   vpsubb %1, %2, %3
 %endmacro
@@ -204,6 +232,13 @@
   vpbroadcastb ymm1, xmm2
   vpsubb ymm0, ymm0, ymm1
   vmovdqu yword [rdi + %1], ymm0
+%endmacro
+
+%macro Sub.mmf32x4 3
+  movdqu xmm0, oword [rdi + %2]
+  movdqu xmm1, oword [rdi + %3]
+  vsubps xmm0, xmm0, xmm1
+  movdqu oword [rdi + %1], xmm0
 %endmacro
 
 %macro Sub.mmf32x8 3
@@ -296,6 +331,20 @@
   vmovdqu ymm1, yword [rdi + %3]
   vpmullw ymm0, ymm0, ymm1
   vmovdqu yword [rdi + %1], ymm0
+%endmacro
+
+%macro Mul.mmu32x4 3
+  movdqu xmm0, oword [rdi + %2]
+  movdqu xmm1, oword [rdi + %3]
+  vpmullw xmm0, xmm0, xmm1
+  movdqu oword [rdi + %1], xmm0
+%endmacro
+
+%macro Mul.mmf32x4 3
+  movdqu xmm0, oword [rdi + %2]
+  movdqu xmm1, oword [rdi + %3]
+  vmulps xmm0, xmm0, xmm1
+  movdqu oword [rdi + %1], xmm0
 %endmacro
 
 %macro Mul.mmf32x8 3
@@ -396,6 +445,13 @@
   mov qword [rdi + %1], rax
 %endmacro
 
+%macro Div.mmf32x4 3
+  movdqu xmm0, oword [rdi + %2]
+  movdqu xmm1, oword [rdi + %3]
+  vdivps xmm0, xmm0, xmm1
+  movdqu oword [rdi + %1], xmm0
+%endmacro
+
 %macro Div.mmf32x8 3
   vmovdqu ymm0, yword [rdi + %2]
   vmovdqu ymm1, yword [rdi + %3]
@@ -477,6 +533,32 @@
 %endmacro
 
 ; -----------------------------------------------------------------------------
+; SubSaturated -- Subtraction Saturated
+
+%macro SubSaturated.mmu8x16 3
+  movdqu xmm0, oword [rdi + %2]
+  movdqu xmm1, oword [rdi + %3]
+  vpsubusb xmm0, xmm0, xmm1
+  movdqu oword [rdi + %1], xmm0
+%endmacro
+
+%macro SubSaturated.mmu8x32 3
+  vmovdqu ymm0, yword [rdi + %2]
+  vmovdqu ymm1, yword [rdi + %3]
+  vpsubusb ymm0, ymm0, ymm1
+  vmovdqu yword [rdi + %1], ymm0
+%endmacro
+
+%macro SubSaturated.mms8x32 3
+  vmovdqu ymm0, yword [rdi + %2]
+  vmovdqu ymm1, yword [rdi + %3]
+  vpsubsb ymm0, ymm0, ymm1
+  vmovdqu yword [rdi + %1], ymm0
+%endmacro
+
+
+
+; -----------------------------------------------------------------------------
 ; Round -- Round number to nearest integer
 
 %macro Round.mmf32x8 2
@@ -550,6 +632,41 @@
 
 %macro Mov.rmu64 2
   mov %1, qword [rdi + %2]
+%endmacro
+
+%macro Mov.iu8x16 2
+  mov al, %2
+  movzx rax, al
+  movq xmm1, rax
+  vpbroadcastb xmm0, xmm1
+  movdqu oword [rdi + %1], xmm0
+%endmacro
+
+%macro Mov.mu8x16 2
+  movdqu xmm0, oword [rdi + %2]
+  movdqu oword [rdi + %1], xmm0
+%endmacro
+
+%macro Mov.iu16x8 2
+  mov ax, %2
+  movzx rax, ax
+  movq xmm1, rax
+  vpbroadcastw xmm0, xmm1
+  movdqu oword [rdi + %1], xmm0
+%endmacro
+
+%macro Mov.iu32x4 2
+  mov rax, %2
+  movq xmm1, rax
+  vpbroadcastd xmm0, xmm1
+  movdqu oword [rdi + %1], xmm0
+%endmacro
+
+%macro Mov.iu64x2 2
+  mov rax, %2
+  movq xmm1, rax
+  vpbroadcastq xmm0, xmm1
+  movdqu oword [rdi + %1], xmm0
 %endmacro
 
 %macro Mov.iu8x32 2
@@ -790,6 +907,13 @@
   vmovdqu yword [rdi + %1], ymm0
 %endmacro
 
+%macro Gt.mmu8x32 3
+  vmovdqu ymm0, yword [rdi + %2]
+  vmovdqu ymm1, yword [rdi + %3]
+  vpcmpgtb ymm0, ymm0, ymm1
+  vmovdqu yword [rdi + %1], ymm0
+%endmacro
+
 %macro Gt.mif64 3
   movsd xmm0, [rdi + %2]
   mov rax, __?float64?__(%3)
@@ -806,6 +930,13 @@
   cmp rax, rdx
   setg al
   mov byte [rdi + %1], al
+%endmacro
+
+%macro Gt.mmu8x16 3
+  movdqu xmm0, oword [rdi + %2]
+  movdqu xmm1, oword [rdi + %3]
+  vpcmpgtb xmm0, xmm0, xmm1
+  movdqu oword [rdi + %1], xmm0
 %endmacro
 
 ; -----------------------------------------------------------------------------
@@ -879,6 +1010,20 @@
   and al, cl
   and al, 1
   mov byte [rdi + %1], al
+%endmacro
+
+%macro And.mmu8x16 3
+  movdqu xmm0, oword [rdi + %2]
+  movdqu xmm1, oword [rdi + %3]
+  vpand xmm0, xmm0, xmm1
+  movdqu oword [rdi + %1], xmm0
+%endmacro
+
+%macro And.mmu32x4 3
+  movdqu xmm0, oword [rdi + %2]
+  movdqu xmm1, oword [rdi + %3]
+  vpand xmm0, xmm0, xmm1
+  movdqu oword [rdi + %1], xmm0
 %endmacro
 
 %macro And.mmu8x32 3
@@ -1066,7 +1211,7 @@
   mov qword [rdi + %1], rax
 %endmacro
 
-%macro Idw.miu8x16 3
+%macro Idr.miu8x16 3
   movdqu xmm0, oword [rdi + %2]
   vpextrb al, xmm0, %3
   mov al, byte [rdi + %1]
@@ -1428,6 +1573,20 @@
   vmovdqu yword [rdi + %1], ymm0
 %endmacro
 
+%macro Or.mmu8x16 3
+  movdqu xmm0, oword [rdi + %2]
+  movdqu xmm1, oword [rdi + %3]
+  vpor xmm0, xmm0, xmm1
+  movdqu oword [rdi + %1], xmm0
+%endmacro
+
+%macro Or.mmu32x4 3
+  movdqu xmm0, oword [rdi + %2]
+  movdqu xmm1, oword [rdi + %3]
+  vpor xmm0, xmm0, xmm1
+  movdqu oword [rdi + %1], xmm0
+%endmacro
+
 ; -----------------------------------------------------------------------------
 ; Call
 
@@ -1531,6 +1690,13 @@ extern free
 %macro Idw.iiu32x4 3
   movdqu xmm0, oword [rdi + %1]
   mov eax, %3
+  vpinsrd xmm0, eax, %2
+  movdqu oword [rdi + %1], xmm0
+%endmacro
+
+%macro Idw.iif32x4 3
+  movdqu xmm0, oword [rdi + %1]
+  mov eax, __?float32?__(%3)
   vpinsrd xmm0, eax, %2
   movdqu oword [rdi + %1], xmm0
 %endmacro
@@ -2212,6 +2378,13 @@ extern f
 
 ; -----------------------------------------------------------------------------
 ; MulStoreHigh -- Multiply Store high
+
+%macro MulStoreHigh.mmu32x4 3
+  movdqu xmm0, oword [rdi + %2]
+  movdqu xmm1, oword [rdi + %3]
+  vpmulhw xmm0, xmm0, xmm1
+  movdqu oword [rdi + %1], xmm0
+%endmacro
 
 %macro MulStoreHigh.mmu16x16 3
   vmovdqu ymm0, yword [rdi + %2]
