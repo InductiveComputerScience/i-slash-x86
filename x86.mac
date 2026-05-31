@@ -1066,6 +1066,13 @@
   mov qword [rdi + %1], rax
 %endmacro
 
+%macro Idw.miu8x16 3
+  movdqu xmm0, oword [rdi + %2]
+  vpextrb al, xmm0, %3
+  mov al, byte [rdi + %1]
+%endmacro
+
+
 ; -----------------------------------------------------------------------------
 ; Idro -- Index Read Array with offset
 
