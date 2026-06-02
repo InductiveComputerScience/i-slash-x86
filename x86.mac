@@ -195,6 +195,13 @@
   mov qword [rdi + %1], rax
 %endmacro
 
+%macro Sub.miu64 3
+  mov rax, qword [rdi + %2]
+  mov rdx, %3
+  sub rax, rdx
+  mov qword [rdi + %1], rax
+%endmacro
+
 %macro Sub.rrru64 3
   mov rax, %2
   sub rax, %3
@@ -639,10 +646,17 @@
   movzx rax, al
   movq xmm1, rax
   vpbroadcastb xmm0, xmm1
+  ;pxor xmm0, xmm0
+  ;vpshufb xmm0, xmm1, xmm0
   movdqu oword [rdi + %1], xmm0
 %endmacro
 
 %macro Mov.mu8x16 2
+  movdqu xmm0, oword [rdi + %2]
+  movdqu oword [rdi + %1], xmm0
+%endmacro
+
+%macro Mov.mu32x4 2
   movdqu xmm0, oword [rdi + %2]
   movdqu oword [rdi + %1], xmm0
 %endmacro
@@ -652,6 +666,8 @@
   movzx rax, ax
   movq xmm1, rax
   vpbroadcastw xmm0, xmm1
+  ;pxor xmm0, xmm0
+  ;vpshufw xmm0, xmm1, xmm0
   movdqu oword [rdi + %1], xmm0
 %endmacro
 
@@ -659,6 +675,7 @@
   mov rax, %2
   movq xmm1, rax
   vpbroadcastd xmm0, xmm1
+  ;vpshufd xmm0, xmm1, 0
   movdqu oword [rdi + %1], xmm0
 %endmacro
 
@@ -720,6 +737,11 @@
   mov qword [rdi + %1], rax
 %endmacro
 
+%macro Ptr.mu8a 2
+  mov rax, qword [rdi + %2]
+  mov qword [rdi + %1], rax
+%endmacro
+
 ; -----------------------------------------------------------------------------
 ; Ptw -- Pointer write
 
@@ -741,12 +763,27 @@
 ; -----------------------------------------------------------------------------
 ; Ptm -- Pointer Move
 
+%macro Ptm.mu8x16a 2
+  mov rax, qword [rdi + %2]
+  mov qword [rdi + %1], rax
+%endmacro
+
 %macro Ptm.mu16x8a 2
   mov rax, qword [rdi + %2]
   mov qword [rdi + %1], rax
 %endmacro
 
 %macro Ptm.mu16x16a 2
+  mov rax, qword [rdi + %2]
+  mov qword [rdi + %1], rax
+%endmacro
+
+%macro Ptm.mu64 2
+  mov rax, qword [rdi + %2]
+  mov qword [rdi + %1], rax
+%endmacro
+
+%macro Ptm.mu64a 2
   mov rax, qword [rdi + %2]
   mov qword [rdi + %1], rax
 %endmacro
@@ -1214,9 +1251,30 @@
 %macro Idr.miu8x16 3
   movdqu xmm0, oword [rdi + %2]
   vpextrb al, xmm0, %3
-  mov al, byte [rdi + %1]
+  mov byte [rdi + %1], al
 %endmacro
 
+%macro Idr.miu32x4 3
+  movdqu xmm0, oword [rdi + %2]
+  vpextrd eax, xmm0, %3
+  mov dword [rdi + %1], eax
+%endmacro
+
+%macro Idr.mmu8x16a 3
+  mov rax, qword [rdi + %2]
+  mov rdx, qword [rdi + %3]
+  shl rdx, 4
+  movdqu xmm0, oword [rax + rdx]
+  movdqu oword [rdi + %1], xmm0
+%endmacro
+
+%macro Idr.miu8x16a 3
+  mov rax, qword [rdi + %2]
+  mov rdx, %3
+  shl rdx, 4
+  movdqu xmm0, oword [rax + rdx]
+  movdqu oword [rdi + %1], xmm0
+%endmacro
 
 ; -----------------------------------------------------------------------------
 ; Idro -- Index Read Array with offset
@@ -1653,6 +1711,38 @@ extern free
   vmovdqu yword [rax + rcx], ymm0
 %endmacro
 
+%macro Idw.mmu16x8a 3
+  movdqu xmm0, oword [rdi + %3]
+  mov rax, qword [rdi + %1]
+  mov rcx, qword [rdi + %2]
+  shl rcx, 4
+  movdqu oword [rax + rcx], xmm0
+%endmacro
+
+%macro Idw.mmu32x4a 3
+  movdqu xmm0, oword [rdi + %3]
+  mov rax, qword [rdi + %1]
+  mov rcx, qword [rdi + %2]
+  shl rcx, 4
+  movdqu oword [rax + rcx], xmm0
+%endmacro
+
+%macro Idw.imu16x8a 3
+  movdqu xmm0, oword [rdi + %3]
+  mov rax, qword [rdi + %1]
+  mov rcx, %2
+  shl rcx, 4
+  movdqu oword [rax + rcx], xmm0
+%endmacro
+
+%macro Idw.imu32x4a 3
+  movdqu xmm0, oword [rdi + %3]
+  mov rax, qword [rdi + %1]
+  mov rcx, %2
+  shl rcx, 4
+  movdqu oword [rax + rcx], xmm0
+%endmacro
+
 %macro Idw.mru8x32a 3
   mov rax, qword [rdi + %1]
   mov rcx, qword [rdi + %2]
@@ -1708,6 +1798,13 @@ extern free
   vpinsrd xmm1, eax, %2 % 8
   vinserti128 ymm0, xmm1, %3 / 8
   vmovdqu yword [rdi + %1], ymm0
+%endmacro
+
+%macro Idw.mmu64a 3
+  mov rdx, qword [rdi + %3]
+  mov rax, qword [rdi + %1]
+  mov rcx, qword [rdi + %2]
+  mov qword [rax + rcx*8], rdx
 %endmacro
 
 ; -----------------------------------------------------------------------------
@@ -1961,6 +2058,22 @@ extern free
   movsd xmm0, qword [rdi + %2]
   cvtsd2ss xmm0, xmm0
   movss dword [rdi + %1], xmm0
+%endmacro
+
+; -----------------------------------------------------------------------------
+; Packed bytes to packed words
+; u8x8tou16x8
+
+%macro u8x8tou16x8.m 2
+  movq xmm0, qword [rdi + %2]
+  pmovzxbw xmm1, xmm0
+  movdqu oword [rdi + %1], xmm1
+%endmacro
+
+%macro u8x4tou32x4.m 2
+  movq xmm0, qword [rdi + %2]
+  pmovzxbd xmm1, xmm0
+  movdqu oword [rdi + %1], xmm1
 %endmacro
 
 ; -----------------------------------------------------------------------------
