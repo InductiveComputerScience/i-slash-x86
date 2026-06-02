@@ -366,8 +366,12 @@ public class Translator {
                 "              \"s16tos8\": {\"args\": 1, \"typeDecider\": 0, \"noTypePostfix\": true},\n" +
                 "              \"f32tos16\": {\"args\": 1, \"typeDecider\": 0, \"noTypePostfix\": true},\n" +
                 "              \"f64tof32\": {\"args\": 1, \"typeDecider\": 0, \"noTypePostfix\": true},\n" +
+                "              \"u8tou16\": {\"args\": 1, \"typeDecider\": 0, \"noTypePostfix\": true},\n" +
+                "              \"u8tou32\": {\"args\": 1, \"typeDecider\": 0, \"noTypePostfix\": true},\n" +
                 "              \"u8x8tou16x8\": {\"args\": 1, \"typeDecider\": 0, \"noTypePostfix\": true},\n" +
                 "              \"u8x4tou32x4\": {\"args\": 1, \"typeDecider\": 0, \"noTypePostfix\": true},\n" +
+                "              \"u16tou32\": {\"args\": 1, \"typeDecider\": 0, \"noTypePostfix\": true},\n" +
+                "              \"u32tou64\": {\"args\": 1, \"typeDecider\": 0, \"noTypePostfix\": true},\n" +
                 "              \"Cmov\": {\"args\": 2, \"typeDecider\": 1},\n" +
                 "              \"Set\": {\"args\": 1, \"typeDecider\": 1},\n" +
                 "              \"Xchg\": {\"args\": 1, \"typeDecider\": 1},\n" +
