@@ -239,64 +239,64 @@ public class Translator {
                 "                \"u8x32\": {\"nasmType\": \"resy\", \"ctype\": \"__m256\"},\n" +
                 "                \"u8x64\": {\"nasmType\": \"resz\", \"ctype\": \"__m512\"},\n" +
                 "                \"u8x8a\": {\"nasmType\": \"resq\", \"ctype\": \"__m64 *\"},\n" +
-                "                \"u8x16a\": {\"nasmType\": \"reso\", \"ctype\": \"__m128 *\"},\n" +
-                "                \"u8x32a\": {\"nasmType\": \"resy\", \"ctype\": \"__m256 *\"},\n" +
-                "                \"u8x64a\": {\"nasmType\": \"resz\", \"ctype\": \"__m512 *\"},\n" +
+                "                \"u8x16a\": {\"nasmType\": \"resq\", \"ctype\": \"__m128 *\"},\n" +
+                "                \"u8x32a\": {\"nasmType\": \"resq\", \"ctype\": \"__m256 *\"},\n" +
+                "                \"u8x64a\": {\"nasmType\": \"resq\", \"ctype\": \"__m512 *\"},\n" +
 
                 "                \"u16x4\": {\"nasmType\": \"resq\", \"ctype\": \"__m64\"},\n" +
                 "                \"u16x8\": {\"nasmType\": \"reso\", \"ctype\": \"__m128\"},\n" +
                 "                \"u16x16\": {\"nasmType\": \"resy\", \"ctype\": \"__m256\"},\n" +
                 "                \"u16x32\": {\"nasmType\": \"resz\", \"ctype\": \"__m512\"},\n" +
                 "                \"u16x4a\": {\"nasmType\": \"resq\", \"ctype\": \"__m64 *\"},\n" +
-                "                \"u16x8a\": {\"nasmType\": \"reso\", \"ctype\": \"__m128 *\"},\n" +
-                "                \"u16x16a\": {\"nasmType\": \"resy\", \"ctype\": \"__m256 *\"},\n" +
-                "                \"u16x32a\": {\"nasmType\": \"resz\", \"ctype\": \"__m512 *\"},\n" +
+                "                \"u16x8a\": {\"nasmType\": \"resq\", \"ctype\": \"__m128 *\"},\n" +
+                "                \"u16x16a\": {\"nasmType\": \"resq\", \"ctype\": \"__m256 *\"},\n" +
+                "                \"u16x32a\": {\"nasmType\": \"resq\", \"ctype\": \"__m512 *\"},\n" +
 
                 "                \"u32x2\": {\"nasmType\": \"resq\", \"ctype\": \"__m64\"},\n" +
                 "                \"u32x4\": {\"nasmType\": \"reso\", \"ctype\": \"__m128\"},\n" +
                 "                \"u32x8\": {\"nasmType\": \"resy\", \"ctype\": \"__m256\"},\n" +
                 "                \"u32x16\": {\"nasmType\": \"resz\", \"ctype\": \"__m512\"},\n" +
                 "                \"u32x2a\": {\"nasmType\": \"resq\", \"ctype\": \"__m64 *\"},\n" +
-                "                \"u32x4a\": {\"nasmType\": \"reso\", \"ctype\": \"__m128 *\"},\n" +
-                "                \"u32x8a\": {\"nasmType\": \"resy\", \"ctype\": \"__m256 *\"},\n" +
-                "                \"u32x16a\": {\"nasmType\": \"resz\", \"ctype\": \"__m512 *\"},\n" +
+                "                \"u32x4a\": {\"nasmType\": \"resq\", \"ctype\": \"__m128 *\"},\n" +
+                "                \"u32x8a\": {\"nasmType\": \"resq\", \"ctype\": \"__m256 *\"},\n" +
+                "                \"u32x16a\": {\"nasmType\": \"resq\", \"ctype\": \"__m512 *\"},\n" +
 
                 "                \"u64x2\": {\"nasmType\": \"reso\", \"ctype\": \"__m128\"},\n" +
                 "                \"u64x4\": {\"nasmType\": \"resy\", \"ctype\": \"__m256\"},\n" +
                 "                \"u64x8\": {\"nasmType\": \"resz\", \"ctype\": \"__m512\"},\n" +
-                "                \"u64x2a\": {\"nasmType\": \"reso\", \"ctype\": \"__m128 *\"},\n" +
-                "                \"u64x4a\": {\"nasmType\": \"resy\", \"ctype\": \"__m256 *\"},\n" +
-                "                \"u64x8a\": {\"nasmType\": \"resz\", \"ctype\": \"__m512 *\"},\n" +
+                "                \"u64x2a\": {\"nasmType\": \"resq\", \"ctype\": \"__m128 *\"},\n" +
+                "                \"u64x4a\": {\"nasmType\": \"resq\", \"ctype\": \"__m256 *\"},\n" +
+                "                \"u64x8a\": {\"nasmType\": \"resq\", \"ctype\": \"__m512 *\"},\n" +
 
                 "                \"s8x8\": {\"nasmType\": \"resq\", \"ctype\": \"__m64\"},\n" +
                 "                \"s8x16\": {\"nasmType\": \"reso\", \"ctype\": \"__m128\"},\n" +
                 "                \"s8x32\": {\"nasmType\": \"resy\", \"ctype\": \"__m256\"},\n" +
                 "                \"s8x64\": {\"nasmType\": \"resz\", \"ctype\": \"__m512\"},\n" +
                 "                \"s8x8a\": {\"nasmType\": \"resq\", \"ctype\": \"__m64 *\"},\n" +
-                "                \"s8x16a\": {\"nasmType\": \"reso\", \"ctype\": \"__m128 *\"},\n" +
-                "                \"s8x32a\": {\"nasmType\": \"resy\", \"ctype\": \"__m256 *\"},\n" +
-                "                \"s8x64a\": {\"nasmType\": \"resz\", \"ctype\": \"__m512 *\"},\n" +
+                "                \"s8x16a\": {\"nasmType\": \"resq\", \"ctype\": \"__m128 *\"},\n" +
+                "                \"s8x32a\": {\"nasmType\": \"resq\", \"ctype\": \"__m256 *\"},\n" +
+                "                \"s8x64a\": {\"nasmType\": \"resq\", \"ctype\": \"__m512 *\"},\n" +
 
                 "                \"b8x8\": {\"nasmType\": \"resq\", \"ctype\": \"__m64\"},\n" +
                 "                \"b8x16\": {\"nasmType\": \"reso\", \"ctype\": \"__m128\"},\n" +
                 "                \"b8x32\": {\"nasmType\": \"resy\", \"ctype\": \"__m256\"},\n" +
                 "                \"b8x64\": {\"nasmType\": \"resz\", \"ctype\": \"__m512\"},\n" +
                 "                \"b8x8a\": {\"nasmType\": \"resq\", \"ctype\": \"__m64 *\"},\n" +
-                "                \"b8x16a\": {\"nasmType\": \"reso\", \"ctype\": \"__m128 *\"},\n" +
-                "                \"b8x32a\": {\"nasmType\": \"resy\", \"ctype\": \"__m256 *\"},\n" +
-                "                \"b8x64a\": {\"nasmType\": \"resz\", \"ctype\": \"__m512 *\"},\n" +
+                "                \"b8x16a\": {\"nasmType\": \"resq\", \"ctype\": \"__m128 *\"},\n" +
+                "                \"b8x32a\": {\"nasmType\": \"resq\", \"ctype\": \"__m256 *\"},\n" +
+                "                \"b8x64a\": {\"nasmType\": \"resq\", \"ctype\": \"__m512 *\"},\n" +
                 "                \"f32x4\": {\"nasmType\": \"reso\", \"ctype\": \"__m128\"},\n" +
                 "                \"f32x8\": {\"nasmType\": \"resy\", \"ctype\": \"__m256\"},\n" +
                 "                \"f32x16\": {\"nasmType\": \"resz\", \"ctype\": \"__m512\"},\n" +
-                "                \"f32x4a\": {\"nasmType\": \"reso\", \"ctype\": \"__m128 *\"},\n" +
-                "                \"f32x8a\": {\"nasmType\": \"resy\", \"ctype\": \"__m256 *\"},\n" +
-                "                \"f32x16a\": {\"nasmType\": \"resz\", \"ctype\": \"__m512 *\"},\n" +
+                "                \"f32x4a\": {\"nasmType\": \"resq\", \"ctype\": \"__m128 *\"},\n" +
+                "                \"f32x8a\": {\"nasmType\": \"resq\", \"ctype\": \"__m256 *\"},\n" +
+                "                \"f32x16a\": {\"nasmType\": \"resq\", \"ctype\": \"__m512 *\"},\n" +
                 "                \"f64x2\": {\"nasmType\": \"reso\", \"ctype\": \"__m128\"},\n" +
                 "                \"f64x4\": {\"nasmType\": \"resy\", \"ctype\": \"__m256\"},\n" +
                 "                \"f64x8\": {\"nasmType\": \"resz\", \"ctype\": \"__m512\"},\n" +
-                "                \"f64x2a\": {\"nasmType\": \"reso\", \"ctype\": \"__m128 *\"},\n" +
-                "                \"f64x4a\": {\"nasmType\": \"resy\", \"ctype\": \"__m256 *\"},\n" +
-                "                \"f64x8a\": {\"nasmType\": \"resz\", \"ctype\": \"__m512 *\"}\n" +
+                "                \"f64x2a\": {\"nasmType\": \"resq\", \"ctype\": \"__m128 *\"},\n" +
+                "                \"f64x4a\": {\"nasmType\": \"resq\", \"ctype\": \"__m256 *\"},\n" +
+                "                \"f64x8a\": {\"nasmType\": \"resq\", \"ctype\": \"__m512 *\"}\n" +
                 "            }").toCharArray();
 
         success = ReadJSON(json, entryTypesRef, message);
