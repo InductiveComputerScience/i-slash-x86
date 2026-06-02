@@ -2379,17 +2379,18 @@ extern f
 ; -----------------------------------------------------------------------------
 ; MulStoreHigh -- Multiply Store high
 
+; TODO: This one is not for u32
 %macro MulStoreHigh.mmu32x4 3
   movdqu xmm0, oword [rdi + %2]
   movdqu xmm1, oword [rdi + %3]
-  vpmulhw xmm0, xmm0, xmm1
+  vpmulhuw xmm0, xmm0, xmm1
   movdqu oword [rdi + %1], xmm0
 %endmacro
 
 %macro MulStoreHigh.mmu16x16 3
   vmovdqu ymm0, yword [rdi + %2]
   vmovdqu ymm1, yword [rdi + %3]
-  vpmulhw ymm0, ymm0, ymm1
+  vpmulhuw ymm0, ymm0, ymm1
   vmovdqu yword [rdi + %1], ymm0
 %endmacro
 
