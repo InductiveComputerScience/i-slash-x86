@@ -23,6 +23,7 @@ Fnc test
   Sub z, x, y
   Mul z, x, y
   Div z, x, y
+  Round z, z
   
   ; u32x4 tests
   Idw a, 0, 1000
@@ -38,4 +39,11 @@ Fnc test
   Add c, a, b
   Sub c, a, b
   Mul c, a, b
+  Abs c, c
 Ret
+
+
+
+
+
+

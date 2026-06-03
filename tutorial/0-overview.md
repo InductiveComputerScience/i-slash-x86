@@ -73,7 +73,7 @@
  - Nop -- No operation
 
 # 12. SIMD basics
- - a. Add, Subtract, Multiply, Divide, Absolute (?), Round
+ - a. Add, Subtract, Multiply, Divide, Absolute, Round
  - b. Compare
  - c. Conversions
  - d. Bitwise operations

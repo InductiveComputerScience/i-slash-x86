@@ -568,11 +568,72 @@
 ; -----------------------------------------------------------------------------
 ; Round -- Round number to nearest integer
 
-%macro Round.mmf32x8 2
+%macro Round.mf32x4 2
+  movdqu xmm0, oword [rdi + %2]
+  vroundps xmm0, xmm0, 0
+  movdqu oword [rdi + %1], xmm0
+%endmacro
+
+%macro Round.mf32x8 2
   vmovdqu ymm0, yword [rdi + %2]
   vroundps ymm0, ymm0, 0
   vmovdqu yword [rdi + %1], ymm0
 %endmacro
+
+; -----------------------------------------------------------------------------
+; Floor -- Round down to nearest integer
+
+%macro Floor.mf32x4 2
+  movdqu xmm0, oword [rdi + %2]
+  vroundps xmm0, xmm0, 1
+  movdqu oword [rdi + %1], xmm0
+%endmacro
+
+; -----------------------------------------------------------------------------
+; Ceil -- Round up to nearest integer
+
+%macro Floor.mf32x4 2
+  movdqu xmm0, oword [rdi + %2]
+  vroundps xmm0, xmm0, 2
+  movdqu oword [rdi + %1], xmm0
+%endmacro
+
+; -----------------------------------------------------------------------------
+; Truncate -- Round towards zero
+
+%macro Truncate.mf32x4 2
+  movdqu xmm0, oword [rdi + %2]
+  vroundps xmm0, xmm0, 3
+  movdqu oword [rdi + %1], xmm0
+%endmacro
+
+; -----------------------------------------------------------------------------
+; Abs -- Absolute Value
+
+%macro Abs.mu8x16 2
+  movdqu xmm0, oword [rdi + %2]
+  pabsb xmm0, xmm0
+  movdqu oword [rdi + %1], xmm0
+%endmacro
+
+%macro Abs.mu16x8 2
+  movdqu xmm0, oword [rdi + %2]
+  pabsw xmm0, xmm0
+  movdqu oword [rdi + %1], xmm0
+%endmacro
+
+%macro Abs.mu32x4 2
+  movdqu xmm0, oword [rdi + %2]
+  pabsd xmm0, xmm0
+  movdqu oword [rdi + %1], xmm0
+%endmacro
+
+%macro Abs.mu64x2 2
+  movdqu xmm0, oword [rdi + %2]
+  pabsq xmm0, xmm0
+  movdqu oword [rdi + %1], xmm0
+%endmacro
+
 
 ; -----------------------------------------------------------------------------
 ; Mov

@@ -323,6 +323,11 @@ public class Translator {
                 "              \"MulDiv\": {\"args\": 3, \"typeDecider\": 1},\n" +
                 "              \"Inc\": {\"args\": 0, \"typeDecider\": 1},\n" +
                 "              \"Dec\": {\"args\": 0, \"typeDecider\": 1},\n" +
+                "              \"Round\": {\"args\": 1, \"typeDecider\": 1},\n" +
+                "              \"Floor\": {\"args\": 1, \"typeDecider\": 1},\n" +
+                "              \"Ceil\": {\"args\": 1, \"typeDecider\": 1},\n" +
+                "              \"Truncate\": {\"args\": 1, \"typeDecider\": 1},\n" +
+                "              \"Abs\": {\"args\": 1, \"typeDecider\": 1},\n" +
                 "              \n" +
                 "              \"Not\": {\"args\": 1, \"typeDecider\": 1},\n" +
                 "              \"Shl\": {\"args\": 2, \"typeDecider\": 1},\n" +
