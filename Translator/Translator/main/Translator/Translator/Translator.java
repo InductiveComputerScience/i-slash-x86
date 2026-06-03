@@ -387,6 +387,7 @@ public class Translator {
                 "              \"f64x4tof32x4\": {\"args\": 2, \"typeDecider\": 0, \"noTypePostfix\": true},\n" +
                 "              \"f32x4tof16x4\": {\"args\": 1, \"typeDecider\": 0, \"noTypePostfix\": true},\n" +
                 "              \"f32x8tof16x8\": {\"args\": 2, \"typeDecider\": 0, \"noTypePostfix\": true},\n" +
+                "              \"f32x4tof64x4\": {\"args\": 2, \"typeDecider\": 0, \"noTypePostfix\": true},\n" +
 
                 "              \"Cmov\": {\"args\": 2, \"typeDecider\": 1},\n" +
                 "              \"Set\": {\"args\": 1, \"typeDecider\": 1},\n" +

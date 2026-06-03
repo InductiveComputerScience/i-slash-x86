@@ -2343,6 +2343,20 @@ extern free
 %endmacro
 
 ; -----------------------------------------------------------------------------
+; Packed doubles to two packed singles
+; f32x4tof64x4
+
+%macro f32x4tof64x4.mm 3
+  movdqu xmm0, oword [rdi + %3]
+  cvtps2pd xmm0, xmm0
+  movdqu xmm1, oword [rdi + %3]
+  psrldq xmm1, 8
+  cvtps2pd xmm1, xmm1
+  movdqu oword [rdi + %1], xmm0
+  movdqu oword [rdi + %2], xmm1
+%endmacro
+
+; -----------------------------------------------------------------------------
 ; Two packed single to packed half
 ; f32x8tof16x8
 
