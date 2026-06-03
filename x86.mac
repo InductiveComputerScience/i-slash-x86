@@ -2134,7 +2134,9 @@ extern free
 %endmacro
 
 %macro u8x4tou32x4.m 2
-  movq xmm0, qword [rdi + %2]
+  mov rax, 0
+  mov eax, dword [rdi + %2]
+  movq xmm0, rax
   pmovzxbd xmm1, xmm0
   movdqu oword [rdi + %1], xmm1
 %endmacro
