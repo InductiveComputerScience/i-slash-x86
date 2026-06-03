@@ -296,7 +296,13 @@ public class Translator {
                 "                \"f64x8\": {\"nasmType\": \"resz\", \"ctype\": \"__m512\"},\n" +
                 "                \"f64x2a\": {\"nasmType\": \"resq\", \"ctype\": \"__m128 *\"},\n" +
                 "                \"f64x4a\": {\"nasmType\": \"resq\", \"ctype\": \"__m256 *\"},\n" +
-                "                \"f64x8a\": {\"nasmType\": \"resq\", \"ctype\": \"__m512 *\"}\n" +
+                "                \"f64x8a\": {\"nasmType\": \"resq\", \"ctype\": \"__m512 *\"},\n" +
+
+                "                \"f16x8\": {\"nasmType\": \"reso\", \"ctype\": \"__m128\"},\n" +
+                "                \"f16x16\": {\"nasmType\": \"resy\", \"ctype\": \"__m256\"},\n" +
+                "                \"f16x32\": {\"nasmType\": \"resz\", \"ctype\": \"__m512\"}\n" +
+
+
                 "            }").toCharArray();
 
         success = ReadJSON(json, entryTypesRef, message);
@@ -377,6 +383,11 @@ public class Translator {
                 "              \"u8x4tou32x4\": {\"args\": 1, \"typeDecider\": 0, \"noTypePostfix\": true},\n" +
                 "              \"u16tou32\": {\"args\": 1, \"typeDecider\": 0, \"noTypePostfix\": true},\n" +
                 "              \"u32tou64\": {\"args\": 1, \"typeDecider\": 0, \"noTypePostfix\": true},\n" +
+                "              \"f64x2tof32x2\": {\"args\": 1, \"typeDecider\": 0, \"noTypePostfix\": true},\n" +
+                "              \"f64x4tof32x4\": {\"args\": 2, \"typeDecider\": 0, \"noTypePostfix\": true},\n" +
+                "              \"f32x4tof16x4\": {\"args\": 1, \"typeDecider\": 0, \"noTypePostfix\": true},\n" +
+                "              \"f32x8tof16x8\": {\"args\": 2, \"typeDecider\": 0, \"noTypePostfix\": true},\n" +
+
                 "              \"Cmov\": {\"args\": 2, \"typeDecider\": 1},\n" +
                 "              \"Set\": {\"args\": 1, \"typeDecider\": 1},\n" +
                 "              \"Xchg\": {\"args\": 1, \"typeDecider\": 1},\n" +
@@ -573,7 +584,7 @@ public class Translator {
                             parts[2].string = RemoveComma(parts[2].string);
                             PrintTabs(cc, tabs);
                             LinkedListCharactersAddString(cc, iname);
-                            AppendTernaryArguments(cc, parts[1].string, parts[2].string, parts[3].string, fname, structure, typeDecider);
+                            AppendTernaryArguments(cc, parts[1].string, parts[2].string, parts[3].string, fname, structure, typeDecider, noTypePostfix);
                             LinkedListCharactersAddString(cc, "\n".toCharArray());
                         }else if(args == 3){
                             parts[1].string = RemoveComma(parts[1].string);
@@ -723,7 +734,7 @@ public class Translator {
 
     public static void AppendQuadArguments(LinkedListCharacters cc, char[] arg1, char[] arg2, char[] arg3, char[] arg4, char[] fname, Structure structure) {
         char[] signature;
-        signature = GetTernarySignature(arg2, arg3, arg4, structure, 1);
+        signature = GetTernarySignature(arg2, arg3, arg4, structure, 1, false);
         LinkedListCharactersAddString(cc, signature);
         LinkedListCharactersAddString(cc, " ".toCharArray());
         AppendArgument(cc, arg1, fname);
@@ -765,12 +776,12 @@ public class Translator {
         }
     }
 
-    public static void AppendTernaryArguments(LinkedListCharacters cc, char[] arg1, char[] arg2, char[] arg3, char[] fname, Structure structure, double typeDecider) {
+    public static void AppendTernaryArguments(LinkedListCharacters cc, char[] arg1, char[] arg2, char[] arg3, char[] fname, Structure structure, double typeDecider, boolean noTypePostfix) {
         char[] signature;
         double i;
         StringReference[] subparts;
 
-        signature = GetTernarySignature(arg1, arg2, arg3, structure, typeDecider);
+        signature = GetTernarySignature(arg1, arg2, arg3, structure, typeDecider, noTypePostfix);
         LinkedListCharactersAddString(cc, signature);
         LinkedListCharactersAddString(cc, " ".toCharArray());
         AppendArgument(cc, arg1, fname);
@@ -1019,7 +1030,7 @@ public class Translator {
         return signature;
     }
 
-    public static char[] GetTernarySignature(char [] arg1, char[] arg2, char[] arg3, Structure structure, double typeDecider) {
+    public static char[] GetTernarySignature(char [] arg1, char[] arg2, char[] arg3, Structure structure, double typeDecider, boolean noTypePostfix) {
         boolean lit2, lit3;
         char [] type, type1, type2, type3;
         char [] signature;
@@ -1062,7 +1073,9 @@ public class Translator {
             } else {
                 signature = AppendString(signature, "m".toCharArray());
             }
-            signature = AppendString(signature, type);
+            if(!noTypePostfix) {
+                signature = AppendString(signature, type);
+            }
         }
 
         return signature;

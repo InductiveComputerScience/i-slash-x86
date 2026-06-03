@@ -1972,6 +1972,13 @@ extern free
   movdqu oword [rdi + %1], xmm0
 %endmacro
 
+%macro Idw.iif64x2 3
+  movdqu xmm0, oword [rdi + %1]
+  mov rax, __?float64?__(%3)
+  vpinsrq xmm0, rax, %2
+  movdqu oword [rdi + %1], xmm0
+%endmacro
+
 %macro Idw.iiu32x8 3
   vmovdqu ymm0, yword [rdi + %1]
   vextracti128 xmm1, ymm0, %3 / 8
@@ -2248,7 +2255,7 @@ extern free
 %endmacro
 
 ; -----------------------------------------------------------------------------
-; Packed bytes to packed words
+; Packed unsigned bytes to packed unsigned words
 ; u8x8tou16x8
 
 %macro u8x8tou16x8.m 2
@@ -2257,6 +2264,10 @@ extern free
   movdqu oword [rdi + %1], xmm1
 %endmacro
 
+; -----------------------------------------------------------------------------
+; Packed unsigned bytes to packed unsigned double words
+; u8x4tou32x4
+
 %macro u8x4tou32x4.m 2
   mov rax, 0
   mov eax, dword [rdi + %2]
@@ -2264,6 +2275,87 @@ extern free
   pmovzxbd xmm1, xmm0
   movdqu oword [rdi + %1], xmm1
 %endmacro
+
+; -----------------------------------------------------------------------------
+; Packed signed bytes to packed signed words
+; s8x8tos16x8
+
+%macro s8x8tos16x8.m 2
+  movq xmm0, qword [rdi + %2]
+  pmovsxbw xmm1, xmm0
+  movdqu oword [rdi + %1], xmm1
+%endmacro
+
+; -----------------------------------------------------------------------------
+; Packed signed bytes to packed signed double words
+; s8x4tos32x4
+
+%macro s8x4tos32x4.m 2
+  mov rax, 0
+  mov eax, dword [rdi + %2]
+  movq xmm0, rax
+  pmovsxbd xmm1, xmm0
+  movdqu oword [rdi + %1], xmm1
+%endmacro
+
+; -----------------------------------------------------------------------------
+; Packed signed quad words to packed double words
+; s64x2tos32x4
+
+%macro s64x2tos32x4.m 2
+  movq xmm0, qword [rdi + %2]
+  vpmovqd xmm1, xmm0
+  movdqu oword [rdi + %1], xmm1
+%endmacro
+
+; -----------------------------------------------------------------------------
+; Packed double to packed single
+; f64x2tof32x2
+
+%macro f64x2tof32x2.m 2
+  movdqu xmm0, oword [rdi + %2]
+  cvtpd2ps xmm1, xmm0
+  movdqu oword [rdi + %1], xmm1
+%endmacro
+
+; -----------------------------------------------------------------------------
+; Packed single to packed half
+; f32x4tof16x2
+
+%macro f32x4tof16x4.m 2
+  movdqu xmm0, oword [rdi + %2]
+  vcvtps2ph xmm1, xmm0, 0
+  movdqu oword [rdi + %1], xmm1
+%endmacro
+
+; -----------------------------------------------------------------------------
+; Two packed double to packed single
+; f64x4tof32x4
+
+%macro f64x4tof32x4.mm 3
+  movdqu xmm0, oword [rdi + %2]
+  cvtpd2ps xmm0, xmm0
+  movdqu xmm1, oword [rdi + %3]
+  cvtpd2ps xmm1, xmm1
+  pslldq xmm1, 8
+  vpor xmm0, xmm1
+  movdqu oword [rdi + %1], xmm0
+%endmacro
+
+; -----------------------------------------------------------------------------
+; Two packed single to packed half
+; f32x8tof16x8
+
+%macro f32x8tof16x8.mm 3
+  movdqu xmm0, oword [rdi + %2]
+  vcvtps2ph xmm0, xmm0, 0
+  movdqu xmm1, oword [rdi + %3]
+  vcvtps2ph xmm1, xmm1, 0
+  pslldq xmm1, 8
+  vpor xmm0, xmm1
+  movdqu oword [rdi + %1], xmm0
+%endmacro
+
 
 ; -----------------------------------------------------------------------------
 ; Ror
