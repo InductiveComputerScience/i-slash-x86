@@ -1227,7 +1227,11 @@ public class Translator {
     }
 
     public static boolean IsLiteral(char[] arg) {
-        return charIsNumber(arg[0]) || StringsEqual(arg, "true".toCharArray()) || StringsEqual(arg, "false".toCharArray()) || arg[0] == '\'';
+        return charIsNumber(arg[0]) ||
+                StringsEqual(arg, "true".toCharArray()) ||
+                StringsEqual(arg, "false".toCharArray()) ||
+                arg[0] == '\'' ||
+                arg[0] == '-';
     }
 
     public static boolean GenerateCHeader(char[] input, Array functions, Array structures, StringReference message, StringReference output) {

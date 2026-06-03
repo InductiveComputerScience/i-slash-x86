@@ -74,12 +74,13 @@
 
 # 12. SIMD basics
  - a. Add, Subtract, Multiply, Divide, Absolute, Round
- - b. Compare
+ - b. Comparisons
  - c. Conversions
  - d. Bitwise operations
  - e. Multiply-and-add
- - f. Array index SIMD (PINSR, PEXTR)
- - g. Horizontal min, max, average (PMIN, PMAX, PAVG)
+ - f. SIMD expressions
+ - g. Array index SIMD (PINSR, PEXTR)
+ - h. Horizontal min, max, average (PMIN, PMAX, PAVG)
 
 # 13. SIMD advanced
  - a. Interleave (PUNPCKL/H)

@@ -592,7 +592,7 @@
 ; -----------------------------------------------------------------------------
 ; Ceil -- Round up to nearest integer
 
-%macro Floor.mf32x4 2
+%macro Ceil.mf32x4 2
   movdqu xmm0, oword [rdi + %2]
   vroundps xmm0, xmm0, 2
   movdqu oword [rdi + %1], xmm0
@@ -943,6 +943,13 @@
   vmovdqu yword [rdi + %1], ymm0
 %endmacro
 
+%macro Lt.mms8x16 3
+  movdqu xmm0, oword [rdi + %2]
+  movdqu xmm1, oword [rdi + %3]
+  vpcmpgtb xmm0, xmm1, xmm0
+  movdqu oword [rdi + %1], xmm0
+%endmacro
+
 %macro Lt.mif64 3
   movsd xmm0, [rdi + %2]
   mov rax, __?float64?__(%3)
@@ -998,6 +1005,15 @@
   vmovdqu yword [rdi + %1], ymm0
 %endmacro
 
+%macro Lte.mms8x16 3
+  movdqu xmm0, oword [rdi + %2]
+  movdqu xmm1, oword [rdi + %3]
+  vpcmpgtb xmm0, xmm0, xmm1
+  vpcmpeqb xmm1, xmm1, xmm1 ; zero
+  vpxor xmm0, xmm0, xmm1    ; not
+  movdqu oword [rdi + %1], xmm0
+%endmacro
+
 ; -----------------------------------------------------------------------------
 ; Gt
 
@@ -1042,6 +1058,13 @@
   movdqu oword [rdi + %1], xmm0
 %endmacro
 
+%macro Gt.mms8x16 3
+  movdqu xmm0, oword [rdi + %2]
+  movdqu xmm1, oword [rdi + %3]
+  vpcmpgtb xmm0, xmm0, xmm1
+  movdqu oword [rdi + %1], xmm0
+%endmacro
+
 ; -----------------------------------------------------------------------------
 ; Gte
 
@@ -1077,6 +1100,15 @@
   vpcmpeqb ymm3, ymm0, ymm1
   vpor ymm0, ymm2, ymm3
   vmovdqu yword [rdi + %1], ymm0
+%endmacro
+
+%macro Gte.mms8x16 3
+  movdqu xmm0, oword [rdi + %2]
+  movdqu xmm1, oword [rdi + %3]
+  vpcmpgtb xmm0, xmm1, xmm0
+  vpcmpeqd xmm1, xmm1, xmm1 ; zero
+  vpxor xmm0, xmm0, xmm1    ; not
+  movdqu oword [rdi + %1], xmm0
 %endmacro
 
 ; -----------------------------------------------------------------------------
@@ -1540,6 +1572,13 @@
   vmovdqu yword [rdi + %1], ymm0
 %endmacro
 
+%macro Eq.mms8x16 3
+  movdqu xmm0, oword [rdi + %2]
+  movdqu xmm1, oword [rdi + %3]
+  vpcmpeqb xmm0, xmm0, xmm1
+  movdqu oword [rdi + %1], xmm0
+%endmacro
+
 ; -----------------------------------------------------------------------------
 ; Neq
 
@@ -1591,6 +1630,15 @@
   vptest zmm2, zmm2
   setnz al
   mov byte [rdi + %1], al
+%endmacro
+
+%macro Neq.mms8x16 3
+  movdqu xmm0, oword [rdi + %2]
+  movdqu xmm1, oword [rdi + %3]
+  vpcmpeqb xmm0, xmm0, xmm1
+  vpcmpeqb xmm1, xmm1, xmm1 ; zero
+  vpxor xmm0, xmm0, xmm1    ; not
+  movdqu oword [rdi + %1], xmm0
 %endmacro
 
 ; -----------------------------------------------------------------------------
@@ -1890,6 +1938,13 @@ extern free
 %endmacro
 
 %macro Idw.iiu8x16 3
+  movdqu xmm0, oword [rdi + %1]
+  mov al, %3
+  vpinsrb xmm0, al, %2
+  movdqu oword [rdi + %1], xmm0
+%endmacro
+
+%macro Idw.iis8x16 3
   movdqu xmm0, oword [rdi + %1]
   mov al, %3
   vpinsrb xmm0, al, %2
