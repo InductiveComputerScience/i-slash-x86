@@ -1776,6 +1776,14 @@ extern free
   movdqu oword [rax + rcx], xmm0
 %endmacro
 
+%macro Idw.mmu8x16a 3
+  movdqu xmm0, oword [rdi + %3]
+  mov rax, qword [rdi + %1]
+  mov rcx, qword [rdi + %2]
+  shl rcx, 4
+  movdqu oword [rax + rcx], xmm0
+%endmacro
+
 %macro Idw.mmu32x4a 3
   movdqu xmm0, oword [rdi + %3]
   mov rax, qword [rdi + %1]
