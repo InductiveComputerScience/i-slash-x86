@@ -1,0 +1,60 @@
+Bgs testS
+  s8x16 a
+  s8x16 b
+  u8x16 c1
+  u8x16 c2
+	u8x16 c3
+	u8x16 c4
+	u8x16 c5
+	u8x16 c6
+Ens
+
+Fnc test
+  ; s8x16 tests
+  Idw a, 0, 7
+  Idw a, 1, -2
+  Idw a, 2, 3
+  Idw a, 3, 4
+  Idw a, 4, 1
+  Idw a, 5, -2
+  Idw a, 6, 3
+  Idw a, 7, 4
+  Idw a, 8, 1
+  Idw a, 9, -20
+  Idw a, 10, 3
+  Idw a, 11, -5
+  Idw a, 12, 1
+  Idw a, 13, -2
+  Idw a, 14, 3
+  Idw a, 15, 4
+  
+  Idw b, 0, 7
+  Idw b, 1, 1
+  Idw b, 2, -5
+  Idw b, 3, 3
+  Idw b, 4, 7
+  Idw b, 5, 1
+  Idw b, 6, -5
+  Idw b, 7, 3
+  Idw b, 8, 70
+  Idw b, 9, 1
+  Idw b, 10, -50
+  Idw b, 11, 3
+  Idw b, 12, 70
+  Idw b, 13, 1
+  Idw b, 14, -5
+  Idw b, 15, 3
+  
+  Gt c1, a, b
+	Gte c2, a, b
+	Lt c3, a, b
+	Lte c4, a, b
+	Eq c5, a, b
+	Neq c6, a, b
+Ret
+
+
+
+
+
+

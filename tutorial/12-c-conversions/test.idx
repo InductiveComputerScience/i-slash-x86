@@ -1,0 +1,94 @@
+Bgs testS
+  f64x2 a
+  f64x2 a2
+  f32x4 b
+  f32x4 c
+  
+  f32x4 d
+  f32x4 d2
+  f16x8 e
+  f16x8 f
+  
+  f64x2 h
+  f64x2 i
+
+  u8x16 x  
+  u32x4 y
+  b128 z
+Ens
+
+Fnc test
+  ; Packed f64 tests
+  Idw a, 0, 7.3
+  Idw a, 1, -2.5
+  Idw a2, 0, 19.2
+  Idw a2, 1, -4.512
+  
+  ; Stores two numbers in the lower two slots
+  f64x2tof32x2 b, a
+  
+  ; Combines a and a2 into lower and upper parts of c
+  f64x4tof32x4 c, a, a2
+  
+  ; packed f32 tests
+  Idw d, 0, 6.4
+  Idw d, 1, -3.4
+  Idw d, 2, 54.1
+  Idw d, 3, -3.62
+  Idw d2, 0, 2.42
+  Idw d2, 1, -121.0
+  Idw d2, 2, 0.02
+  Idw d2, 3, -4.32
+  
+  f32x4tof16x4 e, d
+  f32x8tof16x8 f, d, d2
+  
+  ; Packed f16 tests
+  f32x4tof64x4 h, i, c
+  
+  ; Reinterpret the data
+  Idw x, 0, 0x01
+  Idw x, 1, 0xA0
+  Idw x, 2, 0xFF
+  Idw x, 3, 0xCA
+  Idw x, 4, 0xFE
+  Idw x, 5, 0xBA
+  Idw x, 6, 0xBE
+  Idw x, 7, 0x12
+  Idw x, 8, 0x34
+  Idw x, 9, 0x56
+  Idw x, 10, 0x78
+  Idw x, 11, 0x9A
+  Idw x, 12, 0xBC
+  Idw x, 13, 0xDE
+  Idw x, 14, 0xF0
+  Idw x, 15, 0xAF
+
+  Xu32x4 y, x
+  Xb128 z, x
+Ret
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

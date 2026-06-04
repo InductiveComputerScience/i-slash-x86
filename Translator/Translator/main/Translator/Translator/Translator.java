@@ -211,6 +211,9 @@ public class Translator {
                 "                \"b16\": {\"nasmType\": \"resw\", \"ctype\": \"uint16_t\"},\n" +
                 "                \"b32\": {\"nasmType\": \"resd\", \"ctype\": \"uint32_t\"},\n" +
                 "                \"b64\": {\"nasmType\": \"resq\", \"ctype\": \"uint64_t\"},\n" +
+                "                \"b128\": {\"nasmType\": \"reso\", \"ctype\": \"__m128\"},\n" +
+                "                \"b256\": {\"nasmType\": \"resy\", \"ctype\": \"__m256\"},\n" +
+                "                \"b512\": {\"nasmType\": \"resz\", \"ctype\": \"__m512\"},\n" +
 
                 "                \"f32\": {\"nasmType\": \"resd\", \"ctype\": \"float\"},\n" +
                 "                \"f64\": {\"nasmType\": \"resq\", \"ctype\": \"double\"},\n" +
@@ -230,6 +233,9 @@ public class Translator {
                 "                \"b16a\": {\"nasmType\": \"resq\", \"ctype\": \"uint16_t *\"},\n" +
                 "                \"b32a\": {\"nasmType\": \"resq\", \"ctype\": \"uint32_t *\"},\n" +
                 "                \"b64a\": {\"nasmType\": \"resq\", \"ctype\": \"uint64_t *\"},\n" +
+                "                \"b128a\": {\"nasmType\": \"resq\", \"ctype\": \"__m128 *\"},\n" +
+                "                \"b256a\": {\"nasmType\": \"resq\", \"ctype\": \"__m256 *\"},\n" +
+                "                \"b512a\": {\"nasmType\": \"resq\", \"ctype\": \"__m512 *\"},\n" +
 
                 "                \"f32a\": {\"nasmType\": \"resq\", \"ctype\": \"float *\"},\n" +
                 "                \"f64a\": {\"nasmType\": \"resq\", \"ctype\": \"double *\"},\n" +
@@ -301,7 +307,6 @@ public class Translator {
                 "                \"f16x8\": {\"nasmType\": \"reso\", \"ctype\": \"__m128\"},\n" +
                 "                \"f16x16\": {\"nasmType\": \"resy\", \"ctype\": \"__m256\"},\n" +
                 "                \"f16x32\": {\"nasmType\": \"resz\", \"ctype\": \"__m512\"}\n" +
-
 
                 "            }").toCharArray();
 
@@ -388,6 +393,8 @@ public class Translator {
                 "              \"f32x4tof16x4\": {\"args\": 1, \"typeDecider\": 0, \"noTypePostfix\": true},\n" +
                 "              \"f32x8tof16x8\": {\"args\": 2, \"typeDecider\": 0, \"noTypePostfix\": true},\n" +
                 "              \"f32x4tof64x4\": {\"args\": 2, \"typeDecider\": 0, \"noTypePostfix\": true},\n" +
+                "              \"Xu32x4\": {\"args\": 1, \"typeDecider\": 0, \"noTypePostfix\": true},\n" +
+                "              \"Xb128\": {\"args\": 1, \"typeDecider\": 0, \"noTypePostfix\": true},\n" +
 
                 "              \"Cmov\": {\"args\": 2, \"typeDecider\": 1},\n" +
                 "              \"Set\": {\"args\": 1, \"typeDecider\": 1},\n" +
