@@ -1,0 +1,59 @@
+Bgs testS
+  u64x2 a
+  u64x2 b
+  b128 x
+  b128 y
+  b128 z1
+	b128 z2
+	b128 z3
+	b128 z4
+	b128 z5
+	b128 z6
+	b128 z7
+Ens
+
+Fnc test
+  Idw a, 0, 0x1234567890ABCDEF
+  Idw a, 1, 0x0120148439542F29
+  
+  Idw b, 0, 0x82FBA38A0134FEDE
+  Idw b, 1, 0x010F88BCF4ED8012
+
+  Xb128 x, a
+  Xb128 y, b
+
+	And z1, x, y
+	Or z2, x, y
+	Xor z3, x, y
+	Andnot z4, x, y
+	Not z5, x
+  
+  ShiftLeft z6, x, 10
+  ShiftRight z7, x, 10
+  
+Ret
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -711,9 +711,9 @@
   mov al, %2
   movzx rax, al
   movq xmm1, rax
-  vpbroadcastb xmm0, xmm1
-  ;pxor xmm0, xmm0
-  ;vpshufb xmm0, xmm1, xmm0
+  ;vpbroadcastb xmm0, xmm1
+  pxor xmm0, xmm0
+  vpshufb xmm0, xmm1, xmm0
   movdqu oword [rdi + %1], xmm0
 %endmacro
 
@@ -731,17 +731,17 @@
   mov ax, %2
   movzx rax, ax
   movq xmm1, rax
-  vpbroadcastw xmm0, xmm1
-  ;pxor xmm0, xmm0
-  ;vpshufw xmm0, xmm1, xmm0
+  ;vpbroadcastw xmm0, xmm1
+  pxor xmm0, xmm0
+  vpshufw xmm0, xmm1, xmm0
   movdqu oword [rdi + %1], xmm0
 %endmacro
 
 %macro Mov.iu32x4 2
   mov rax, %2
   movq xmm1, rax
-  vpbroadcastd xmm0, xmm1
-  ;vpshufd xmm0, xmm1, 0
+  ;vpbroadcastd xmm0, xmm1
+  vpshufd xmm0, xmm1, 0
   movdqu oword [rdi + %1], xmm0
 %endmacro
 
@@ -1128,6 +1128,20 @@
   vmovdqu yword [rdi + %1], ymm0
 %endmacro
 
+%macro Not.mb256 2
+  vmovdqu ymm0, yword [rdi + %2]
+  vpcmpeqb ymm3, ymm3, ymm3
+  vpxor ymm0, ymm0, ymm3
+  vmovdqu yword [rdi + %1], ymm0
+%endmacro
+
+%macro Not.mb128 2
+  movdqu xmm0, oword [rdi + %2]
+  pcmpeqb xmm3, xmm3
+  pxor xmm0, xmm3
+  movdqu oword [rdi + %1], xmm0
+%endmacro
+
 ; -----------------------------------------------------------------------------
 ; And
 
@@ -1184,6 +1198,13 @@
   movdqu oword [rdi + %1], xmm0
 %endmacro
 
+%macro And.mmb128 3
+  movdqu xmm0, oword [rdi + %2]
+  movdqu xmm1, oword [rdi + %3]
+  pand xmm0, xmm1
+  movdqu oword [rdi + %1], xmm0
+%endmacro
+
 ; TODO: This should be And.mmb256
 %macro And.mmu16x16 3
   vmovdqu ymm0, yword [rdi + %2]
@@ -1225,6 +1246,13 @@
   mov rcx, qword [rdi + %3]
   andn rdx, rax, rcx
   mov qword [rdi + %1], rdx
+%endmacro
+
+%macro Andnot.mmb128 3
+  movdqu xmm0, oword [rdi + %2]
+  movdqu xmm1, oword [rdi + %3]
+  pandn xmm0, xmm1
+  movdqu oword [rdi + %1], xmm0
 %endmacro
 
 ; -----------------------------------------------------------------------------
@@ -1740,6 +1768,12 @@
   mov dword [rdi + %1], eax
 %endmacro
 
+%macro Shl.mib128 3
+  movdqu xmm0, oword [rdi + %2]
+  pslldq xmm0, %3
+  movdqu oword [rdi + %1], xmm0
+%endmacro
+
 ; -----------------------------------------------------------------------------
 ; Shr
 
@@ -1753,6 +1787,12 @@
   mov rax, qword [rdi + %2]
   shr rax, %3
   mov qword [rdi + %1], rax
+%endmacro
+
+%macro Shr.mib128 3
+  movdqu xmm0, oword [rdi + %2]
+  psrldq xmm0, %3
+  movdqu oword [rdi + %1], xmm0
 %endmacro
 
 ; -----------------------------------------------------------------------------
@@ -1792,6 +1832,60 @@
   movdqu xmm0, oword [rdi + %2]
   movdqu xmm1, oword [rdi + %3]
   vpor xmm0, xmm0, xmm1
+  movdqu oword [rdi + %1], xmm0
+%endmacro
+
+%macro Or.mmb128 3
+  movdqu xmm0, oword [rdi + %2]
+  movdqu xmm1, oword [rdi + %3]
+  vpor xmm0, xmm0, xmm1
+  movdqu oword [rdi + %1], xmm0
+%endmacro
+
+; -----------------------------------------------------------------------------
+; Xor
+
+%macro Xor.mmb32 3
+  mov eax, dword [rdi + %2]
+  mov edx, dword [rdi + %3]
+  xor eax, edx
+  mov dword [rdi + %1], eax
+%endmacro
+
+; TODO: Should this be the same as Or.mmb32?
+%macro Xor.mmu32 3
+  mov eax, dword [rdi + %2]
+  mov edx, dword [rdi + %3]
+  xor eax, edx
+  mov dword [rdi + %1], eax
+%endmacro
+
+; TODO: This should be Or.mmb256
+%macro Xor.mmu8x32 3
+  vmovdqu ymm0, yword [rdi + %2]
+  vmovdqu ymm1, yword [rdi + %3]
+  vpxor ymm0, ymm0, ymm1
+  vmovdqu yword [rdi + %1], ymm0
+%endmacro
+
+%macro Xor.mmu8x16 3
+  movdqu xmm0, oword [rdi + %2]
+  movdqu xmm1, oword [rdi + %3]
+  vpxor xmm0, xmm0, xmm1
+  movdqu oword [rdi + %1], xmm0
+%endmacro
+
+%macro Xor.mmu32x4 3
+  movdqu xmm0, oword [rdi + %2]
+  movdqu xmm1, oword [rdi + %3]
+  vpxor xmm0, xmm0, xmm1
+  movdqu oword [rdi + %1], xmm0
+%endmacro
+
+%macro Xor.mmb128 3
+  movdqu xmm0, oword [rdi + %2]
+  movdqu xmm1, oword [rdi + %3]
+  vpxor xmm0, xmm0, xmm1
   movdqu oword [rdi + %1], xmm0
 %endmacro
 
@@ -1993,6 +2087,13 @@ extern free
   mov rax, qword [rdi + %1]
   mov rcx, qword [rdi + %2]
   mov qword [rax + rcx*8], rdx
+%endmacro
+
+%macro Idw.iiu64x2 3
+  movdqu xmm0, oword [rdi + %1]
+  mov rax, %3
+  vpinsrq xmm0, rax, %2
+  movdqu oword [rdi + %1], xmm0
 %endmacro
 
 ; -----------------------------------------------------------------------------
@@ -2380,12 +2481,12 @@ extern free
 ; Reinterpret as a different type
 ; Xu32x4, Xb128
 
-%macro u32x4.m 2
+%macro Xu32x4.m 2
   movdqu xmm0, oword [rdi + %2]
   movdqu oword [rdi + %1], xmm0
 %endmacro
 
-%macro b128.m 2
+%macro Xb128.m 2
   movdqu xmm0, oword [rdi + %2]
   movdqu oword [rdi + %1], xmm0
 %endmacro

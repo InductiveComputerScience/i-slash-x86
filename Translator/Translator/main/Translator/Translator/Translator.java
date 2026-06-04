@@ -348,6 +348,7 @@ public class Translator {
                 "              \"And\": {\"args\": 2, \"typeDecider\": 1},\n" +
                 "              \"Andnot\": {\"args\": 2, \"typeDecider\": 1},\n" +
                 "              \"Or\": {\"args\": 2, \"typeDecider\": 1},\n" +
+                "              \"Xor\": {\"args\": 2, \"typeDecider\": 1},\n" +
                 "              \"Ror\": {\"args\": 2, \"typeDecider\": 1},\n" +
                 "              \"Rol\": {\"args\": 2, \"typeDecider\": 1},\n" +
                 "              \"Bswap\": {\"args\": 1, \"typeDecider\": 1},\n" +
