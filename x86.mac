@@ -2256,10 +2256,11 @@ extern free
 
 ; -----------------------------------------------------------------------------
 ; Packed integers to larger types
-; u8x8tou16x8, u8x4tou32x4, s8x8tos16x8, s8x4tos32x4, s64x2tos32x2
+; u8x8tou16x8, u8x4tou32x4, u8x2tou64x2, u16x4tou32x4, u32x2tou64x2
 
 %macro u8x8tou16x8.m 2
-  movq xmm0, qword [rdi + %2]
+  mov rax, qword [rdi + %2]
+  movq xmm0, rax
   pmovzxbw xmm1, xmm0
   movdqu oword [rdi + %1], xmm1
 %endmacro
@@ -2271,6 +2272,30 @@ extern free
   pmovzxbd xmm1, xmm0
   movdqu oword [rdi + %1], xmm1
 %endmacro
+
+%macro u8x2tou64x2.m 2
+  mov rax, 0
+  mov ax, word [rdi + %2]
+  movq xmm0, rax
+  pmovzxdq xmm1, xmm0
+  movdqu oword [rdi + %1], xmm1
+%endmacro
+
+%macro u16x4tou32x4.m 2
+  movq xmm0, qword [rdi + %2]
+  pmovzxwd xmm1, xmm0
+  movdqu oword [rdi + %1], xmm1
+%endmacro
+
+%macro u32x2tou64x2.m 2
+  movq xmm0, qword [rdi + %2]
+  pmovzxdq xmm1, xmm0
+  movdqu oword [rdi + %1], xmm1
+%endmacro
+
+; -----------------------------------------------------------------------------
+; Packed signed integers to larger types
+; s8x8tos16x8, s8x4tos32x4
 
 %macro s8x8tos16x8.m 2
   movq xmm0, qword [rdi + %2]
@@ -2285,6 +2310,10 @@ extern free
   pmovsxbd xmm1, xmm0
   movdqu oword [rdi + %1], xmm1
 %endmacro
+
+; -----------------------------------------------------------------------------
+; Packed integers to smaller types
+; s64x2tos32x2
 
 %macro s64x2tos32x2.m 2
   movq xmm0, qword [rdi + %2]
