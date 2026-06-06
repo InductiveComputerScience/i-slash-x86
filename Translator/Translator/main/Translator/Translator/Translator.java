@@ -422,7 +422,9 @@ public class Translator {
                 "              \"Emask\": {\"args\": 1, \"typeDecider\": 0},\n" +
                 "              \"Shuffle\": {\"args\": 2, \"typeDecider\": 0},\n" +
                 "              \"MulStoreHigh\": {\"args\": 2, \"typeDecider\": 0},\n" +
-                "              \"SubSaturated\": {\"args\": 2, \"typeDecider\": 0}\n" +
+                "              \"SubSaturated\": {\"args\": 2, \"typeDecider\": 0},\n" +
+                "              \"MultiplyAndAdd\": {\"args\": 3, \"typeDecider\": 0}\n" +
+
 
                 "            }").toCharArray();
 

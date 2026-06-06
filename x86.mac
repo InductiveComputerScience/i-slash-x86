@@ -2932,6 +2932,16 @@ extern f
   vmovdqu yword [rdi + %1], ymm0
 %endmacro
 
+; -----------------------------------------------------------------------------
+; MultiplyAndAdd -- Fused Multiply and add
+
+%macro MultiplyAndAdd.mmf32x4 4
+  movdqu xmm0, oword [rdi + %2]
+  movdqu xmm1, oword [rdi + %3]
+  movdqu xmm2, oword [rdi + %4]
+  vfmadd123ps xmm0, xmm1, xmm2
+  movdqu oword [rdi + %1], xmm0
+%endmacro
 
 
 
