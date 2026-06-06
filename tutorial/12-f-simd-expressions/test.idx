@@ -1,0 +1,51 @@
+Bgs testS
+  f32x4 a
+  f32x4 b
+  f32x4 c
+  f32x4 x
+Ens
+
+Fnc test
+  Idw a, 0, 10.3
+  Idw a, 1, -19.2
+  Idw a, 2, 3.14
+  Idw a, 3, 2.72
+  
+  Idw b, 0, -1.1
+  Idw b, 1, 10.2
+  Idw b, 2, 9.2
+  Idw b, 3, 1.28
+  
+  Idw c, 0, -1.1
+  Idw c, 1, 10.2
+  Idw c, 2, 9.2
+  Idw c, 3, 1.28
+
+  MultiplyAndAdd x, a, b, c
+  
+Ret
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

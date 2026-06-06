@@ -976,6 +976,13 @@
   mov byte [rdi + %1], al
 %endmacro
 
+%macro Lt.mmf32x4 3
+  movdqu xmm0, oword [rdi + %2]
+  movdqu xmm1, oword [rdi + %3]
+  vcmpltps xmm0, xmm0, xmm1
+  movdqu oword [rdi + %1], xmm0
+%endmacro
+
 ; -----------------------------------------------------------------------------
 ; Lte
 
@@ -1604,6 +1611,13 @@
   movdqu xmm0, oword [rdi + %2]
   movdqu xmm1, oword [rdi + %3]
   vpcmpeqb xmm0, xmm0, xmm1
+  movdqu oword [rdi + %1], xmm0
+%endmacro
+
+%macro Eq.mmf32x4 3
+  movdqu xmm0, oword [rdi + %2]
+  movdqu xmm1, oword [rdi + %3]
+  vcmpeqps xmm0, xmm1, xmm0
   movdqu oword [rdi + %1], xmm0
 %endmacro
 
