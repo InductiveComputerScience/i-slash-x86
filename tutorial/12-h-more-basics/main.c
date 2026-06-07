@@ -12,8 +12,11 @@ int main(){
 
 	test(&ts);
 
-	print_m128_u32(ts.x);
 	print_m128_u8(ts.a);
+	print_m128_u8(ts.b);
+	print_m128_u8(ts.x);
+	print_m128_u8(ts.y);
+	print_m128_u8(ts.z);
 
 	/*if(ts.y == 0x6add1e80){
 		printf("success\n");
