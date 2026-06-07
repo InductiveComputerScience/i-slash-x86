@@ -426,7 +426,10 @@ public class Translator {
                 "              \"MultiplyAndAdd\": {\"args\": 3, \"typeDecider\": 0},\n" +
                 "              \"Avg\": {\"args\": 2, \"typeDecider\": 0},\n" +
                 "              \"Max\": {\"args\": 2, \"typeDecider\": 0},\n" +
-                "              \"Min\": {\"args\": 2, \"typeDecider\": 0}\n" +
+                "              \"Min\": {\"args\": 2, \"typeDecider\": 0},\n" +
+                "              \"Sqrt\": {\"args\": 1, \"typeDecider\": 0},\n" +
+                "              \"ApproxReciprocal\": {\"args\": 1, \"typeDecider\": 0},\n" +
+                "              \"ApproxReciprocalSqrt\": {\"args\": 1, \"typeDecider\": 0}\n" +
 
                 "            }").toCharArray();
 

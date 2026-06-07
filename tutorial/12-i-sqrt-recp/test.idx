@@ -1,0 +1,26 @@
+Bgs testS
+  f32x4 a
+  f32x4 b
+  f32x4 x
+  f32x4 y
+  f32x4 z
+Ens
+
+Fnc test
+  Idw a, 0, 1.0
+  Idw a, 1, 2.0
+  Idw a, 2, 3.0
+  Idw a, 3, 4.0
+  
+  Sqrt x, a
+  ApproxReciprocal y, a
+  ApproxReciprocalSqrt z, a
+Ret
+
+
+
+
+
+
+
+

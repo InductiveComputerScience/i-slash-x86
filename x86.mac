@@ -2987,10 +2987,31 @@ extern f
   movdqu oword [rdi + %1], xmm0
 %endmacro
 
+; -----------------------------------------------------------------------------
+; Sqrt -- Square root
 
+%macro Sqrt.mf32x4 2
+  movdqu xmm0, oword [rdi + %2]
+  sqrtps xmm0, xmm0
+  movdqu oword [rdi + %1], xmm0
+%endmacro
 
+; -----------------------------------------------------------------------------
+; ApproxReciprocal -- x = approx(1 / a)
 
+%macro ApproxReciprocal.mf32x4 2
+  movdqu xmm0, oword [rdi + %2]
+  rcpps xmm0, xmm0
+  movdqu oword [rdi + %1], xmm0
+%endmacro
 
+; -----------------------------------------------------------------------------
+; ApproxReciprocalSqrt -- x = approx(1 / sqrt(a))
 
+%macro ApproxReciprocalSqrt.mf32x4 2
+  movdqu xmm0, oword [rdi + %2]
+  rsqrtps xmm0, xmm0
+  movdqu oword [rdi + %1], xmm0
+%endmacro
 
 
