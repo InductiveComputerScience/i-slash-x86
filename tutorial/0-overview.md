@@ -81,23 +81,22 @@
  - f. SIMD expressions
  - g. Array index SIMD (PINSR, PEXTR)
  - h. Min, max, average (PMIN, PMAX, PAVG)
- - i. Square root and reciprocals (SQRTPD, RCPPS, RSQRT)
+ - i. Square root and reciprocals (SQRTPD)
 
 # 13. SIMD advanced
  - a. Interleave (PUNPCK)
  - b. Shuffle (PSHUF)
  - c. Create bit mask (PMOVMSKB)
- - d. Horizontal multiply (PMULH)
+ - d. Selective copy (PBLENDV)
  - e. Sum of absolute difference (PSADBW)
- - f. Move selected values based on mask (MASKMOVQ).
- - g. Pairwise horizontal add and subtract (PHADD, PHSUB)
- - h. Pairwiser multiply-and-add (PMADDUB)
- - i. Change sign (PSIGN)
- - j. Combine two packed (PALIGNR)
- - k. Blend (PBLENDV)
- - l. Dot-product (DPPS)
- - m. Multiply and store high part of result (PMULHW)
+ - f. Pairwise horizontal add and subtract (PHADD, PHSUB)
+ - g. Pairwiser multiply-and-add (PMADDUB)
+ - h. Change sign (PSIGN)
+ - i. Combine two packed (PALIGNR)
+ - k. Dot-product (DPPS)
+ - l. Multiply and store high part of result (PMULHW)
+ - m. Approximate of reciprocals (RCPPS, RSQRT)
 
-
-
+# Not included
+ - e. Move selected values based on mask (MASKMOVQ)
 

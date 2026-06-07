@@ -431,7 +431,8 @@ public class Translator {
                 "              \"ApproxReciprocal\": {\"args\": 1, \"typeDecider\": 0},\n" +
                 "              \"ApproxReciprocalSqrt\": {\"args\": 1, \"typeDecider\": 0},\n" +
                 "              \"InterleaveLow\": {\"args\": 2, \"typeDecider\": 0},\n" +
-                "              \"InterleaveHigh\": {\"args\": 2, \"typeDecider\": 0}\n" +
+                "              \"InterleaveHigh\": {\"args\": 2, \"typeDecider\": 0},\n" +
+                "              \"SelectiveCopy\": {\"args\": 3, \"typeDecider\": 0}\n" +
 
 
                 "            }").toCharArray();

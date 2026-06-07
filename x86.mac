@@ -2935,12 +2935,21 @@ extern f
 %endmacro
 
 ; -----------------------------------------------------------------------------
-; Blend -- Conditionally copy from one SIMD register to another
+; SelectiveCopy -- Conditionally copy from one SIMD register to another
 
-%macro Blend.mmu8x32 3
+%macro SelectiveCopy.mmu8x16 4
+  movdqu xmm1, oword [rdi + %2]
+  movdqu xmm2, oword [rdi + %3]
+  movdqu xmm0, oword [rdi + %4]
+  pblendvb xmm1, xmm2
+  movdqu oword [rdi + %1], xmm1
+%endmacro
+
+%macro SelectiveCopy.mmu8x32 4
   vmovdqu ymm0, yword [rdi + %2]
   vmovdqu ymm1, yword [rdi + %3]
-  vpblendvb ymm0, ymm0, ymm1
+  vmovdqu ymm2, yword [rdi + %4]
+  vpblendvb ymm0, ymm0, ymm1, ymm2
   vmovdqu yword [rdi + %1], ymm0
 %endmacro
 
