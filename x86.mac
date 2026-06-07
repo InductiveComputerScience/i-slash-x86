@@ -2882,22 +2882,20 @@ extern free
 %endmacro
 
 ; -----------------------------------------------------------------------------
-; Emask -- Extract Byte Mask
+; ExtractMask -- Extract Byte Mask
 
 extern f
 
-; TODO: This should be Emask.mu8x16?
-%macro Emask.mu16x8 2
-  movdqu xmm1, [rdi + %2]
-  vpmovmskb rax, xmm1
-  mov [rdi + %1], rax
+%macro ExtractMask.mu8x16 2
+  movdqu xmm1, oword [rdi + %2]
+  pmovmskb eax, xmm1
+  mov word [rdi + %1], ax
 %endmacro
 
-; TODO: This should be Emask.mu8x32?
-%macro Emask.mu16x16 2
+%macro ExtractMask.mu8x32 2
   vmovdqu ymm0, yword [rdi + %2]
   vpmovmskb rax, ymm0
-  mov qword [rdi + %1], rax
+  mov dword [rdi + %1], eax
 %endmacro
 
 ; -----------------------------------------------------------------------------
@@ -3014,4 +3012,22 @@ extern f
   movdqu oword [rdi + %1], xmm0
 %endmacro
 
+; -----------------------------------------------------------------------------
+; InterleaveLow -- Interleaves pairs from low data from both vectors
 
+%macro InterleaveLow.mmu32x4 3
+  movdqu xmm0, oword [rdi + %2]
+  movdqu xmm1, oword [rdi + %3]
+  punpckldq xmm0, xmm1
+  movdqu oword [rdi + %1], xmm0
+%endmacro
+
+; -----------------------------------------------------------------------------
+; InterleaveHigh -- Interleaves pairs from high data from both vectors
+
+%macro InterleaveHigh.mmu32x4 3
+  movdqu xmm0, oword [rdi + %2]
+  movdqu xmm1, oword [rdi + %3]
+  punpckhdq xmm0, xmm1
+  movdqu oword [rdi + %1], xmm0
+%endmacro

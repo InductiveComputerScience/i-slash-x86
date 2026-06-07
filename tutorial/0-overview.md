@@ -84,7 +84,7 @@
  - i. Square root and reciprocals (SQRTPD, RCPPS, RSQRT)
 
 # 13. SIMD advanced
- - a. Interleave (PUNPCKL/H)
+ - a. Interleave (PUNPCK)
  - b. Shuffle (PSHUF)
  - c. Create bit mask (PMOVMSKB)
  - d. Horizontal multiply (PMULH)

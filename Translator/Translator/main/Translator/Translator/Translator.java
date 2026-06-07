@@ -419,7 +419,7 @@ public class Translator {
                 "              \"Bzhi\": {\"args\": 2, \"typeDecider\": 0},\n" +
                 "              \"Pdep\": {\"args\": 2, \"typeDecider\": 0},\n" +
                 "              \"Pext\": {\"args\": 2, \"typeDecider\": 0},\n" +
-                "              \"Emask\": {\"args\": 1, \"typeDecider\": 0},\n" +
+                "              \"ExtractMask\": {\"args\": 1, \"typeDecider\": 0},\n" +
                 "              \"Shuffle\": {\"args\": 2, \"typeDecider\": 0},\n" +
                 "              \"MulStoreHigh\": {\"args\": 2, \"typeDecider\": 0},\n" +
                 "              \"SubSaturated\": {\"args\": 2, \"typeDecider\": 0},\n" +
@@ -429,7 +429,10 @@ public class Translator {
                 "              \"Min\": {\"args\": 2, \"typeDecider\": 0},\n" +
                 "              \"Sqrt\": {\"args\": 1, \"typeDecider\": 0},\n" +
                 "              \"ApproxReciprocal\": {\"args\": 1, \"typeDecider\": 0},\n" +
-                "              \"ApproxReciprocalSqrt\": {\"args\": 1, \"typeDecider\": 0}\n" +
+                "              \"ApproxReciprocalSqrt\": {\"args\": 1, \"typeDecider\": 0},\n" +
+                "              \"InterleaveLow\": {\"args\": 2, \"typeDecider\": 0},\n" +
+                "              \"InterleaveHigh\": {\"args\": 2, \"typeDecider\": 0}\n" +
+
 
                 "            }").toCharArray();
 

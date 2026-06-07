@@ -1,0 +1,31 @@
+Bgs testS
+  u8x16 a
+  u16 x
+Ens
+
+Fnc test
+  Idw a, 0, 0xFF
+  Idw a, 1, 0x0
+  Idw a, 2, 0x0
+  Idw a, 3, 0x0
+  Idw a, 4, 0x0
+  Idw a, 5, 0xFF
+  Idw a, 6, 0x0
+  Idw a, 7, 0x0
+  Idw a, 8, 0xFF
+  Idw a, 9, 0xFF
+  Idw a, 10, 0x0
+  Idw a, 11, 0x0
+  Idw a, 12, 0x0
+  Idw a, 13, 0x0
+  Idw a, 14, 0xFF
+  Idw a, 15, 0x0
+  
+  ExtractMask x, a
+Ret
+
+
+
+
+
+

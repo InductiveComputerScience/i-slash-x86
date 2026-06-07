@@ -1,0 +1,34 @@
+Bgs testS
+  u32x4 a
+  u32x4 b
+  u32x4 c
+  u32x4 d
+Ens
+
+Fnc test
+  
+  ; u32x4 tests
+  Idw a, 0, 0x10001000
+  Idw a, 1, 0x20002000
+  Idw a, 2, 0x30003000
+  Idw a, 3, 0x40004000
+  
+  Idw b, 0, 0x50005000
+  Idw b, 1, 0x60006000
+  Idw b, 2, 0x70007000
+  Idw b, 3, 0x80008000
+  
+  Idw c, 0, 0
+  Idw c, 1, 0
+  Idw c, 2, 0
+  Idw c, 3, 0
+  
+  InterleaveLow c, a, b
+  InterleaveHigh d, a, b
+Ret
+
+
+
+
+
+
