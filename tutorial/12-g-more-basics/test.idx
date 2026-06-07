@@ -1,0 +1,55 @@
+Bgs testS
+  u8x16 a
+  u8x16 b
+  u8x16 x
+  u8x16 y
+  u8x16 z
+Ens
+
+Fnc test
+  Idw a, 0, 1
+  Idw a, 1, 2
+  Idw a, 2, 3
+  Idw a, 3, 4
+  Idw a, 4, 5
+  Idw a, 5, 6
+  Idw a, 6, 7
+  Idw a, 7, 8
+  Idw a, 8, 9
+  Idw a, 9, 10
+  Idw a, 10, 11
+  Idw a, 11, 12
+  Idw a, 12, 13
+  Idw a, 13, 14
+  Idw a, 14, 15
+  Idw a, 15, 16
+  
+  Idw b, 0, 10
+  Idw b, 1, 10
+  Idw b, 2, 10
+  Idw b, 3, 10
+  Idw b, 4, 10
+  Idw b, 5, 10
+  Idw b, 6, 10
+  Idw b, 7, 10
+  Idw b, 8, 10
+  Idw b, 9, 10
+  Idw b, 10, 10
+  Idw b, 11, 10
+  Idw b, 12, 10
+  Idw b, 13, 10
+  Idw b, 14, 10
+  Idw b, 15, 10
+  
+  Avg x, a, b
+  Min y, a, b
+  Max z, a, b
+Ret
+
+
+
+
+
+
+
+

@@ -423,8 +423,10 @@ public class Translator {
                 "              \"Shuffle\": {\"args\": 2, \"typeDecider\": 0},\n" +
                 "              \"MulStoreHigh\": {\"args\": 2, \"typeDecider\": 0},\n" +
                 "              \"SubSaturated\": {\"args\": 2, \"typeDecider\": 0},\n" +
-                "              \"MultiplyAndAdd\": {\"args\": 3, \"typeDecider\": 0}\n" +
-
+                "              \"MultiplyAndAdd\": {\"args\": 3, \"typeDecider\": 0},\n" +
+                "              \"Avg\": {\"args\": 2, \"typeDecider\": 0},\n" +
+                "              \"Max\": {\"args\": 2, \"typeDecider\": 0},\n" +
+                "              \"Min\": {\"args\": 2, \"typeDecider\": 0}\n" +
 
                 "            }").toCharArray();
 

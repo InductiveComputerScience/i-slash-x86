@@ -80,7 +80,8 @@
  - e. Multiply-and-add
  - f. SIMD expressions
  - g. Array index SIMD (PINSR, PEXTR)
- - h. Horizontal min, max, average (PMIN, PMAX, PAVG)
+ - h. Min, max, average (PMIN, PMAX, PAVG)
+ - i. Square root and reciprocals (SQRTPD, RCPPS, RSQRT)
 
 # 13. SIMD advanced
  - a. Interleave (PUNPCKL/H)

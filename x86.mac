@@ -2957,9 +2957,35 @@ extern f
   movdqu oword [rdi + %1], xmm0
 %endmacro
 
+; -----------------------------------------------------------------------------
+; Avg -- Average of two numbers
 
+%macro Avg.mmu8x16 3
+  movdqu xmm0, oword [rdi + %2]
+  movdqu xmm1, oword [rdi + %3]
+  pavgb xmm0, xmm1
+  movdqu oword [rdi + %1], xmm0
+%endmacro
 
+; -----------------------------------------------------------------------------
+; Min -- Minimum of two numbers
 
+%macro Min.mmu8x16 3
+  movdqu xmm0, oword [rdi + %2]
+  movdqu xmm1, oword [rdi + %3]
+  pminub xmm0, xmm1
+  movdqu oword [rdi + %1], xmm0
+%endmacro
+
+; -----------------------------------------------------------------------------
+; Max -- Maximum of two numbers
+
+%macro Max.mmu8x16 3
+  movdqu xmm0, oword [rdi + %2]
+  movdqu xmm1, oword [rdi + %3]
+  pmaxub xmm0, xmm1
+  movdqu oword [rdi + %1], xmm0
+%endmacro
 
 
 
