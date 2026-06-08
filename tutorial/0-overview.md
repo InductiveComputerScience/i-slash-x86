@@ -83,19 +83,22 @@
  - h. Min, max, average (PMIN, PMAX, PAVG)
  - i. Square root and reciprocals (SQRTPD)
 
-# 13. SIMD advanced
+# 13. SIMD advanced data movement
  - a. Interleave (PUNPCK)
  - b. Shuffle (PSHUF)
  - c. Create bit mask (PMOVMSKB)
  - d. Selective copy (PBLENDV)
- - e. Sum of absolute difference (PSADBW)
- - f. Pairwise horizontal add and subtract (PHADD, PHSUB)
- - g. Pairwiser multiply-and-add (PMADDUB)
- - h. Change sign (PSIGN)
- - i. Combine two packed (PALIGNR)
- - k. Dot-product (DPPS)
- - l. Multiply and store high part of result (PMULHW)
- - m. Approximate of reciprocals (RCPPS, RSQRT)
+ - e. Combine two packed (PALIGNR)
+ 
+# 14. SIMD advanced calculations
+ - a. Sum of absolute difference (PSADBW)
+ - b. Pairwise horizontal add and subtract (PHADD, PHSUB)
+ - c. Pairwiser multiply-and-add (PMADDUB)
+ - d. Alternating add and subtract (ADDSUBPS)
+ - e. Conditional change sign (PSIGN)
+ - f. Dot-product (DPPS)
+ - g. Multiply and store high part of result (PMULHW)
+ - h. Approximate of reciprocals (RCPPS, RSQRT)
 
 # Not included
  - e. Move selected values based on mask (MASKMOVQ)
