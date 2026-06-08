@@ -1,0 +1,51 @@
+Bgs testS
+  u8x16 a
+  u8x16 b
+  u16x8 x
+Ens
+
+Fnc test
+  Idw a, 0, 3
+  Idw a, 1, 2
+  Idw a, 2, 3
+  Idw a, 3, 4
+  Idw a, 4, 6
+  Idw a, 5, 7
+  Idw a, 6, 38
+  Idw a, 7, 24
+  Idw a, 8, 12
+  Idw a, 9, 1
+  Idw a, 10, 0
+  Idw a, 11, 49
+  Idw a, 12, 3
+  Idw a, 13, 40
+  Idw a, 14, 23
+  Idw a, 15, 24
+  
+  Idw b, 0, 1
+  Idw b, 1, 0
+  Idw b, 2, 0
+  Idw b, 3, 0
+  Idw b, 4, 0
+  Idw b, 5, 0
+  Idw b, 6, 0
+  Idw b, 7, 0
+  Idw b, 8, 0
+  Idw b, 9, 0
+  Idw b, 10, 0
+  Idw b, 11, 0
+  Idw b, 12, 0
+  Idw b, 13, 0
+  Idw b, 14, 0
+  Idw b, 15, 0
+
+  SumAbsoluteDifference x, a, b
+Ret
+
+
+
+
+
+
+
+

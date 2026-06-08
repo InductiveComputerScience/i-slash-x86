@@ -2480,6 +2480,7 @@ extern free
 ; Packed floating point numbers up-converted and stored in two vars
 ; f32x4tof64x4
 
+; TODO: Can we use vinsertf128?
 %macro f32x4tof64x4.mm 3
   movdqu xmm0, oword [rdi + %3]
   movdqu xmm1, xmm0
@@ -2490,6 +2491,17 @@ extern free
   movdqu oword [rdi + %1], xmm1
   movdqu oword [rdi + %2], xmm2
 %endmacro
+
+; -----------------------------------------------------------------------------
+; Packed ints to smaller types
+; u64x2tou32x2, u32x4tou16x2
+
+; TODO: Find correct instructions
+;%macro f64x2tof32x2.m 2
+  ;movdqu xmm0, oword [rdi + %2]
+  ;packusdw xmm1, xmm0
+  ;movdqu oword [rdi + %1], xmm1
+;%endmacro
 
 ; -----------------------------------------------------------------------------
 ; Reinterpret as a different type
@@ -3040,3 +3052,25 @@ extern f
   punpckhdq xmm0, xmm1
   movdqu oword [rdi + %1], xmm0
 %endmacro
+
+; -----------------------------------------------------------------------------
+; CombineExtract -- Combine and extract a part offset by a constant
+
+; TODO: Should this not be mmi?
+%macro CombineExtract.miu8x16 4
+  movdqu xmm0, oword [rdi + %2]
+  movdqu xmm1, oword [rdi + %3]
+  palignr xmm0, xmm1, %4
+  movdqu oword [rdi + %1], xmm0
+%endmacro
+
+; -----------------------------------------------------------------------------
+; SumAbsoluteDifference -- Sum of absolute differences
+
+%macro SumAbsoluteDifference.mmu8x16 3
+  movdqu xmm0, oword [rdi + %2]
+  movdqu xmm1, oword [rdi + %3]
+  psadbw xmm0, xmm1
+  movdqu oword [rdi + %1], xmm0
+%endmacro
+

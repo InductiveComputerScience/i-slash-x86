@@ -22,6 +22,12 @@ void print_m128_u8(__m128 reg) {
     printf("u8: %u, %u, %u, %u, %u, %u, %u, %u, %u, %u, %u, %u, %u, %u, %u, %u\n", values[0], values[1], values[2], values[3], values[4], values[5], values[6], values[7], values[8], values[9], values[10], values[11], values[12], values[13], values[14], values[15]);
 }
 
+void print_m128_u16(__m128 reg) {
+    uint16_t *values = (uint16_t *)&reg;
+
+    printf("u16: %u, %u, %u, %u, %u, %u, %u, %u\n", values[0], values[1], values[2], values[3], values[4], values[5], values[6], values[7]);
+}
+
 void print_m128_u32(__m128 reg) {
     uint32_t *values = (uint32_t *)&reg;
 

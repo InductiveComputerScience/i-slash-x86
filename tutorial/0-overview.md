@@ -68,6 +68,7 @@
  - RDPMC -- Read performance counters
  - RDRAND -- Read random number
  - ??(CPUID)
+ - Prefetch -- (PREFETCHT)
 
 # 11. Various other instructions
  - Nop -- No operation
@@ -88,7 +89,7 @@
  - b. Shuffle (PSHUF)
  - c. Create bit mask (PMOVMSKB)
  - d. Selective copy (PBLENDV)
- - e. Combine two packed (PALIGNR)
+ - e. Combine and extract (PALIGNR)
  
 # 14. SIMD advanced calculations
  - a. Sum of absolute difference (PSADBW)
@@ -101,5 +102,6 @@
  - h. Approximate of reciprocals (RCPPS, RSQRT)
 
 # Not included
- - e. Move selected values based on mask (MASKMOVQ)
+ - x. Move selected values based on mask (MASKMOVQ)
+ - x. Down-convert with saturation (packusdw, packssdw)
 

@@ -432,8 +432,9 @@ public class Translator {
                 "              \"ApproxReciprocalSqrt\": {\"args\": 1, \"typeDecider\": 0},\n" +
                 "              \"InterleaveLow\": {\"args\": 2, \"typeDecider\": 0},\n" +
                 "              \"InterleaveHigh\": {\"args\": 2, \"typeDecider\": 0},\n" +
-                "              \"SelectiveCopy\": {\"args\": 3, \"typeDecider\": 0}\n" +
-
+                "              \"SelectiveCopy\": {\"args\": 3, \"typeDecider\": 0},\n" +
+                "              \"CombineExtract\": {\"args\": 3, \"typeDecider\": 0},\n" +
+                "              \"SumAbsoluteDifference\": {\"args\": 2, \"typeDecider\": 0}\n" +
 
                 "            }").toCharArray();
 
