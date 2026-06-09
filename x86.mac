@@ -3161,48 +3161,48 @@ extern f
 ; StringSubset -- Identify the occurance of characters in a string
 
 %macro StringSubset.mmu8x16 4
-  movdqu xmm0, oword [rdi + %2]
+  movdqu xmm0, oword [rdi + %3]
   mov rax, qword [rdi + %4]
-  movdqu xmm1, oword [rdi + %3]
+  movdqu xmm1, oword [rdi + %2]
   mov rdx, 16
-  pcmpestrm xmm1, xmm0, (1 << 6) + (0 << 2)
-  movdqu oword [rdi + %1], xmm0
+  pcmpestrm xmm0, xmm1, (0 << 6) + (0 << 2)
+  vpextrw word [rdi + %1], xmm0, 0
 %endmacro
 
 ; -----------------------------------------------------------------------------
 ; StringRangeCheck -- Find members of a range
 
 %macro StringRangeCheck.mmu8x16 4
-  movdqu xmm0, oword [rdi + %2]
+  movdqu xmm0, oword [rdi + %3]
   mov rax, qword [rdi + %4]
-  movdqu xmm1, oword [rdi + %3]
+  movdqu xmm1, oword [rdi + %2]
   mov rdx, 16
-  pcmpestrm xmm1, xmm0, (1 << 6) + (1 << 2)
-  movdqu oword [rdi + %1], xmm0
+  pcmpestrm xmm0, xmm1, (0 << 6) + (1 << 2)
+  vpextrw word [rdi + %1], xmm0, 0
 %endmacro
 
 ; -----------------------------------------------------------------------------
 ; MatchString -- Match string
 
 %macro MatchString.mmu8x16 4
-  movdqu xmm0, oword [rdi + %2]
+  movdqu xmm0, oword [rdi + %3]
   mov rax, qword [rdi + %4]
-  movdqu xmm1, oword [rdi + %3]
+  movdqu xmm1, oword [rdi + %2]
   mov rdx, 16
-  pcmpestrm xmm1, xmm0, (1 << 6) + (2 << 2)
-  movdqu oword [rdi + %1], xmm0
+  pcmpestrm xmm0, xmm1, (0 << 6) + (2 << 2)
+  vpextrw word [rdi + %1], xmm0, 0
 %endmacro
 
 ; -----------------------------------------------------------------------------
 ; FindSubstring -- Locate string
 
 %macro FindSubstring.mmu8x16 4
-  movdqu xmm0, oword [rdi + %2]
+  movdqu xmm0, oword [rdi + %3]
   mov rax, qword [rdi + %4]
-  movdqu xmm1, oword [rdi + %3]
+  movdqu xmm1, oword [rdi + %2]
   mov rdx, 16
-  pcmpestrm xmm1, xmm0, (1 << 6) + (3 << 2)
-  movdqu oword [rdi + %1], xmm0
+  pcmpestrm xmm0, xmm1, (0 << 6) + (3 << 2)
+  vpextrw word [rdi + %1], xmm0, 0
 %endmacro
 
 

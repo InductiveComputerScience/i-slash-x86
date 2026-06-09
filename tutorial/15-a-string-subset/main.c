@@ -9,6 +9,8 @@
 
 #include "../simdlib.c"
 
+void print_bits_16(uint16_t value);
+
 int main(){
 	struct testS ts;
   _Bool success;
@@ -42,10 +44,10 @@ int main(){
 	
 	printf("%s\n", (char*)&ts.s1);
 	
-	print_m128_b8(ts.mask1);
-	print_m128_b8(ts.mask2);
-	print_m128_b8(ts.mask3);
-	print_m128_b8(ts.mask4);
+	print_bits_16(ts.mask1);
+	print_bits_16(ts.mask2);
+	print_bits_16(ts.mask3);
+	print_bits_16(ts.mask4);
 
 
 	/*if(ts.c == 1){
@@ -56,3 +58,13 @@ int main(){
 
 	return 0;
 }
+
+
+void print_bits_16(uint16_t value) {
+    for (int i = 0; i < 16; i++) {
+        uint16_t bit = (value >> i) & 1;
+        printf("%u", bit);
+    }
+    printf("\n");
+}
+

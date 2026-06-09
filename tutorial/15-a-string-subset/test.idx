@@ -11,10 +11,10 @@ Bgs testS
 	u64 m3len
   u64 m4len
 	u64 i
-  u8x16 mask1
-  u8x16 mask2
-  u8x16 mask3
-  u8x16 mask4
+  u16 mask1
+  u16 mask2
+  u16 mask3
+  u16 mask4
 Ens
 
 Fnc test
