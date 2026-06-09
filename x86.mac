@@ -3166,7 +3166,8 @@ extern f
   movdqu xmm1, oword [rdi + %2]
   mov rdx, 16
   pcmpestrm xmm0, xmm1, (0 << 6) + (0 << 2)
-  vpextrw word [rdi + %1], xmm0, 0
+  vpextrw eax, xmm0, 0
+  mov word [rdi + %1], ax
 %endmacro
 
 ; -----------------------------------------------------------------------------
@@ -3178,7 +3179,8 @@ extern f
   movdqu xmm1, oword [rdi + %2]
   mov rdx, 16
   pcmpestrm xmm0, xmm1, (0 << 6) + (1 << 2)
-  vpextrw word [rdi + %1], xmm0, 0
+  vpextrw eax, xmm0, 0
+  mov word [rdi + %1], ax
 %endmacro
 
 ; -----------------------------------------------------------------------------
@@ -3190,7 +3192,8 @@ extern f
   movdqu xmm1, oword [rdi + %2]
   mov rdx, 16
   pcmpestrm xmm0, xmm1, (0 << 6) + (2 << 2)
-  vpextrw word [rdi + %1], xmm0, 0
+  vpextrw eax, xmm0, 0
+  mov word [rdi + %1], ax
 %endmacro
 
 ; -----------------------------------------------------------------------------
@@ -3202,7 +3205,8 @@ extern f
   movdqu xmm1, oword [rdi + %2]
   mov rdx, 16
   pcmpestrm xmm0, xmm1, (0 << 6) + (3 << 2)
-  vpextrw word [rdi + %1], xmm0, 0
+  vpextrw eax, xmm0, 0
+  mov word [rdi + %1], ax
 %endmacro
 
 
