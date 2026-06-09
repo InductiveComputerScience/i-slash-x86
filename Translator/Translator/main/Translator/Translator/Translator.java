@@ -240,6 +240,7 @@ public class Translator {
                 "                \"f32a\": {\"nasmType\": \"resq\", \"ctype\": \"float *\"},\n" +
                 "                \"f64a\": {\"nasmType\": \"resq\", \"ctype\": \"double *\"},\n" +
 
+                // SIMD
                 "                \"u8x8\": {\"nasmType\": \"resq\", \"ctype\": \"__m64\"},\n" +
                 "                \"u8x16\": {\"nasmType\": \"reso\", \"ctype\": \"__m128\"},\n" +
                 "                \"u8x32\": {\"nasmType\": \"resy\", \"ctype\": \"__m256\"},\n" +
@@ -283,6 +284,31 @@ public class Translator {
                 "                \"s8x32a\": {\"nasmType\": \"resq\", \"ctype\": \"__m256 *\"},\n" +
                 "                \"s8x64a\": {\"nasmType\": \"resq\", \"ctype\": \"__m512 *\"},\n" +
 
+                "                \"s16x4\": {\"nasmType\": \"resq\", \"ctype\": \"__m64\"},\n" +
+                "                \"s16x8\": {\"nasmType\": \"reso\", \"ctype\": \"__m128\"},\n" +
+                "                \"s16x16\": {\"nasmType\": \"resy\", \"ctype\": \"__m256\"},\n" +
+                "                \"s16x32\": {\"nasmType\": \"resz\", \"ctype\": \"__m512\"},\n" +
+                "                \"s16x4a\": {\"nasmType\": \"resq\", \"ctype\": \"__m64 *\"},\n" +
+                "                \"s16x8a\": {\"nasmType\": \"resq\", \"ctype\": \"__m128 *\"},\n" +
+                "                \"s16x16a\": {\"nasmType\": \"resq\", \"ctype\": \"__m256 *\"},\n" +
+                "                \"s16x32a\": {\"nasmType\": \"resq\", \"ctype\": \"__m512 *\"},\n" +
+
+                "                \"s32x2\": {\"nasmType\": \"resq\", \"ctype\": \"__m64\"},\n" +
+                "                \"s32x4\": {\"nasmType\": \"reso\", \"ctype\": \"__m128\"},\n" +
+                "                \"s32x8\": {\"nasmType\": \"resy\", \"ctype\": \"__m256\"},\n" +
+                "                \"s32x16\": {\"nasmType\": \"resz\", \"ctype\": \"__m512\"},\n" +
+                "                \"s32x2a\": {\"nasmType\": \"resq\", \"ctype\": \"__m64 *\"},\n" +
+                "                \"s32x4a\": {\"nasmType\": \"resq\", \"ctype\": \"__m128 *\"},\n" +
+                "                \"s32x8a\": {\"nasmType\": \"resq\", \"ctype\": \"__m256 *\"},\n" +
+                "                \"s32x16a\": {\"nasmType\": \"resq\", \"ctype\": \"__m512 *\"},\n" +
+
+                "                \"s64x2\": {\"nasmType\": \"reso\", \"ctype\": \"__m128\"},\n" +
+                "                \"s64x4\": {\"nasmType\": \"resy\", \"ctype\": \"__m256\"},\n" +
+                "                \"s64x8\": {\"nasmType\": \"resz\", \"ctype\": \"__m512\"},\n" +
+                "                \"s64x2a\": {\"nasmType\": \"resq\", \"ctype\": \"__m128 *\"},\n" +
+                "                \"s64x4a\": {\"nasmType\": \"resq\", \"ctype\": \"__m256 *\"},\n" +
+                "                \"s64x8a\": {\"nasmType\": \"resq\", \"ctype\": \"__m512 *\"},\n" +
+
                 "                \"b8x8\": {\"nasmType\": \"resq\", \"ctype\": \"__m64\"},\n" +
                 "                \"b8x16\": {\"nasmType\": \"reso\", \"ctype\": \"__m128\"},\n" +
                 "                \"b8x32\": {\"nasmType\": \"resy\", \"ctype\": \"__m256\"},\n" +
@@ -291,6 +317,7 @@ public class Translator {
                 "                \"b8x16a\": {\"nasmType\": \"resq\", \"ctype\": \"__m128 *\"},\n" +
                 "                \"b8x32a\": {\"nasmType\": \"resq\", \"ctype\": \"__m256 *\"},\n" +
                 "                \"b8x64a\": {\"nasmType\": \"resq\", \"ctype\": \"__m512 *\"},\n" +
+
                 "                \"f32x4\": {\"nasmType\": \"reso\", \"ctype\": \"__m128\"},\n" +
                 "                \"f32x8\": {\"nasmType\": \"resy\", \"ctype\": \"__m256\"},\n" +
                 "                \"f32x16\": {\"nasmType\": \"resz\", \"ctype\": \"__m512\"},\n" +
@@ -434,7 +461,13 @@ public class Translator {
                 "              \"InterleaveHigh\": {\"args\": 2, \"typeDecider\": 0},\n" +
                 "              \"SelectiveCopy\": {\"args\": 3, \"typeDecider\": 0},\n" +
                 "              \"CombineExtract\": {\"args\": 3, \"typeDecider\": 0},\n" +
-                "              \"SumAbsoluteDifference\": {\"args\": 2, \"typeDecider\": 0}\n" +
+                "              \"SumAbsoluteDifference\": {\"args\": 2, \"typeDecider\": 0},\n" +
+                "              \"PairwiseAdd\": {\"args\": 2, \"typeDecider\": 0},\n" +
+                "              \"PairwiseSub\": {\"args\": 2, \"typeDecider\": 0},\n" +
+                "              \"PairwiseMulAdd\": {\"args\": 2, \"typeDecider\": 0},\n" +
+                "              \"AlternatingSubAdd\": {\"args\": 2, \"typeDecider\": 0},\n" +
+                "              \"ConditionalNegate\": {\"args\": 2, \"typeDecider\": 0},\n" +
+                "              \"DotProduct\": {\"args\": 2, \"typeDecider\": 0}\n" +
 
                 "            }").toCharArray();
 

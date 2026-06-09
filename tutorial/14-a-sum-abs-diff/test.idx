@@ -38,7 +38,17 @@ Fnc test
   Idw b, 13, 0
   Idw b, 14, 0
   Idw b, 15, 0
-
+  
+  Idw x, 0, 0xFFFF
+  Idw x, 1, 0xFFFF
+  Idw x, 2, 0xFFFF
+  Idw x, 3, 0xFFFF
+  Idw x, 4, 0xFFFF
+  Idw x, 5, 0xFFFF
+  Idw x, 6, 0xFFFF
+  Idw x, 7, 0xFFFF
+  Idw x, 8, 0xFFFF
+  
   SumAbsoluteDifference x, a, b
 Ret
 

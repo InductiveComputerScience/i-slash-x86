@@ -1,0 +1,27 @@
+Bgs testS
+  s32x4 a
+  s32x4 b
+  s32x4 x
+Ens
+
+Fnc test
+  Idw a, 0, -3
+  Idw a, 1, 2
+  Idw a, 2, 3
+  Idw a, 3, -4
+
+  Idw b, 0, -1
+  Idw b, 1, -5
+  Idw b, 2, 4
+  Idw b, 3, 49
+  
+  ConditionalNegate x, a, b
+Ret
+
+
+
+
+
+
+
+

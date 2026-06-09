@@ -1,0 +1,27 @@
+Bgs testS
+  f32x4 a
+  f32x4 b
+  f32x4 x
+Ens
+
+Fnc test
+  Idw a, 0, -3.1
+  Idw a, 1, 2.2
+  Idw a, 2, 3.4
+  Idw a, 3, -4.5
+
+  Idw b, 0, -1.3
+  Idw b, 1, -5.5
+  Idw b, 2, 4.5
+  Idw b, 3, 49.6
+  
+  DotProduct x, a, b
+Ret
+
+
+
+
+
+
+
+

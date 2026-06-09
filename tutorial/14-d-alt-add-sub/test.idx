@@ -1,0 +1,35 @@
+Bgs testS
+  f32x4 a
+  f32x4 b
+  f32x4 x
+Ens
+
+Fnc test
+  Idw a, 0, 3.1
+  Idw a, 1, 2.1
+  Idw a, 2, 3.1
+  Idw a, 3, 4.1
+  Idw a, 4, 6.1
+  Idw a, 5, 7.1
+  Idw a, 6, 38.1
+  Idw a, 7, 24.1
+
+  Idw b, 0, 1.1
+  Idw b, 1, 5.1
+  Idw b, 2, 4.1
+  Idw b, 3, 49.1
+  Idw b, 4, 3.1
+  Idw b, 5, 5.1
+  Idw b, 6, 3.1
+  Idw b, 7, 64.1
+  
+  AlternatingSubAdd x, a, b
+Ret
+
+
+
+
+
+
+
+

@@ -1,0 +1,37 @@
+Bgs testS
+  s16x8 a
+  s16x8 b
+  s16x8 x
+  s16x8 y
+Ens
+
+Fnc test
+  Idw a, 0, 3
+  Idw a, 1, 2
+  Idw a, 2, 3
+  Idw a, 3, 4
+  Idw a, 4, 6
+  Idw a, 5, 7
+  Idw a, 6, 38
+  Idw a, 7, 24
+
+  Idw b, 0, 1
+  Idw b, 1, 5
+  Idw b, 2, 4
+  Idw b, 3, 49
+  Idw b, 4, 3
+  Idw b, 5, 5
+  Idw b, 6, 3
+  Idw b, 7, 64
+  
+  PairwiseAdd x, a, b
+  PairwiseSub y, a, b
+Ret
+
+
+
+
+
+
+
+

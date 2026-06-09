@@ -2066,6 +2066,27 @@ extern free
   movdqu oword [rdi + %1], xmm0
 %endmacro
 
+%macro Idw.iiu16x8 3
+  movdqu xmm0, oword [rdi + %1]
+  mov eax, %3
+  vpinsrw xmm0, eax, %2
+  movdqu oword [rdi + %1], xmm0
+%endmacro
+
+%macro Idw.iis16x8 3
+  movdqu xmm0, oword [rdi + %1]
+  mov eax, %3
+  vpinsrw xmm0, eax, %2
+  movdqu oword [rdi + %1], xmm0
+%endmacro
+
+%macro Idw.iis32x4 3
+  movdqu xmm0, oword [rdi + %1]
+  mov eax, %3
+  vpinsrd xmm0, eax, %2
+  movdqu oword [rdi + %1], xmm0
+%endmacro
+
 %macro Idw.iiu32x4 3
   movdqu xmm0, oword [rdi + %1]
   mov eax, %3
@@ -3073,4 +3094,67 @@ extern f
   psadbw xmm0, xmm1
   movdqu oword [rdi + %1], xmm0
 %endmacro
+
+; -----------------------------------------------------------------------------
+; PairwiseAdd -- Pairwiser horizontal add
+
+%macro PairwiseAdd.mms16x8 3
+  movdqu xmm0, oword [rdi + %2]
+  movdqu xmm1, oword [rdi + %3]
+  phaddw xmm0, xmm1
+  movdqu oword [rdi + %1], xmm0
+%endmacro
+
+; -----------------------------------------------------------------------------
+; PairwiseSub -- Pairwiser horizontal subtract
+
+%macro PairwiseSub.mms16x8 3
+  movdqu xmm0, oword [rdi + %2]
+  movdqu xmm1, oword [rdi + %3]
+  phsubw xmm0, xmm1
+  movdqu oword [rdi + %1], xmm0
+%endmacro
+
+; -----------------------------------------------------------------------------
+; PairwiseMulAdd -- Multiply vertical pairs and add horizontally
+
+%macro PairwiseMulAdd.mms16x8 3
+  movdqu xmm0, oword [rdi + %2]
+  movdqu xmm1, oword [rdi + %3]
+  pmaddwd xmm0, xmm1
+  movdqu oword [rdi + %1], xmm0
+%endmacro
+
+; -----------------------------------------------------------------------------
+; AlternatingSubAdd -- Alternating subtract and add
+
+%macro AlternatingSubAdd.mmf32x4 3
+  movdqu xmm0, oword [rdi + %2]
+  movdqu xmm1, oword [rdi + %3]
+  addsubps xmm0, xmm1
+  movdqu oword [rdi + %1], xmm0
+%endmacro
+
+; -----------------------------------------------------------------------------
+; ConditionalNegate -- Conditionally nagate
+
+%macro ConditionalNegate.mms32x4 3
+  movdqu xmm0, oword [rdi + %2]
+  movdqu xmm1, oword [rdi + %3]
+  psignd xmm0, xmm1
+  movdqu oword [rdi + %1], xmm0
+%endmacro
+
+; -----------------------------------------------------------------------------
+; DotProduct -- Dot Product
+
+; TODO: How to deal with the fourth and fifth parameters?
+%macro DotProduct.mmf32x4 3
+  movdqu xmm0, oword [rdi + %2]
+  movdqu xmm1, oword [rdi + %3]
+  dpps xmm0, xmm1, 0x9 * 16 + 0x3; %4 * 16 + %5
+  movdqu oword [rdi + %1], xmm0
+%endmacro
+
+
 

@@ -46,6 +46,18 @@ void print_m128_s8(__m128 reg) {
     printf("s8: %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d\n", values[0], values[1], values[2], values[3], values[4], values[5], values[6], values[7], values[8], values[9], values[10], values[11], values[12], values[13], values[14], values[15]);
 }
 
+void print_m128_s16(__m128 reg) {
+    int16_t *values = (int16_t *)&reg;
+
+    printf("s16: %d, %d, %d, %d, %d, %d, %d, %d\n", values[0], values[1], values[2], values[3], values[4], values[5], values[6], values[7]);
+}
+
+void print_m128_s32(__m128 reg) {
+    int32_t *values = (int32_t *)&reg;
+
+    printf("s32: %d, %d, %d, %d\n", values[0], values[1], values[2], values[3]);
+}
+
 void print_m128_b8(__m128 reg) {
     uint8_t *values = (uint8_t *)&reg;
     
