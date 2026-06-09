@@ -1,8 +1,3 @@
-void print_m128_f16(__m128 reg) {
-    _Float16 *values = (_Float16 *)&reg;
-    
-    printf("f16: %f, %f, %f, %f, %f, %f, %f, %f\n", (float)values[0], (float)values[1], (float)values[2], (float)values[3], (float)values[4], (float)values[5], (float)values[6], (float)values[7]);
-}
 
 void print_m128_f32(__m128 reg) {
     float *values = (float *)&reg;

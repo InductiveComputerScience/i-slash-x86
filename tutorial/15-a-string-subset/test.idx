@@ -1,0 +1,25 @@
+Bgs testS
+  u8x16 s1
+  u64 s1len
+  u8x16 m1
+	u8x16 m2
+	u8x16 m3
+	u8x16 m4
+  u64 s2len
+	u64 m1len
+	u64 m2len
+	u64 m3len
+  u64 m4len
+	u64 i
+  u8x16 mask1
+  u8x16 mask2
+  u8x16 mask3
+  u8x16 mask4
+Ens
+
+Fnc test
+	StringSubset mask1, s1, m1, m1len
+	StringRangeCheck mask2, s1, m2, m2len
+	MatchString mask3, s1, m3, m3len
+	FindSubstring mask4, s1, m4, m4len
+Ret

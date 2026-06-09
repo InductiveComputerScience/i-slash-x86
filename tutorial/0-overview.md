@@ -38,8 +38,9 @@
  - g. Rotate
  - h. Compare and exchange (concurrency)
  - i. CRC32
- - j. Convert with saturate
- - k. Saturated addition and subtraction
+ - j. Multiply full (x-bit to 2x-bit)
+ - k. Convert with saturate
+ - l. Saturated addition and subtraction
 
 # 8. Bit computations
  - a. Byte swap
@@ -61,14 +62,13 @@
  - a. Block move (MOVSX)
  - b. Block compare (CMPSX)
  - c. Find index of value in block (SCASX)
- - ??(d. LODX and STOSX -- load into or store from ax)
 
 # 10. Various infrastructural instructions
- - RDTSC -- Read time stamp counter
- - RDPMC -- Read performance counters
- - RDRAND -- Read random number
- - ??(CPUID)
- - Prefetch -- (PREFETCHT)
+ - Read time stamp counter (RDTSC)
+ - Read performance counters (RDPMC)
+ - Read random number (RDRAND)
+ - CPU info (CPUID)
+ - Prefetch (PREFETCHx)
 
 # 11. Various other instructions
  - Nop -- No operation
@@ -80,7 +80,7 @@
  - d. Bitwise operations
  - e. Multiply-and-add
  - f. SIMD expressions
- - g. Array index SIMD (PINSR, PEXTR)
+ - g. Array index SIMD (PINSR, PEXTR, EXTRACTPS, INSERTPS)
  - h. Min, max, average (PMIN, PMAX, PAVG)
  - i. Square root and reciprocals (SQRTPD)
 
@@ -90,6 +90,8 @@
  - c. Create bit mask (PMOVMSKB)
  - d. Selective copy (PBLENDV)
  - e. Combine and extract (PALIGNR)
+ - f. Shift with common shift (PSLL, PSRL, PSRA)
+ - g. Bitfield extract and insert (INSERTQ, EXTRQ)
  
 # 14. SIMD advanced calculations
  - a. Sum of absolute difference (PSADBW)
@@ -100,8 +102,27 @@
  - f. Dot-product (DPPS)
  - g. Multiply and store high part of result (PMULHW)
  - h. Approximate of reciprocals (RCPPS, RSQRT)
+ - i. Multiply full (PMULUDQ)
+ 
+# 15. SIMD string instructions
+ - x. String instructions (PCMPxSTRy) -- 512 different operations
+ - a. Subset -- Does the a character in the first occur in the second (00 << 2)
+ - b. Range check -- Does a character fit into one of the ranges? (01 << 2)
+ - c. Match -- one-to-one match (10 << 2)
+ - d. Substring -- Where does the string occur?
+ - e. (First or last match variant of each)
 
 # Not included
- - x. Move selected values based on mask (MASKMOVQ)
+ - x. Move selected values based on mask (MASKMOVx)
  - x. Down-convert with saturation (packusdw, packssdw)
+ - x. Add and substract with saturation (PADDSB, PADDSW, PADDUSB, PADDUSW)
+ - x. Pairwise add with saturation (PHADDSW, PMADDUBSW)
+ - x. Packed Multiply High With Round and Scale (PMULHRSW)
+ - x. Packed Horizontal Word Minimum (PHMINPOSUW)
+ - x. Compute Multiple Packed Sums of Absolute Difference (MPSADBW)
+ - x. Duplicate (MOVxxDUP)
+ - x. SIMD test (PTEST)
+ - x. Perm (VPERM)
+ - x. Gather (VPGATHER)
+
 

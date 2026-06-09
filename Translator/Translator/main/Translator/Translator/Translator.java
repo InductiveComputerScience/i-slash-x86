@@ -467,7 +467,12 @@ public class Translator {
                 "              \"PairwiseMulAdd\": {\"args\": 2, \"typeDecider\": 0},\n" +
                 "              \"AlternatingSubAdd\": {\"args\": 2, \"typeDecider\": 0},\n" +
                 "              \"ConditionalNegate\": {\"args\": 2, \"typeDecider\": 0},\n" +
-                "              \"DotProduct\": {\"args\": 2, \"typeDecider\": 0}\n" +
+                "              \"DotProduct\": {\"args\": 2, \"typeDecider\": 0},\n" +
+
+                "              \"StringSubset\": {\"args\": 3, \"typeDecider\": 0},\n" +
+                "              \"StringRangeCheck\": {\"args\": 3, \"typeDecider\": 0},\n" +
+                "              \"MatchString\": {\"args\": 3, \"typeDecider\": 0},\n" +
+                "              \"FindSubstring\": {\"args\": 3, \"typeDecider\": 0}\n" +
 
                 "            }").toCharArray();
 
