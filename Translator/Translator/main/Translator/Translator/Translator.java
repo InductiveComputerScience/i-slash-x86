@@ -475,6 +475,7 @@ public class Translator {
                 "              \"AlternatingSubAdd\": {\"args\": 2, \"typeDecider\": 0},\n" +
                 "              \"ConditionalNegate\": {\"args\": 2, \"typeDecider\": 0},\n" +
                 "              \"DotProduct\": {\"args\": 2, \"typeDecider\": 0},\n" +
+                "              \"Gather\": {\"args\": 3, \"typeDecider\": 2},\n" +
 
                 "              \"StringSubset\": {\"args\": 3, \"typeDecider\": 0},\n" +
                 "              \"StringRangeCheck\": {\"args\": 3, \"typeDecider\": 0},\n" +
@@ -658,7 +659,7 @@ public class Translator {
                             parts[3].string = RemoveComma(parts[3].string);
                             PrintTabs(cc, tabs);
                             LinkedListCharactersAddString(cc, iname);
-                            AppendQuadArguments(cc, parts[1].string, parts[2].string, parts[3].string, parts[4].string, fname, structure);
+                            AppendQuadArguments(cc, parts[1].string, parts[2].string, parts[3].string, parts[4].string, fname, structure, typeDecider);
                             LinkedListCharactersAddString(cc, "\n".toCharArray());
                         }else{
                             success = false;
@@ -798,9 +799,9 @@ public class Translator {
         return success;
     }
 
-    public static void AppendQuadArguments(LinkedListCharacters cc, char[] arg1, char[] arg2, char[] arg3, char[] arg4, char[] fname, Structure structure) {
+    public static void AppendQuadArguments(LinkedListCharacters cc, char[] arg1, char[] arg2, char[] arg3, char[] arg4, char[] fname, Structure structure, double typeDecider) {
         char[] signature;
-        signature = GetTernarySignature(arg2, arg3, arg4, structure, 1, false);
+        signature = GetTernarySignature(arg2, arg3, arg4, structure, typeDecider, false);
         LinkedListCharactersAddString(cc, signature);
         LinkedListCharactersAddString(cc, " ".toCharArray());
         AppendArgument(cc, arg1, fname);

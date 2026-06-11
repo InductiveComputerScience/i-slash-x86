@@ -388,6 +388,13 @@
   mov qword [rdi + %1 + 8], rdx
 %endmacro
 
+%macro MulFull.mmu64x2 3
+  movdqu xmm0, oword [rdi + %2]
+  movdqu xmm1, oword [rdi + %3]
+  pmuludq xmm0, xmm1
+  movdqu oword [rdi + %1], xmm0
+%endmacro
+
 ; -----------------------------------------------------------------------------
 ; Div
 
@@ -3199,6 +3206,19 @@ extern f
   palignr xmm0, xmm1, %4
   movdqu oword [rdi + %1], xmm0
 %endmacro
+
+; -----------------------------------------------------------------------------
+; Gather -- Gather data into array
+
+; TODO: Should this not be mmm?
+%macro Gather.mmu32x4 4
+  mov rax, qword [rdi + %2]
+  movdqu xmm1, oword [rdi + %3]
+  movdqu xmm2, oword [rdi + %4]
+  vpgatherdd xmm0, [rax + xmm1 * 4], xmm2
+  movdqu oword [rdi + %1], xmm0
+%endmacro
+
 
 ; -----------------------------------------------------------------------------
 ; SumAbsoluteDifference -- Sum of absolute differences

@@ -32,7 +32,7 @@ void print_m128_u32(__m128 reg) {
 void print_m128_u64(__m128 reg) {
     uint64_t *values = (uint64_t *)&reg;
     
-    printf("u64 values: %.8lx, %.8lx\n", values[0], values[1]);
+    printf("u64: %lu, %lu\n", values[0], values[1]);
 }
 
 void print_m128_s8(__m128 reg) {
@@ -63,6 +63,12 @@ void print_m128_b32(__m128 reg) {
     uint32_t *values = (uint32_t *)&reg;
     
     printf("b32: %.8x, %.8x, %.8x, %.8x\n", values[0], values[1], values[2], values[3]);
+}
+
+void print_m128_b64(__m128 reg) {
+    uint64_t *values = (uint64_t *)&reg;
+    
+    printf("b64: %.16lx, %.16lx\n", values[0], values[1]);
 }
 
 void print_m128_b128(__m128 reg) {

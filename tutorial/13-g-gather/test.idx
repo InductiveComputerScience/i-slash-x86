@@ -1,0 +1,29 @@
+Bgs testS
+  u32a data
+  u32x4 a
+  u32x4 b
+  u32x4 x
+  u64 p
+Ens
+
+Fnc test
+  Idw a, 0, 1
+  Idw a, 1, 5
+  Idw a, 2, 10
+  Idw a, 3, 20
+  
+  Idw b, 0, 0xFFFFFFFF
+  Idw b, 1, 0xFFFFFFFF
+  Idw b, 2, 0xFFFFFFFF
+  Idw b, 3, 0xFFFFFFFF
+  
+  Ptm p, data
+  
+  Gather x, p, a, b
+Ret
+
+
+
+
+
+

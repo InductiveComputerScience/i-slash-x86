@@ -90,7 +90,8 @@
  - c. Create bit mask (PMOVMSKB)
  - d. Selective copy (PBLENDV)
  - e. Combine and extract (PALIGNR)
- - g. Shift with individual shift (VPSLLV, VPSRLV, VPSRAV)
+ - f. Shift with individual shift (VPSLLV, VPSRLV, VPSRAV)
+ - g. Gather scattered data into array (VPGATHER)
  
 # 14. SIMD advanced calculations
  - a. Sum of absolute difference (PSADBW)
@@ -104,12 +105,11 @@
  - i. Multiply full (PMULUDQ)
  
 # 15. SIMD string instructions
- - x. String instructions (PCMPxSTRy) -- 512 different operations
- - a. Subset -- Does the a character in the first occur in the second (00 << 2)
- - b. Range check -- Does a character fit into one of the ranges? (01 << 2)
- - c. Match -- one-to-one match (10 << 2)
+String instructions (PCMPxSTRy) -- 512 different operations
+ - a. Subset -- Does the a character in the first occur in the second
+ - b. Range check -- Does a character fit into one of the ranges?
+ - c. Match -- one-to-one match
  - d. Substring -- Where does the string occur?
- - e. (First or last match variant of each)
 
 # Not included
  - x. Move selected values based on mask (MASKMOVx)
@@ -122,7 +122,6 @@
  - x. Duplicate (MOVxxDUP)
  - x. SIMD test (PTEST)
  - x. Perm (VPERM)
- - x. Gather (VPGATHER)
  - x. Shift with common shift (PSLL, PSRL, PSRA) -- Just a subset of that with individual shifts
  - x. Bitfield extract and insert (INSERTQ, EXTRQ) -- AMD only?
 
