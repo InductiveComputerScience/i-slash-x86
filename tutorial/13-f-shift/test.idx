@@ -1,0 +1,45 @@
+Bgs testS
+  u32x4 a
+  u32x4 b
+  u32x4 c
+  u32x4 d
+  u32x4 e
+  u32x4 f
+  u32x4 x
+  u32x4 y
+  u32x4 z
+Ens
+
+Fnc test
+  Idw a, 0, 0x01
+  Idw a, 1, 0x02
+  Idw a, 2, 0x03
+  Idw a, 3, 0x04
+  
+  Idw b, 0, 4
+  Idw b, 1, 8
+  Idw b, 2, 12
+  Idw b, 3, 16
+  
+  Shl x, a, b
+  
+  Idw a, 0, 0x10000000
+  Idw a, 1, 0x20000000
+  Idw a, 2, 0x30000000
+  Idw a, 3, 0x40000000
+  
+  Shr y, a, b
+  
+  Idw a, 0, 0xF1000000
+  Idw a, 1, 0xF2000000
+  Idw a, 2, 0xF3000000
+  Idw a, 3, 0xF4000000
+  
+  Sar z, a, b
+Ret
+
+
+
+
+
+

@@ -371,6 +371,23 @@
   mov word [rdi + %1], ax
 %endmacro
 
+%macro MulFull.mms64 3
+  mov eax, dword [rdi + %2]
+  mov ecx, dword [rdi + %3]
+  imul ecx
+  shl rdx, 32
+  or rax, rdx
+  mov qword [rdi + %1], rax
+%endmacro
+
+%macro MulFull.mms128 3
+  mov rax, qword [rdi + %2]
+  mov rcx, qword [rdi + %3]
+  imul rcx
+  mov qword [rdi + %1], rax
+  mov qword [rdi + %1 + 8], rdx
+%endmacro
+
 ; -----------------------------------------------------------------------------
 ; Div
 
@@ -540,7 +557,41 @@
 %endmacro
 
 ; -----------------------------------------------------------------------------
+; AddSaturated -- Addition Saturated
+
+%macro AddSaturated.mms16 3
+  mov rax, 0
+  mov ax, word [rdi + %2]
+  mov rcx, 0
+  mov cx, word [rdi + %3]
+  movq xmm0, rax
+  movq xmm1, rcx
+  paddsw xmm0, xmm1
+  movq rax, xmm0
+  mov word [rdi + %1], ax
+%endmacro
+
+%macro AddSaturated.mmu8x16 3
+  movdqu xmm0, oword [rdi + %2]
+  movdqu xmm1, oword [rdi + %3]
+  vpaddusb xmm0, xmm0, xmm1
+  movdqu oword [rdi + %1], xmm0
+%endmacro
+
+; -----------------------------------------------------------------------------
 ; SubSaturated -- Subtraction Saturated
+
+%macro SubSaturated.mms16 3
+  mov rax, 0
+  mov ax, word [rdi + %2]
+  mov rcx, 0
+  mov cx, word [rdi + %3]
+  movq xmm0, rax
+  movq xmm1, rcx
+  psubsw xmm0, xmm1
+  movq rax, xmm0
+  mov word [rdi + %1], ax
+%endmacro
 
 %macro SubSaturated.mmu8x16 3
   movdqu xmm0, oword [rdi + %2]
@@ -1451,7 +1502,7 @@
 %endmacro
 
 ; -----------------------------------------------------------------------------
-; Eq
+; Eq -- Equal
 
 %macro Eq.mmu8 3
   mov al, byte [rdi + %2]
@@ -1623,7 +1674,7 @@
 %endmacro
 
 ; -----------------------------------------------------------------------------
-; Neq
+; Neq -- Not equal
 
 %macro Neq.mmu16 3
   mov ax, word [rdi + %2]
@@ -1685,7 +1736,7 @@
 %endmacro
 
 ; -----------------------------------------------------------------------------
-; Acw
+; Acw -- Structure write element
 
 %macro Acw.mmu16 3
   mov ax, word [rdi + %3]
@@ -1712,7 +1763,7 @@
 %endmacro
 
 ; -----------------------------------------------------------------------------
-; Acr
+; Acr -- Structure read element
 
 %macro Acr.mmu64 3
   mov rax, [rdi + %2]
@@ -1739,7 +1790,7 @@
 %endmacro
 
 ; -----------------------------------------------------------------------------
-; Inc
+; Inc -- Increment by 1
 
 %macro Inc.mu64 1
   inc qword [rdi + %1]
@@ -1754,7 +1805,7 @@
 %endmacro
 
 ; -----------------------------------------------------------------------------
-; Dec
+; Dec - Decrement by 1
 
 %macro Dec.mu64 1
   dec qword [rdi + %1]
@@ -1769,7 +1820,7 @@
 %endmacro
 
 ; -----------------------------------------------------------------------------
-; Shl
+; Shl -- Shift left
 
 %macro Shl.mib32 3
   mov eax, dword [rdi + %2]
@@ -1789,8 +1840,24 @@
   movdqu oword [rdi + %1], xmm0
 %endmacro
 
+%macro Shl.miu32x4 3
+  movdqu xmm0, oword [rdi + %2]
+  mov rax, %3
+  movq xmm1, rax
+  vpbroadcastd xmm1, xmm1
+  vpsllvd xmm0, xmm0, xmm1
+  movdqu oword [rdi + %1], xmm0
+%endmacro
+
+%macro Shl.mmu32x4 3
+  movdqu xmm0, oword [rdi + %2]
+  movdqu xmm1, oword [rdi + %3]
+  vpsllvd xmm0, xmm0, xmm1
+  movdqu oword [rdi + %1], xmm0
+%endmacro
+
 ; -----------------------------------------------------------------------------
-; Shr
+; Shr - Shift right
 
 %macro Shr.miu32 3
   mov eax, dword [rdi + %2]
@@ -1807,6 +1874,29 @@
 %macro Shr.mib128 3
   movdqu xmm0, oword [rdi + %2]
   psrldq xmm0, %3
+  movdqu oword [rdi + %1], xmm0
+%endmacro
+
+%macro Shr.mmu32x4 3
+  movdqu xmm0, oword [rdi + %2]
+  movdqu xmm1, oword [rdi + %3]
+  vpsrlvd xmm0, xmm0, xmm1
+  movdqu oword [rdi + %1], xmm0
+%endmacro
+
+; -----------------------------------------------------------------------------
+; Sar - Shift arithmetic right
+
+%macro Shr.mis32 3
+  mov eax, dword [rdi + %2]
+  sar eax, %3
+  mov dword [rdi + %1], eax
+%endmacro
+
+%macro Sar.mmu32x4 3
+  movdqu xmm0, oword [rdi + %2]
+  movdqu xmm1, oword [rdi + %3]
+  vpsravd xmm0, xmm0, xmm1
   movdqu oword [rdi + %1], xmm0
 %endmacro
 
@@ -2098,7 +2188,8 @@ extern free
 %macro Idw.iif32x4 3
   movdqu xmm0, oword [rdi + %1]
   mov eax, __?float32?__(%3)
-  vpinsrd xmm0, eax, %2
+  movq xmm1, rax
+  insertps xmm0, xmm1, %2 << 4
   movdqu oword [rdi + %1], xmm0
 %endmacro
 
@@ -2538,6 +2629,29 @@ extern free
   movdqu xmm0, oword [rdi + %2]
   movdqu oword [rdi + %1], xmm0
 %endmacro
+
+; -----------------------------------------------------------------------------
+; Signed integer to smaller signed type with saturation
+; u32tou16s
+
+%macro u32tou16s.m 2
+  mov rax, 0
+  mov eax, dword [rdi + %2]
+  movq xmm0, rax
+  packusdw xmm0, xmm0
+  movq rax, xmm0
+  mov word [rdi + %1], ax
+%endmacro
+
+%macro s32tos16s.m 2
+  mov rax, 0
+  mov eax, dword [rdi + %2]
+  movq xmm0, rax
+  packssdw xmm0, xmm0
+  movq rax, xmm0
+  mov word [rdi + %1], ax
+%endmacro
+
 
 ; -----------------------------------------------------------------------------
 ; Ror

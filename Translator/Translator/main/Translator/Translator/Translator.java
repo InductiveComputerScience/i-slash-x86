@@ -200,11 +200,13 @@ public class Translator {
                 "                \"u16\": {\"nasmType\": \"resw\", \"ctype\": \"uint16_t\"},\n" +
                 "                \"u32\": {\"nasmType\": \"resd\", \"ctype\": \"uint32_t\"},\n" +
                 "                \"u64\": {\"nasmType\": \"resq\", \"ctype\": \"uint64_t\"},\n" +
+                "                \"u128\": {\"nasmType\": \"resq\", \"ctype\": \"unsigned __int128\"},\n" +
 
                 "                \"s8\": {\"nasmType\": \"resb\", \"ctype\": \"int8_t\"},\n" +
                 "                \"s16\": {\"nasmType\": \"resw\", \"ctype\": \"int16_t\"},\n" +
                 "                \"s32\": {\"nasmType\": \"resd\", \"ctype\": \"int32_t\"},\n" +
                 "                \"s64\": {\"nasmType\": \"resq\", \"ctype\": \"int64_t\"},\n" +
+                "                \"u128\": {\"nasmType\": \"resq\", \"ctype\": \"__int128\"},\n" +
 
                 "                \"b1\": {\"nasmType\": \"resb\", \"ctype\": \"uint8_t\"},\n" +
                 "                \"b8\": {\"nasmType\": \"resb\", \"ctype\": \"uint8_t\"},\n" +
@@ -359,6 +361,7 @@ public class Translator {
                 "              \"Mod\": {\"args\": 2, \"typeDecider\": 1},\n" +
                 "              \"DivMod\": {\"args\": 3, \"typeDecider\": 1},\n" +
                 "              \"MulDiv\": {\"args\": 3, \"typeDecider\": 1},\n" +
+                "              \"MulFull\": {\"args\": 2, \"typeDecider\": 1},\n" +
                 "              \"Inc\": {\"args\": 0, \"typeDecider\": 1},\n" +
                 "              \"Dec\": {\"args\": 0, \"typeDecider\": 1},\n" +
                 "              \"Round\": {\"args\": 1, \"typeDecider\": 1},\n" +
@@ -370,8 +373,10 @@ public class Translator {
                 "              \"Not\": {\"args\": 1, \"typeDecider\": 1},\n" +
                 "              \"Shl\": {\"args\": 2, \"typeDecider\": 1},\n" +
                 "              \"Shr\": {\"args\": 2, \"typeDecider\": 1},\n" +
+                "              \"Sar\": {\"args\": 2, \"typeDecider\": 1},\n" +
                 "              \"ShiftLeft\": {\"args\": 2, \"typeDecider\": 1, \"alias\": \"Shl\"},\n" +
                 "              \"ShiftRight\": {\"args\": 2, \"typeDecider\": 1, \"alias\": \"Shr\"},\n" +
+                "              \"ShiftArithmeticRight\": {\"args\": 2, \"typeDecider\": 1, \"alias\": \"Sar\"},\n" +
                 "              \"And\": {\"args\": 2, \"typeDecider\": 1},\n" +
                 "              \"Andnot\": {\"args\": 2, \"typeDecider\": 1},\n" +
                 "              \"Or\": {\"args\": 2, \"typeDecider\": 1},\n" +
@@ -423,6 +428,7 @@ public class Translator {
                 "              \"f32x4tof64x4\": {\"args\": 2, \"typeDecider\": 0, \"noTypePostfix\": true},\n" +
                 "              \"Xu32x4\": {\"args\": 1, \"typeDecider\": 0, \"noTypePostfix\": true},\n" +
                 "              \"Xb128\": {\"args\": 1, \"typeDecider\": 0, \"noTypePostfix\": true},\n" +
+                "              \"u32tou16s\": {\"args\": 1, \"typeDecider\": 0, \"noTypePostfix\": true},\n" +
 
                 "              \"Cmov\": {\"args\": 2, \"typeDecider\": 1},\n" +
                 "              \"Set\": {\"args\": 1, \"typeDecider\": 1},\n" +
@@ -449,6 +455,7 @@ public class Translator {
                 "              \"ExtractMask\": {\"args\": 1, \"typeDecider\": 0},\n" +
                 "              \"Shuffle\": {\"args\": 2, \"typeDecider\": 0},\n" +
                 "              \"MulStoreHigh\": {\"args\": 2, \"typeDecider\": 0},\n" +
+                "              \"AddSaturated\": {\"args\": 2, \"typeDecider\": 0},\n" +
                 "              \"SubSaturated\": {\"args\": 2, \"typeDecider\": 0},\n" +
                 "              \"MultiplyAndAdd\": {\"args\": 3, \"typeDecider\": 0},\n" +
                 "              \"Avg\": {\"args\": 2, \"typeDecider\": 0},\n" +

@@ -1,0 +1,13 @@
+Bgs testS
+  s16 a
+  s16 b
+  s16 c
+  s16 d
+  s16 x
+  s16 y
+Ens
+
+Fnc test
+  AddSaturated x, a, b
+  SubSaturated y, c, d
+Ret

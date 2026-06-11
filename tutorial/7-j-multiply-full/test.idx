@@ -1,0 +1,9 @@
+Bgs testS
+  s32 a
+  s32 b
+  s64 x
+Ens
+
+Fnc test
+  MulFull x, a, b
+Ret

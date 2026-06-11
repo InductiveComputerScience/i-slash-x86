@@ -1,6 +1,8 @@
 Bgs testS
   u32x4 x
   u8x16 a
+  f32x4 b
+  f64x2 y
 Ens
 
 Fnc test
@@ -25,4 +27,12 @@ Fnc test
   Idw a, 13, 14
   Idw a, 14, 15
   Idw a, 15, 16 
+  
+  Idw b, 0, 4.1
+  Idw b, 1, 3.1
+  Idw b, 2, 2.1
+  Idw b, 3, 1.1
+  
+  Idw y, 0, 3.141592653589793
+  Idw y, 1, 2.718281828459045
 Ret

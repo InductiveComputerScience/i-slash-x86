@@ -67,8 +67,8 @@
  - Read time stamp counter (RDTSC)
  - Read performance counters (RDPMC)
  - Read random number (RDRAND)
- - CPU info (CPUID)
  - Prefetch (PREFETCHx)
+ - CPU info (CPUID)
 
 # 11. Various other instructions
  - Nop -- No operation
@@ -80,7 +80,7 @@
  - d. Bitwise operations
  - e. Multiply-and-add
  - f. SIMD expressions
- - g. Array index SIMD (PINSR, PEXTR, EXTRACTPS, INSERTPS)
+ - g. Array index SIMD (PINSR, PEXTR, INSERTPS, EXTRACTPS)
  - h. Min, max, average (PMIN, PMAX, PAVG)
  - i. Square root and reciprocals (SQRTPD)
 
@@ -90,8 +90,7 @@
  - c. Create bit mask (PMOVMSKB)
  - d. Selective copy (PBLENDV)
  - e. Combine and extract (PALIGNR)
- - f. Shift with common shift (PSLL, PSRL, PSRA)
- - g. Bitfield extract and insert (INSERTQ, EXTRQ)
+ - g. Shift with individual shift (VPSLLV, VPSRLV, VPSRAV)
  
 # 14. SIMD advanced calculations
  - a. Sum of absolute difference (PSADBW)
@@ -114,7 +113,7 @@
 
 # Not included
  - x. Move selected values based on mask (MASKMOVx)
- - x. Down-convert with saturation (packusdw, packssdw)
+ - x. Down-convert with saturation (PACKUSDW, PACKSSDW)
  - x. Add and substract with saturation (PADDSB, PADDSW, PADDUSB, PADDUSW)
  - x. Pairwise add with saturation (PHADDSW, PMADDUBSW)
  - x. Packed Multiply High With Round and Scale (PMULHRSW)
@@ -124,5 +123,6 @@
  - x. SIMD test (PTEST)
  - x. Perm (VPERM)
  - x. Gather (VPGATHER)
-
+ - x. Shift with common shift (PSLL, PSRL, PSRA) -- Just a subset of that with individual shifts
+ - x. Bitfield extract and insert (INSERTQ, EXTRQ) -- AMD only?
 
