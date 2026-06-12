@@ -3343,8 +3343,29 @@ extern f
   mov word [rdi + %1], ax
 %endmacro
 
+; -----------------------------------------------------------------------------
+; MovAndDuplicate -- Copy data and duplicate even columns
 
+%macro MovAndDuplicate.mf64x2 2
+  movdqu xmm0, oword [rdi + %2]
+  movddup xmm0, xmm0
+  movdqu oword [rdi + %1], xmm0
+%endmacro
 
+%macro MovAndDuplicate.mf32x4 2
+  movdqu xmm0, oword [rdi + %2]
+  movsldup xmm0, xmm0
+  movdqu oword [rdi + %1], xmm0
+%endmacro
+
+; -----------------------------------------------------------------------------
+; MovAndDuplicateOdd -- Copy data and duplicate odd columns
+
+%macro MovAndDuplicateOdd.mf32x4 2
+  movdqu xmm0, oword [rdi + %2]
+  movshdup xmm0, xmm0
+  movdqu oword [rdi + %1], xmm0
+%endmacro
 
 
 

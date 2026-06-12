@@ -92,9 +92,11 @@
  - e. Combine and extract (PALIGNR)
  - f. Shift with individual shift (VPSLLV, VPSRLV, VPSRAV)
  - g. Gather scattered data into array (VPGATHER)
+ - h. Perm (VPERM) - TODO
+ - i. Copy and duplicate (MOVxxDUP)
  
 # 14. SIMD advanced calculations
- - a. Sum of absolute difference (PSADBW)
+ - a. Sum of absolute difference (PSADBW) and (MPSADBW) - TODO
  - b. Pairwise horizontal add and subtract (PHADD, PHSUB)
  - c. Pairwiser multiply-and-add (PMADDUB)
  - d. Alternating subtract and add (ADDSUBPS)
@@ -103,6 +105,11 @@
  - g. Multiply and store high part of result (PMULHW)
  - h. Approximate of reciprocals (RCPPS, RSQRT)
  - i. Multiply full (PMULUDQ)
+ - j. Packed Multiply High With Round and Scale (PMULHRSW) - TODO
+ - k. Packed Horizontal Word Minimum (PHMINPOSUW) - TODO
+ - l. Down-convert with saturation (PACKUSDW, PACKSSDW) - TODO
+ - m. Add and substract with saturation (PADDSB, PADDSW, PADDUSB, PADDUSW) - TODO
+ - n. Pairwise add with saturation (PHADDSW, PMADDUBSW) - TODO
  
 # 15. SIMD string instructions
 String instructions (PCMPxSTRy) -- 512 different operations
@@ -111,17 +118,9 @@ String instructions (PCMPxSTRy) -- 512 different operations
  - c. Match -- one-to-one match
  - d. Substring -- Where does the string occur?
 
-# Not included
+# Not included yet
  - x. Move selected values based on mask (MASKMOVx)
- - x. Down-convert with saturation (PACKUSDW, PACKSSDW)
- - x. Add and substract with saturation (PADDSB, PADDSW, PADDUSB, PADDUSW)
- - x. Pairwise add with saturation (PHADDSW, PMADDUBSW)
- - x. Packed Multiply High With Round and Scale (PMULHRSW)
- - x. Packed Horizontal Word Minimum (PHMINPOSUW)
- - x. Compute Multiple Packed Sums of Absolute Difference (MPSADBW)
- - x. Duplicate (MOVxxDUP)
  - x. SIMD test (PTEST)
- - x. Perm (VPERM)
  - x. Shift with common shift (PSLL, PSRL, PSRA) -- Just a subset of that with individual shifts
  - x. Bitfield extract and insert (INSERTQ, EXTRQ) -- AMD only?
 

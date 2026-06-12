@@ -476,6 +476,8 @@ public class Translator {
                 "              \"ConditionalNegate\": {\"args\": 2, \"typeDecider\": 0},\n" +
                 "              \"DotProduct\": {\"args\": 2, \"typeDecider\": 0},\n" +
                 "              \"Gather\": {\"args\": 3, \"typeDecider\": 2},\n" +
+                "              \"MovAndDuplicate\": {\"args\": 1, \"typeDecider\": 0},\n" +
+                "              \"MovAndDuplicateOdd\": {\"args\": 1, \"typeDecider\": 0},\n" +
 
                 "              \"StringSubset\": {\"args\": 3, \"typeDecider\": 0},\n" +
                 "              \"StringRangeCheck\": {\"args\": 3, \"typeDecider\": 0},\n" +
