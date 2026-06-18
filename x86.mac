@@ -795,6 +795,20 @@
   movdqu oword [rdi + %1], xmm0
 %endmacro
 
+%macro Mov.mu16x8 2
+	mov rax, 0
+  mov ax, word [rdi + %2]
+  movq xmm1, rax
+  ;vpbroadcastw xmm0, xmm1
+  
+  mov rax, 0x0100010001000100
+	movq xmm2, rax
+	punpcklqdq xmm2, xmm2       ; xmm2 now holds the full 128-bit shuffle mask
+	vpshufb xmm0, xmm1, xmm2
+  
+  movdqu oword [rdi + %1], xmm0
+%endmacro
+
 %macro Mov.iu32x4 2
   mov rax, %2
   movq xmm1, rax
@@ -1404,6 +1418,14 @@
   vmovdqu yword [rdi + %1], ymm0
 %endmacro
 
+%macro Idr.mmu16x8a 3
+  mov rax, qword [rdi + %2]
+  mov rdx, qword [rdi + %3]
+  shl rdx, 4
+  movdqu xmm0, oword [rax + rdx]
+  movdqu oword [rdi + %1], xmm0
+%endmacro
+
 %macro Idr.mmu16x16a 3
   mov rax, qword [rdi + %2]
   mov rdx, qword [rdi + %3]
@@ -1496,8 +1518,8 @@
   mov rax, qword [rdi + %2]
   mov rdx, qword [rdi + %3]
   shl rdx, 4
-  movq xmm0, [rax + rdx + %4 * 16]
-  movq [rdi + %1], xmm0
+  movdqu xmm0, [rax + rdx + %4 * 16]
+  movdqu [rdi + %1], xmm0
 %endmacro
 
 %macro Idro.miu16x16a 4
@@ -1703,6 +1725,14 @@
   mov rax, qword [rdi + %2]
   mov rdx, %3
   cmp rax, rdx
+  setne al
+  mov byte [rdi + %1], al
+%endmacro
+
+%macro Neq.miu32 3
+  mov eax, dword [rdi + %2]
+  mov edx, %3
+  cmp eax, edx
   setne al
   mov byte [rdi + %1], al
 %endmacro
@@ -2929,6 +2959,14 @@ extern free
   mov qword [rdi + %1], rax
 %endmacro
 
+%macro Lzcnt.mu16 2
+	mov rax, 0
+  mov ax, word [rdi + %2]
+  lzcnt rax, rax
+  sub rax, 48
+  mov qword [rdi + %1], rax
+%endmacro
+
 ; -----------------------------------------------------------------------------
 ; Tzcnt -- Trailing zero count
 
@@ -3052,6 +3090,14 @@ extern f
   vpmovmskb rax, ymm0
   mov dword [rdi + %1], eax
 %endmacro
+
+%macro ExtractMask.mu16x8 2
+  movdqu xmm1, oword [rdi + %2]
+  pmovmskb eax, xmm1
+  mov dword [rdi + %1], eax
+%endmacro
+
+
 
 ; -----------------------------------------------------------------------------
 ; Shuffle -- Shuffle data
@@ -3295,6 +3341,17 @@ extern f
 ; StringSubset -- Identify the occurance of characters in a string
 
 %macro StringSubset.mmu8x16 4
+  movdqu xmm0, oword [rdi + %3]
+  mov rax, qword [rdi + %4]
+  movdqu xmm1, oword [rdi + %2]
+  mov rdx, 16
+  pcmpestrm xmm0, xmm1, (0 << 6) + (0 << 2)
+  vpextrw eax, xmm0, 0
+  mov word [rdi + %1], ax
+%endmacro
+
+; TODO: How to deal with there really only being a byte version of this? b128?
+%macro StringSubset.mmu16x8 4
   movdqu xmm0, oword [rdi + %3]
   mov rax, qword [rdi + %4]
   movdqu xmm1, oword [rdi + %2]
