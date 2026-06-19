@@ -517,6 +517,15 @@
 ; -----------------------------------------------------------------------------
 ; DivMod
 
+%macro DivMod.mmu8 4
+  mov al, byte [rdi + %3]
+  mov ah, 0
+  mov cl, byte [rdi + %4]
+  div cl
+  mov byte [rdi + %1], al
+  mov byte [rdi + %2], ah
+%endmacro
+
 %macro DivMod.mmu64 4
   mov rax, qword [rdi + %3]
   mov rdx, 0
@@ -546,6 +555,14 @@
 
 ; -----------------------------------------------------------------------------
 ; Mod
+
+%macro Mod.mmu8 4
+  mov al, byte [rdi + %2]
+  mov ah, 0
+  mov cl, byte [rdi + %3]
+  div cl
+  mov byte [rdi + %1], ah
+%endmacro
 
 %macro Mod.mmu64 3
   mov rax, qword [rdi + %2]
