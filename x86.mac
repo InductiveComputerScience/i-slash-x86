@@ -1,7 +1,7 @@
 ; Integer
 ; Working registers -- rax, rcx, rdx
 ; Parameter: rdi
-; Unused: rbx, rsi, r8-r15
+; Unused: rbx, rsi, r8-r15: Caller saves: RAX, RCX, RDX, RSI, RDI, R8, R9, R10, R11
 
 ; SSE
 ; Working registers -- xmm0, xmm1, xmm2
@@ -806,13 +806,7 @@
 	mov rax, 0
   mov ax, word [rdi + %2]
   movq xmm1, rax
-  ;vpbroadcastw xmm0, xmm1
-  
-  mov rax, 0x0100010001000100
-	movq xmm2, rax
-	punpcklqdq xmm2, xmm2       ; xmm2 now holds the full 128-bit shuffle mask
-	vpshufb xmm0, xmm1, xmm2
-  
+  vpbroadcastw xmm0, xmm1
   movdqu oword [rdi + %1], xmm0
 %endmacro
 
