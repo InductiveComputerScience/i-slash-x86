@@ -1,7 +1,13 @@
 ; Integer
 ; Working registers -- rax, rcx, rdx
 ; Parameter: rdi
-; Unused: rbx, rsi, r8-r15: Caller saves: rax, rcx, rdx, rsi, rdi, r8-r11
+; Unused: rbx, rsi, r8-r15
+; Linux:
+:  - Caller saves: rax, rcx, rdx, rsi, rdi, r8-r11
+;  - Callee saves: rbx, rsp, rbp, r12-r15
+; Windows:
+:  - Caller saves: rax, rcx, rdx, r8-r11, xmm0–xmm5
+;  - Callee saves: rbx, rbp, rsi, rdi, r12-r15, xmm6–xmm15
 
 ; SSE
 ; Working registers -- xmm0, xmm1, xmm2
@@ -3111,8 +3117,6 @@ extern free
 
 ; -----------------------------------------------------------------------------
 ; ExtractMask -- Extract Byte Mask
-
-extern f
 
 %macro ExtractMask.mu8x16 2
   movdqu xmm1, oword [rdi + %2]
