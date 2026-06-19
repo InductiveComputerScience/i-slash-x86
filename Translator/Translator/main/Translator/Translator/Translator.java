@@ -243,10 +243,10 @@ public class Translator {
                 "                \"b256a\": {\"nasmType\": \"resq\", \"ctype\": \"__m256 *\"},\n" +
                 "                \"b512a\": {\"nasmType\": \"resq\", \"ctype\": \"__m512 *\"},\n" +
 
-                "                \"f16\": {\"nasmType\": \"resd\", \"ctype\": \"_Float16 *\"},\n" +
+                "                \"f16a\": {\"nasmType\": \"resd\", \"ctype\": \"_Float16 *\"},\n" +
                 "                \"f32a\": {\"nasmType\": \"resq\", \"ctype\": \"float *\"},\n" +
                 "                \"f64a\": {\"nasmType\": \"resq\", \"ctype\": \"double *\"},\n" +
-                "                \"f80\": {\"nasmType\": \"resq\", \"ctype\": \"long double *\"},\n" +
+                "                \"f80a\": {\"nasmType\": \"resq\", \"ctype\": \"long double *\"},\n" +
 
                 // SIMD
                 "                \"u8x8\": {\"nasmType\": \"resq\", \"ctype\": \"__m64\"},\n" +
