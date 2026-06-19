@@ -1,7 +1,7 @@
 ; Integer
 ; Working registers -- rax, rcx, rdx
 ; Parameter: rdi
-; Unused: rbx, rsi, r8-r15: Caller saves: RAX, RCX, RDX, RSI, RDI, R8, R9, R10, R11
+; Unused: rbx, rsi, r8-r15: Caller saves: rax, rcx, rdx, rsi, rdi, r8-r11
 
 ; SSE
 ; Working registers -- xmm0, xmm1, xmm2
@@ -672,6 +672,9 @@
   movdqu oword [rdi + %1], xmm0
 %endmacro
 
+
+
+
 ; -----------------------------------------------------------------------------
 ; Abs -- Absolute Value
 
@@ -698,6 +701,7 @@
   pabsq xmm0, xmm0
   movdqu oword [rdi + %1], xmm0
 %endmacro
+
 
 
 ; -----------------------------------------------------------------------------
@@ -868,64 +872,8 @@
   mov qword [rdi + %1], rax
 %endmacro
 
-; -----------------------------------------------------------------------------
-; Ptr -- Pointer read, same as x = &a in C.
 
-%macro Ptr.mu16a 2
-  mov rax, qword [rdi + %2]
-  mov qword [rdi + %1], rax
-%endmacro
 
-%macro Ptr.mu8a 2
-  mov rax, qword [rdi + %2]
-  mov qword [rdi + %1], rax
-%endmacro
-
-; -----------------------------------------------------------------------------
-; Ptw -- Pointer write
-
-%macro Ptw.mu16x16a 2
-  mov rax, qword [rdi + %2]
-  mov qword [rdi + %1], rax
-%endmacro
-
-%macro Ptw.mu16x32a 2
-  mov rax, qword [rdi + %2]
-  mov qword [rdi + %1], rax
-%endmacro
-
-%macro Ptw.mu64a 2
-  mov rax, qword [rdi + %2]
-  mov qword [rdi + %1], rax
-%endmacro
-
-; -----------------------------------------------------------------------------
-; Ptm -- Pointer Move
-
-%macro Ptm.mu8x16a 2
-  mov rax, qword [rdi + %2]
-  mov qword [rdi + %1], rax
-%endmacro
-
-%macro Ptm.mu16x8a 2
-  mov rax, qword [rdi + %2]
-  mov qword [rdi + %1], rax
-%endmacro
-
-%macro Ptm.mu16x16a 2
-  mov rax, qword [rdi + %2]
-  mov qword [rdi + %1], rax
-%endmacro
-
-%macro Ptm.mu64 2
-  mov rax, qword [rdi + %2]
-  mov qword [rdi + %1], rax
-%endmacro
-
-%macro Ptm.mu64a 2
-  mov rax, qword [rdi + %2]
-  mov qword [rdi + %1], rax
-%endmacro
 
 ; -----------------------------------------------------------------------------
 ; Loop
@@ -2658,14 +2606,100 @@ extern free
 ; Reinterpret as a different type
 ; Xu32x4, Xb128
 
-%macro Xu32x4.m 2
-  movdqu xmm0, oword [rdi + %2]
-  movdqu oword [rdi + %1], xmm0
+
+; Pointer to integer
+%macro Xu64.m 2
+  mov rax, qword [rdi + %2]
+  mov qword [rdi + %1], rax
+%endmacro
+
+
+; Between array types
+%macro Xu8a.m 2
+  mov rax, qword [rdi + %2]
+  mov qword [rdi + %1], rax
+%endmacro
+
+%macro Xu16a.m 2
+  mov rax, qword [rdi + %2]
+  mov qword [rdi + %1], rax
+%endmacro
+
+%macro Xu64a.m 2
+  mov rax, qword [rdi + %2]
+  mov qword [rdi + %1], rax
+%endmacro
+
+
+; Between bit-array types
+%macro Xb8.m 2
+  mov al, byte [rdi + %2]
+  mov byte [rdi + %1], al
+%endmacro
+
+%macro Xb16.m 2
+  mov ax, word [rdi + %2]
+  mov word [rdi + %1], ax
+%endmacro
+
+%macro Xb32.m 2
+  mov eax, dword [rdi + %2]
+  mov dword [rdi + %1], eax
+%endmacro
+
+%macro Xb64.m 2
+  mov rax, qword [rdi + %2]
+  mov qword [rdi + %1], rax
 %endmacro
 
 %macro Xb128.m 2
   movdqu xmm0, oword [rdi + %2]
   movdqu oword [rdi + %1], xmm0
+%endmacro
+
+%macro Xb256.m 2
+  vmovdqu ymm0, yword [rdi + %2]
+  vmovdqu yword [rdi + %1], ymm0
+%endmacro
+
+
+
+; SIMD-types
+%macro Xu32x4.m 2
+  movdqu xmm0, oword [rdi + %2]
+  movdqu oword [rdi + %1], xmm0
+%endmacro
+
+
+; SIMD array types
+%macro Xu16x8a.m 2
+  mov rax, qword [rdi + %2]
+  mov qword [rdi + %1], rax
+%endmacro
+
+%macro Xu8x16a.m 2
+  mov rax, qword [rdi + %2]
+  mov qword [rdi + %1], rax
+%endmacro
+
+%macro Xu16x8a.m 2
+  mov rax, qword [rdi + %2]
+  mov qword [rdi + %1], rax
+%endmacro
+
+%macro Xu16x16a.m 2
+  mov rax, qword [rdi + %2]
+  mov qword [rdi + %1], rax
+%endmacro
+
+%macro Xu16x16a.m 2
+  mov rax, qword [rdi + %2]
+  mov qword [rdi + %1], rax
+%endmacro
+
+%macro Xu16x32a.m 2
+  mov rax, qword [rdi + %2]
+  mov qword [rdi + %1], rax
 %endmacro
 
 ; -----------------------------------------------------------------------------

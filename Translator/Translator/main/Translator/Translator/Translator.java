@@ -350,9 +350,6 @@ public class Translator {
 
         json = ("{\n" +
                 "              \"Mov\": {\"args\": 1, \"typeDecider\": 1},\n" +
-                "              \"Ptr\": {\"args\": 1, \"typeDecider\": 2},\n" +
-                "              \"Ptw\": {\"args\": 1, \"typeDecider\": 1},\n" +
-                "              \"Ptm\": {\"args\": 1, \"typeDecider\": 1},\n" +
                 "\n" +
                 "              \"Add\": {\"args\": 2, \"typeDecider\": 1},\n" +
                 "              \"Sub\": {\"args\": 2, \"typeDecider\": 1},\n" +
@@ -427,7 +424,15 @@ public class Translator {
                 "              \"f32x8tof16x8\": {\"args\": 2, \"typeDecider\": 0, \"noTypePostfix\": true},\n" +
                 "              \"f32x4tof64x4\": {\"args\": 2, \"typeDecider\": 0, \"noTypePostfix\": true},\n" +
                 "              \"Xu32x4\": {\"args\": 1, \"typeDecider\": 0, \"noTypePostfix\": true},\n" +
+
+                "              \"Xb8\": {\"args\": 1, \"typeDecider\": 0, \"noTypePostfix\": true},\n" +
+                "              \"Xb16\": {\"args\": 1, \"typeDecider\": 0, \"noTypePostfix\": true},\n" +
+                "              \"Xb32\": {\"args\": 1, \"typeDecider\": 0, \"noTypePostfix\": true},\n" +
+                "              \"Xb64\": {\"args\": 1, \"typeDecider\": 0, \"noTypePostfix\": true},\n" +
                 "              \"Xb128\": {\"args\": 1, \"typeDecider\": 0, \"noTypePostfix\": true},\n" +
+                "              \"Xb256\": {\"args\": 1, \"typeDecider\": 0, \"noTypePostfix\": true},\n" +
+
+                "              \"Xu16x8a\": {\"args\": 1, \"typeDecider\": 0, \"noTypePostfix\": true},\n" +
                 "              \"u32tou16s\": {\"args\": 1, \"typeDecider\": 0, \"noTypePostfix\": true},\n" +
 
                 "              \"Cmov\": {\"args\": 2, \"typeDecider\": 1},\n" +
