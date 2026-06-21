@@ -17,12 +17,13 @@
 ; Working registers -- ymm0, ymm1, ymm2, ymm3
 ; Unused: ymm4-ymm15
 
-; AVX2
+; AVX-512
 ; Working registers -- zmm0, zmm1, zmm2, zmm3
 ; Unused: zmm4-zmm15
 
 ; -----------------------------------------------------------------------------
 ; Add
+; x = a + b. x, a, b of the same type.
 
 %macro Add.mmu8 3
   mov al, byte [rdi + %2]
@@ -165,6 +166,7 @@
 
 ; -----------------------------------------------------------------------------
 ; Sub
+; x = a - b. a, b, c of the same type.
 
 %macro Sub.mmu8 3
   mov al, byte [rdi + %2]
@@ -270,6 +272,7 @@
 
 ; -----------------------------------------------------------------------------
 ; Mul
+; x = a * b. a, b, c of the same type.
 
 %macro Mul.mmu8 3
   mov al, byte [rdi + %2]
@@ -376,6 +379,7 @@
 
 ; -----------------------------------------------------------------------------
 ; MulFull -- Multiply two x-bit numbers and store the full 2x-bit result
+; x = a op b. a and b of x-bit. x of 2x-bit.
 
 %macro MulFull.mmu8 3
   mov al, byte [rdi + %2]
@@ -410,6 +414,7 @@
 
 ; -----------------------------------------------------------------------------
 ; Div
+; x = a / b. x, a and b of the same type.
 
 %macro Div.mmu8 3
   mov al, byte [rdi + %2]
@@ -505,6 +510,7 @@
 
 ; -----------------------------------------------------------------------------
 ; DivFull -- Divide a 2x-bit number by an x-bit number
+; x = a op b. a of 2x-bit, b and x of x-bit.
 
 %macro DivFull.mmu8 3
   mov ax, word [rdi + %2]
@@ -516,6 +522,7 @@
 
 ; -----------------------------------------------------------------------------
 ; DivMod
+; x, y = a / b. x, y, a, b of the same type.
 
 %macro DivMod.mmu8 4
   mov al, byte [rdi + %3]
@@ -555,6 +562,7 @@
 
 ; -----------------------------------------------------------------------------
 ; Mod
+; x = a % b. x, a, b of the same type.
 
 %macro Mod.mmu8 4
   mov al, byte [rdi + %2]
@@ -574,6 +582,7 @@
 
 ; -----------------------------------------------------------------------------
 ; MulDiv
+; x = a * b / c. x, a, b, c of the same type.
 
 %macro MulDiv.mmu64 4
   mov rax, qword [rdi + %2]
@@ -595,6 +604,7 @@
 
 ; -----------------------------------------------------------------------------
 ; AddSaturated -- Addition Saturated
+; x = a +| b. x, a, b of the same type.
 
 %macro AddSaturated.mms16 3
   mov rax, 0
@@ -617,6 +627,7 @@
 
 ; -----------------------------------------------------------------------------
 ; SubSaturated -- Subtraction Saturated
+; x = a -| b. x, a, b of the same type.
 
 %macro SubSaturated.mms16 3
   mov rax, 0
@@ -655,6 +666,7 @@
 
 ; -----------------------------------------------------------------------------
 ; Round -- Round number to nearest integer
+; x = round(a). x, a of the same type.
 
 %macro Round.mf32x4 2
   movdqu xmm0, oword [rdi + %2]
@@ -670,6 +682,7 @@
 
 ; -----------------------------------------------------------------------------
 ; Floor -- Round down to nearest integer
+; x = floor(a). x, a of the same type.
 
 %macro Floor.mf32x4 2
   movdqu xmm0, oword [rdi + %2]
@@ -679,6 +692,7 @@
 
 ; -----------------------------------------------------------------------------
 ; Ceil -- Round up to nearest integer
+; x = ceil(a). x, a of the same type.
 
 %macro Ceil.mf32x4 2
   movdqu xmm0, oword [rdi + %2]
@@ -688,6 +702,7 @@
 
 ; -----------------------------------------------------------------------------
 ; Truncate -- Round towards zero
+; x = truncate(a). x, a of the same type.
 
 %macro Truncate.mf32x4 2
   movdqu xmm0, oword [rdi + %2]
@@ -700,6 +715,7 @@
 
 ; -----------------------------------------------------------------------------
 ; Abs -- Absolute Value
+; x = |a|. x, a of the same type.
 
 %macro Abs.mu8x16 2
   movdqu xmm0, oword [rdi + %2]
@@ -729,6 +745,7 @@
 
 ; -----------------------------------------------------------------------------
 ; Mov
+; x = a. x, a of the same type.
 
 %macro Mov.mb1 2
   mov al, byte [rdi + %2]
@@ -900,6 +917,7 @@
 
 ; -----------------------------------------------------------------------------
 ; Loop
+; No parameters
 
 %macro Loop 1
   %1:
@@ -907,6 +925,7 @@
 
 ; -----------------------------------------------------------------------------
 ; Len
+; x = len(a). x must be a number. a must be an array.
 
 %macro Len 2
   mov rax, qword [rdi + %2]
@@ -916,6 +935,7 @@
 
 ; -----------------------------------------------------------------------------
 ; Lt
+; x = a < b. x is a boolean. a and b are of the same type.
 
 %macro Lt.mmu16 3
   mov ax, word [rdi + %2]
@@ -1029,6 +1049,7 @@
 
 ; -----------------------------------------------------------------------------
 ; Lte
+; x = a <= b. x is a boolean. a and b are of the same type.
 
 %macro Lte.mmu8x32 3
   vmovdqu ymm0, yword [rdi + %2]
@@ -1067,6 +1088,7 @@
 
 ; -----------------------------------------------------------------------------
 ; Gt
+; x = a > b. x is a boolean. a and b are of the same type.
 
 %macro Gt.miu8x32 3
   vmovdqu ymm0, yword [rdi + %2]
@@ -1118,6 +1140,7 @@
 
 ; -----------------------------------------------------------------------------
 ; Gte
+; x = a >= b. x is a boolean. a and b are of the same type.
 
 %macro Gte.mmu8x32 3
   vmovdqu ymm0, yword [rdi + %2]
@@ -1164,6 +1187,7 @@
 
 ; -----------------------------------------------------------------------------
 ; Not
+; x = !a. x and a are booleans.
 
 %macro Not.mb1 2
   mov al, byte [rdi + %2]
@@ -1195,6 +1219,7 @@
 
 ; -----------------------------------------------------------------------------
 ; And
+; x = a & b. x, a, b are booleans.
 
 %macro And.mmb1 3
   mov al, byte [rdi + %2]
@@ -1290,7 +1315,8 @@
 %endmacro
 
 ; -----------------------------------------------------------------------------
-; Andnot - y = !a & b
+; Andnot
+; x = !a & b. x, a, b are booleans.
 
 %macro Andnot.mmb64 3
   mov rax, qword [rdi + %2]
@@ -1308,6 +1334,7 @@
 
 ; -----------------------------------------------------------------------------
 ; If
+; If a. a is a boolean.
 
 %macro If.mb1 2
   mov al, 0
@@ -1334,6 +1361,7 @@
 
 ; -----------------------------------------------------------------------------
 ; Endloop
+; No parameters
 
 %macro EndLoop 2
   jmp %1
@@ -1342,6 +1370,7 @@
 
 ; -----------------------------------------------------------------------------
 ; Endb
+; No parameters
 
 %macro Endb 1
   %1:
@@ -1349,6 +1378,7 @@
 
 ; -----------------------------------------------------------------------------
 ; Idr
+; x = a[b]. b must be a number. a must be an array. x must be of the same type as the array's elements.
 
 %macro Idr.mmu8a 3
   mov rax, qword [rdi + %2]
@@ -1485,6 +1515,7 @@
 
 ; -----------------------------------------------------------------------------
 ; Idro -- Index Read Array with offset
+; x = a[b + c]. b and c must be numbers. a must be an array. x must be of the same type as the array's elements.
 
 %macro Idro.miu16x8a 4
   mov rax, qword [rdi + %2]
@@ -1504,6 +1535,7 @@
 
 ; -----------------------------------------------------------------------------
 ; Eq -- Equal
+; x = a = b. x is a boolean. a and b are the same types.
 
 %macro Eq.mmu8 3
   mov al, byte [rdi + %2]
@@ -1676,6 +1708,7 @@
 
 ; -----------------------------------------------------------------------------
 ; Neq -- Not equal
+; x = a != b. x is a boolean. a and b are the same types.
 
 %macro Neq.mmu16 3
   mov ax, word [rdi + %2]
@@ -1746,6 +1779,7 @@
 
 ; -----------------------------------------------------------------------------
 ; Acw -- Structure write element
+; x.y = a. x must be a structure type. a and y must be of the same types.
 
 %macro Acw.mmu16 3
   mov ax, word [rdi + %3]
@@ -1773,6 +1807,7 @@
 
 ; -----------------------------------------------------------------------------
 ; Acr -- Structure read element
+; x = a.b. a must be a structure type. x and b must be of the same types.
 
 %macro Acr.mmu64 3
   mov rax, [rdi + %2]
@@ -1800,6 +1835,7 @@
 
 ; -----------------------------------------------------------------------------
 ; Inc -- Increment by 1
+; x++. x must be a number type.
 
 %macro Inc.mu64 1
   inc qword [rdi + %1]
@@ -1815,6 +1851,7 @@
 
 ; -----------------------------------------------------------------------------
 ; Dec - Decrement by 1
+; x--. x must be a number type.
 
 %macro Dec.mu64 1
   dec qword [rdi + %1]
@@ -1830,6 +1867,7 @@
 
 ; -----------------------------------------------------------------------------
 ; Shl -- Shift left
+; x = a << b. x and a must be bit fields. b must be a number type
 
 %macro Shl.mib32 3
   mov eax, dword [rdi + %2]
@@ -1867,6 +1905,7 @@
 
 ; -----------------------------------------------------------------------------
 ; Shr - Shift right
+; x = a >> b. x and a must be bit fields. b must be a number type
 
 %macro Shr.miu32 3
   mov eax, dword [rdi + %2]
@@ -1895,6 +1934,7 @@
 
 ; -----------------------------------------------------------------------------
 ; Sar - Shift arithmetic right
+; x = a op b. x and a must be bit fields. b must be a number type
 
 %macro Shr.mis32 3
   mov eax, dword [rdi + %2]
@@ -1911,6 +1951,7 @@
 
 ; -----------------------------------------------------------------------------
 ; Or
+; x = a | b. x, a, b must be the same bitfield types.
 
 %macro Or.mmb32 3
   mov eax, dword [rdi + %2]
@@ -1958,6 +1999,7 @@
 
 ; -----------------------------------------------------------------------------
 ; Xor
+; x = a ^ b. x, a, b must be the same bitfield types.
 
 %macro Xor.mmb32 3
   mov eax, dword [rdi + %2]
@@ -2005,6 +2047,7 @@
 
 ; -----------------------------------------------------------------------------
 ; Call
+; f(x). x must be a structure.
 
 %macro Call 2
   push rdi
@@ -2015,6 +2058,7 @@
 
 ; -----------------------------------------------------------------------------
 ; Else
+; No parameters
 
 %macro Else 2
   jmp %2
@@ -2023,6 +2067,7 @@
 
 ; -----------------------------------------------------------------------------
 ; New
+; x = New(S). The type of x must be S.
 
 extern malloc
 
@@ -2038,6 +2083,7 @@ extern malloc
 
 ; -----------------------------------------------------------------------------
 ; Del
+; Del(x).
 
 extern free
 
@@ -2052,6 +2098,7 @@ extern free
 
 ; -----------------------------------------------------------------------------
 ; Idw
+; x = a[b]. b must be a number type. a must be array. x must be the same as a's element types.
 
 %macro Idw.iiu16a 3
   mov rcx, %2
@@ -2234,6 +2281,7 @@ extern free
 
 ; -----------------------------------------------------------------------------
 ; Rdrand
+; x = Rdrand(). x must be a number type
 
 %macro Rdrand.mu64 2
   rdrand rax
@@ -2243,6 +2291,7 @@ extern free
 
 ; -----------------------------------------------------------------------------
 ; Set
+; x = SetIf(a). TODO: How does this work?
 
 %macro Set.mu64 2
   mov al, byte [rdi + %2]
@@ -2262,6 +2311,8 @@ extern free
 
 ; -----------------------------------------------------------------------------
 ; Movzx
+; x = a. x and a must be the same unsigned number types.
+; TODO: Can this be a convesion instruction instead?
 
 %macro Movzx.mu8 2
   mov al, byte [rdi + %2]
@@ -2284,6 +2335,7 @@ extern free
 ; -----------------------------------------------------------------------------
 ; Usigned integer to larger unsigned types
 ; u8tou16, u16tou32, u32tou64
+; x = (AtoB)a. a must be of type A, x must be of type B.
 
 %macro u8tou16.m 2
   mov al, byte [rdi + %2]
@@ -2312,6 +2364,7 @@ extern free
 ; -----------------------------------------------------------------------------
 ; Usigned integer to larger signed types
 ; u8tos16, u16tos32, u32tos64
+; x = (AtoB)a. a must be of type A, x must be of type B.
 
 %macro u8tos16.m 2
   mov al, byte [rdi + %2]
@@ -2335,6 +2388,7 @@ extern free
 ; -----------------------------------------------------------------------------
 ; Signed integer to larger signed types
 ; s8tos16, s16tos32, s32tos64
+; x = (AtoB)a. a must be of type A, x must be of type B.
 
 %macro s8tos16.m 2
   mov al, byte [rdi + %2]
@@ -2357,6 +2411,7 @@ extern free
 ; -----------------------------------------------------------------------------
 ; Integer to floats
 ; u16tof32, s16tof32, u32tof64, s32tof64
+; x = (AtoB)a. a must be of type A, x must be of type B.
 
 %macro u16tof32.m 2
   mov ax, word [rdi + %2]
@@ -2388,6 +2443,7 @@ extern free
 ; -----------------------------------------------------------------------------
 ; Floats to larger types
 ; f32tof64
+; x = (AtoB)a. a must be of type A, x must be of type B.
 
 %macro f32tof64.m 2
   movss xmm0, dword [rdi + %2]
@@ -2398,6 +2454,7 @@ extern free
 ; -----------------------------------------------------------------------------
 ; Usigned integer to smaller unsigned types
 ; u16tou8, u32tou16, u64tou32
+; x = (AtoB)a. a must be of type A, x must be of type B.
 
 %macro u16tou8.m 2
   mov ax, word [rdi + %2]
@@ -2417,6 +2474,7 @@ extern free
 ; -----------------------------------------------------------------------------
 ; Usigned integer to smaller unsigned types
 ; s16tou8, s32tou16, s64tou32
+; x = (AtoB)a. a must be of type A, x must be of type B.
 
 %macro s16tou8.m 2
   mov ax, word [rdi + %2]
@@ -2437,6 +2495,7 @@ extern free
 ; -----------------------------------------------------------------------------
 ; Signed integer to smaller signed types
 ; s16tos8, s32tos16, s64tos32
+; x = (AtoB)a. a must be of type A, x must be of type B.
 
 %macro s16tos8.m 2
   mov ax, word [rdi + %2]
@@ -2456,6 +2515,7 @@ extern free
 ; -----------------------------------------------------------------------------
 ; floats to integers
 ; f32tou16, f32tos16, f64tou32, f64tos32
+; x = (AtoB)a. a must be of type A, x must be of type B.
 
 %macro f32tou16.m 2
   movss xmm0, [rdi + %2]
@@ -2484,6 +2544,7 @@ extern free
 ; -----------------------------------------------------------------------------
 ; Floats to smaller floats
 ; f64tof32
+; x = (AtoB)a. a must be of type A, x must be of type B.
 
 %macro f64tof32.m 2
   movsd xmm0, qword [rdi + %2]
@@ -2494,6 +2555,7 @@ extern free
 ; -----------------------------------------------------------------------------
 ; Packed integers to larger types
 ; u8x8tou16x8, u8x4tou32x4, u8x2tou64x2, u16x4tou32x4, u32x2tou64x2
+; x = (AtoB)a. a must be of type A, x must be of type B.
 
 %macro u8x8tou16x8.m 2
   mov rax, qword [rdi + %2]
@@ -2533,6 +2595,7 @@ extern free
 ; -----------------------------------------------------------------------------
 ; Packed signed integers to larger types
 ; s8x8tos16x8, s8x4tos32x4
+; x = (AtoB)a. a must be of type A, x must be of type B.
 
 %macro s8x8tos16x8.m 2
   movq xmm0, qword [rdi + %2]
@@ -2551,6 +2614,7 @@ extern free
 ; -----------------------------------------------------------------------------
 ; Packed integers to smaller types
 ; s64x2tos32x2
+; x = (AtoB)a. a must be of type A, x must be of type B.
 
 %macro s64x2tos32x2.m 2
   movq xmm0, qword [rdi + %2]
@@ -2561,6 +2625,7 @@ extern free
 ; -----------------------------------------------------------------------------
 ; Packed floats to smaller types
 ; f64x2tof32x2, f32x4tof16x2
+; x = (AtoB)a. a must be of type A, x must be of type B.
 
 %macro f64x2tof32x2.m 2
   movdqu xmm0, oword [rdi + %2]
@@ -2577,6 +2642,7 @@ extern free
 ; -----------------------------------------------------------------------------
 ; Two packed floats downconverted and combined
 ; f64x4tof32x4, f32x8tof16x8
+; x = (AtoB)a. a must be of type A, x must be of type B.
 
 %macro f64x4tof32x4.mm 3
   movdqu xmm0, oword [rdi + %2]
@@ -2601,6 +2667,7 @@ extern free
 ; -----------------------------------------------------------------------------
 ; Packed floating point numbers up-converted and stored in two vars
 ; f32x4tof64x4
+; x = (AtoB)a. a must be of type A, x must be of type B.
 
 ; TODO: Can we use vinsertf128?
 %macro f32x4tof64x4.mm 3
@@ -2617,6 +2684,7 @@ extern free
 ; -----------------------------------------------------------------------------
 ; Packed ints to smaller types
 ; u64x2tou32x2, u32x4tou16x2
+; x = (AtoB)a. a must be of type A, x must be of type B.
 
 ; TODO: Find correct instructions
 ;%macro f64x2tof32x2.m 2
@@ -2628,7 +2696,7 @@ extern free
 ; -----------------------------------------------------------------------------
 ; Reinterpret as a different type
 ; Xu32x4, Xb128
-
+; x = (B)a. x must be target type. TODO: What must a be?
 
 ; Pointer to integer
 %macro Xu64.m 2
@@ -2728,6 +2796,7 @@ extern free
 ; -----------------------------------------------------------------------------
 ; Signed integer to smaller signed type with saturation
 ; u32tou16s
+; x = (AtoB)a. a must be of type A, x must be of type B.
 
 %macro u32tou16s.m 2
   mov rax, 0
@@ -2750,6 +2819,7 @@ extern free
 
 ; -----------------------------------------------------------------------------
 ; Ror
+; x = a op b. x, a must be bitfield types. b must be a number.
 
 %macro Ror.mib32 3
   mov eax, dword [rdi + %2]
@@ -2765,6 +2835,7 @@ extern free
 
 ; -----------------------------------------------------------------------------
 ; Rol
+; x = a op b. x, a must be bitfield types. b must be a number.
 
 %macro Rol.mib32 3
   mov eax, dword [rdi + %2]
@@ -2780,6 +2851,7 @@ extern free
 
 ; -----------------------------------------------------------------------------
 ; Cmovcc
+; x = a ? b : x. x, b must be the same types. a must be a boolean.
 
 %macro Cmov.mms64 3
   mov rdx, qword [rdi + %2]
@@ -2800,6 +2872,7 @@ extern free
 
 ; -----------------------------------------------------------------------------
 ; Xchg
+; a op b. a and b must be the same types.
 
 %macro Xchg.ms64 2
   mov rax, qword [rdi + %2]
@@ -2809,6 +2882,7 @@ extern free
 
 ; -----------------------------------------------------------------------------
 ; Xadd
+; TODO: What is this?
 
 %macro Xadd.ms64 2
   mov rax, qword [rdi + %2]
@@ -2818,6 +2892,7 @@ extern free
 
 ; -----------------------------------------------------------------------------
 ; Bswap
+; x = bswap(a). a and x must be bitfields.
 
 %macro Bswap.mb64 2
   mov rax, qword [rdi + %2]
@@ -2839,6 +2914,7 @@ extern free
 
 ; -----------------------------------------------------------------------------
 ; Bsf -- Bit scan forward, find first set bit rightwards
+; x = Bsf(a). a must be a bitfield. x is a number.
 
 %macro Bsf.mb64 2
   mov rax, qword [rdi + %2]
@@ -2848,6 +2924,7 @@ extern free
 
 ; -----------------------------------------------------------------------------
 ; Bsr -- Bit scan reverse, find first set bit leftwards
+; x = Bsr(a). a must be a bitfield. x is a number.
 
 %macro Bsr.mb64 2
   mov rax, qword [rdi + %2]
@@ -2857,6 +2934,7 @@ extern free
 
 ; -----------------------------------------------------------------------------
 ; Bt -- Bit test
+; x = Bt(a). a must be a bitfield. x is a boolean.
 
 %macro Bt.miu64 3
   mov rax, qword [rdi + %2]
@@ -2868,6 +2946,7 @@ extern free
 
 ; -----------------------------------------------------------------------------
 ; CmpXchg -- Compare and Exchange
+; TODO: What is this?
 
 %macro CmpXchg.mms64 4
   mov rax, qword [rdi + %2]
@@ -2882,6 +2961,7 @@ extern free
 
 ; -----------------------------------------------------------------------------
 ; Crc32 -- Cyclic redundancy check
+; TODO: What is this?
 
 %macro Crc32.mu32 2
   mov eax, dword [rdi + %1]
@@ -2892,6 +2972,7 @@ extern free
 
 ; -----------------------------------------------------------------------------
 ; Movs -- Move String, Block copy
+
 
 %macro Movs.mmu8a 3
   cld
