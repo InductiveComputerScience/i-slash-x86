@@ -1760,8 +1760,8 @@
 %endmacro
 
 %macro Neq.mmb512 3
-  vmovdqu64 zmm0, zword [rdi + %2]
-  vmovdqu64 zmm1, zword [rdi + %3]
+  vmovdqu zmm0, zword [rdi + %2]
+  vmovdqu zmm1, zword [rdi + %3]
   vpxorq zmm2, zmm0, zmm1
   vptest zmm2, zmm2
   setnz al
@@ -2972,7 +2972,7 @@ extern free
 
 ; -----------------------------------------------------------------------------
 ; Movs -- Move String, Block copy
-
+; x = Movs(a, len). a and x must be arrays, len must be a number.
 
 %macro Movs.mmu8a 3
   cld
@@ -3016,6 +3016,7 @@ extern free
 
 ; -----------------------------------------------------------------------------
 ; Cmps -- Compare strings
+; x = Cmps(a, b, len). a, b must be arrays, len must be a number, x must be a boolean.
 
 %macro Cmps.mmu8a 4
   cld
@@ -3063,6 +3064,7 @@ extern free
 
 ; -----------------------------------------------------------------------------
 ; Scas -- Block scan, find index of byte %3 in array %2
+; x = Scas(a, c, len). a must be an array, c a character, len must be a number, x must be a number.
 
 %macro Scas.mmu8a 4
   cld
@@ -3082,6 +3084,7 @@ extern free
 
 ; -----------------------------------------------------------------------------
 ; Popcnt -- Population count -- count ones set
+; x = Popcnt(a). a is a bitfield, x a number.
 
 %macro Popcnt.mb64 2
   mov rax, qword [rdi + %2]
@@ -3091,6 +3094,7 @@ extern free
 
 ; -----------------------------------------------------------------------------
 ; Lzcnt -- Leading zero count
+; x = Lzcnt(a). a is a bitfield, x a number.
 
 %macro Lzcnt.mb64 2
   mov rax, qword [rdi + %2]
@@ -3108,6 +3112,7 @@ extern free
 
 ; -----------------------------------------------------------------------------
 ; Tzcnt -- Trailing zero count
+; x = Tzcnt(a). a is a bitfield, x a number.
 
 %macro Tzcnt.mb64 2
   mov rax, qword [rdi + %2]
@@ -3117,6 +3122,7 @@ extern free
 
 ; -----------------------------------------------------------------------------
 ; Rdtsc -- Read time stamp counter
+; x = Rdtsc(). x is a number.
 
 %macro Rdtsc.mu64 1
   rdtsc
@@ -3127,6 +3133,7 @@ extern free
 
 ; -----------------------------------------------------------------------------
 ; Rdpmc -- Read performance counter
+; x = Rdpmc(a). x, a is a number.
 
 %macro Rdpmc.mu64 2
   mov rcx, qword [rdi + %2]
@@ -3138,6 +3145,7 @@ extern free
 
 ; -----------------------------------------------------------------------------
 ; Nop -- No operation
+; No parameters
 
 %macro Nop 0
   nop
@@ -3145,6 +3153,7 @@ extern free
 
 ; -----------------------------------------------------------------------------
 ; Bextr -- Bitfield extract -- dest = bits a length b from src
+; x = Bextr(a, b, c). x, a are bitfields. b and c are numbers.
 
 %macro Bextr.mmb64 4
   mov rax, 0
@@ -3157,6 +3166,7 @@ extern free
 
 ; -----------------------------------------------------------------------------
 ; Blsi -- Extract Lowest Set Isolated Bit
+; x = Blsi(a). a are bitfields. x is a number.
 
 %macro Blsi.mb64 2
   mov rax, qword [rdi + %2]
@@ -3166,6 +3176,7 @@ extern free
 
 ; -----------------------------------------------------------------------------
 ; Blsmsk -- Generate bitmask
+; x = Blsmsk(a). x, a are bitfields.
 
 %macro Blsmsk.mb64 2
   mov rax, qword [rdi + %2]
@@ -3175,6 +3186,7 @@ extern free
 
 ; -----------------------------------------------------------------------------
 ; Blsr -- Clear lowest bit set
+; x = Blsr(a). x, a are bitfields.
 
 %macro Blsr.mb64 2
   mov rax, qword [rdi + %2]
@@ -3184,6 +3196,7 @@ extern free
 
 ; -----------------------------------------------------------------------------
 ; Bzhi -- Clear high order bits
+; x = Bzhi(a). x, a are bitfields.
 
 %macro Bzhi.mmb64 3
   mov rax, 0
@@ -3195,6 +3208,7 @@ extern free
 
 ; -----------------------------------------------------------------------------
 ; Pdep -- Parallel bit deposit
+; x = Pdep(a, b). x, a, b are bitfields.
 
 %macro Pdep.mmb64 3
   mov rdx, qword [rdi + %2]
@@ -3205,6 +3219,7 @@ extern free
 
 ; -----------------------------------------------------------------------------
 ; Pext -- Parallel bit extract
+; x = Pext(a, b). x, a, b are bitfields.
 
 %macro Pext.mmb64 3
   mov rdx, qword [rdi + %2]
@@ -3215,6 +3230,7 @@ extern free
 
 ; -----------------------------------------------------------------------------
 ; ExtractMask -- Extract Byte Mask
+; x = ExtractMask(a). a is an 8xX-bit, x is X-bit
 
 %macro ExtractMask.mu8x16 2
   movdqu xmm1, oword [rdi + %2]
@@ -3228,6 +3244,7 @@ extern free
   mov dword [rdi + %1], eax
 %endmacro
 
+; TODO: Is this possible?
 %macro ExtractMask.mu16x8 2
   movdqu xmm1, oword [rdi + %2]
   pmovmskb eax, xmm1
@@ -3238,6 +3255,7 @@ extern free
 
 ; -----------------------------------------------------------------------------
 ; Shuffle -- Shuffle data
+; x = Shuffle(a, b). a, b, x are the same packed number type.
 
 %macro Shuffle.mmu8x16 3
   movdqu xmm0, oword [rdi + %1]
@@ -3256,6 +3274,7 @@ extern free
 
 ; -----------------------------------------------------------------------------
 ; MulStoreHigh -- Multiply Store high
+; x = MulStoreHigh(a, b). a, b, x are the same number type.
 
 ; TODO: This one is not for u32
 %macro MulStoreHigh.mmu32x4 3
@@ -3274,6 +3293,7 @@ extern free
 
 ; -----------------------------------------------------------------------------
 ; SelectiveCopy -- Conditionally copy from one SIMD register to another
+; x = SelectiveCopy(a, b, c). a, b, c, x are the same packed number types.
 
 %macro SelectiveCopy.mmu8x16 4
   movdqu xmm1, oword [rdi + %2]
@@ -3293,6 +3313,7 @@ extern free
 
 ; -----------------------------------------------------------------------------
 ; MultiplyAndAdd -- Fused Multiply and add
+; x = MultiplyAndAdd(a, b, c). a, b, c, x are the same packed number types.
 
 %macro MultiplyAndAdd.mmf32x4 4
   movdqu xmm0, oword [rdi + %2]
@@ -3304,6 +3325,7 @@ extern free
 
 ; -----------------------------------------------------------------------------
 ; Avg -- Average of two numbers
+; x = Avg(a, b). a, b, x are the same number types.
 
 %macro Avg.mmu8x16 3
   movdqu xmm0, oword [rdi + %2]
@@ -3314,6 +3336,7 @@ extern free
 
 ; -----------------------------------------------------------------------------
 ; Min -- Minimum of two numbers
+; x = Min(a, b). a, b, x are the same number types.
 
 %macro Min.mmu8x16 3
   movdqu xmm0, oword [rdi + %2]
@@ -3324,6 +3347,7 @@ extern free
 
 ; -----------------------------------------------------------------------------
 ; Max -- Maximum of two numbers
+; x = Max(a, b). a, b, x are the same number types.
 
 %macro Max.mmu8x16 3
   movdqu xmm0, oword [rdi + %2]
@@ -3334,6 +3358,7 @@ extern free
 
 ; -----------------------------------------------------------------------------
 ; Sqrt -- Square root
+; x = Sqrt(a). a, x are the same number types.
 
 %macro Sqrt.mf32x4 2
   movdqu xmm0, oword [rdi + %2]
@@ -3343,6 +3368,7 @@ extern free
 
 ; -----------------------------------------------------------------------------
 ; ApproxReciprocal -- x = approx(1 / a)
+; x = ApproxReciprocal(a). a, x are the same number types.
 
 %macro ApproxReciprocal.mf32x4 2
   movdqu xmm0, oword [rdi + %2]
@@ -3352,6 +3378,7 @@ extern free
 
 ; -----------------------------------------------------------------------------
 ; ApproxReciprocalSqrt -- x = approx(1 / sqrt(a))
+; x = ApproxReciprocalSqrt(a). a, x are the same number types.
 
 %macro ApproxReciprocalSqrt.mf32x4 2
   movdqu xmm0, oword [rdi + %2]
@@ -3361,6 +3388,7 @@ extern free
 
 ; -----------------------------------------------------------------------------
 ; InterleaveLow -- Interleaves pairs from low data from both vectors
+; x = InterleaveLow(a, b). a, b, x are the same packed number types.
 
 %macro InterleaveLow.mmu32x4 3
   movdqu xmm0, oword [rdi + %2]
@@ -3371,6 +3399,7 @@ extern free
 
 ; -----------------------------------------------------------------------------
 ; InterleaveHigh -- Interleaves pairs from high data from both vectors
+; x = InterleaveLow(a, b). a, b, x are the same packed number types.
 
 %macro InterleaveHigh.mmu32x4 3
   movdqu xmm0, oword [rdi + %2]
@@ -3381,6 +3410,7 @@ extern free
 
 ; -----------------------------------------------------------------------------
 ; CombineExtract -- Combine and extract a part offset by a constant
+; x = CombineExtract(a, b. c). a, b are bitfields, c is a number.
 
 ; TODO: Should this not be mmi?
 %macro CombineExtract.miu8x16 4
@@ -3392,6 +3422,7 @@ extern free
 
 ; -----------------------------------------------------------------------------
 ; Gather -- Gather data into array
+; x = CombineExtract(p, a, b). p is a pointer. x, a and b are packed number types.
 
 ; TODO: Should this not be mmm?
 %macro Gather.mmu32x4 4
@@ -3405,6 +3436,7 @@ extern free
 
 ; -----------------------------------------------------------------------------
 ; SumAbsoluteDifference -- Sum of absolute differences
+; x = SumAbsoluteDifference(a, b). a, b, x are packed number types.
 
 %macro SumAbsoluteDifference.mmu8x16 3
   movdqu xmm0, oword [rdi + %2]
@@ -3415,6 +3447,7 @@ extern free
 
 ; -----------------------------------------------------------------------------
 ; PairwiseAdd -- Pairwiser horizontal add
+; x = PairwiseAdd(a, b). a, b, x are packed number types.
 
 %macro PairwiseAdd.mms16x8 3
   movdqu xmm0, oword [rdi + %2]
@@ -3425,6 +3458,7 @@ extern free
 
 ; -----------------------------------------------------------------------------
 ; PairwiseSub -- Pairwiser horizontal subtract
+; x = PairwiseSub(a, b). a, b, x are packed number types.
 
 %macro PairwiseSub.mms16x8 3
   movdqu xmm0, oword [rdi + %2]
@@ -3435,6 +3469,7 @@ extern free
 
 ; -----------------------------------------------------------------------------
 ; PairwiseMulAdd -- Multiply vertical pairs and add horizontally
+; x = PairwiseMulAdd(a, b). a, b, x are packed number types.
 
 %macro PairwiseMulAdd.mms16x8 3
   movdqu xmm0, oword [rdi + %2]
@@ -3445,6 +3480,7 @@ extern free
 
 ; -----------------------------------------------------------------------------
 ; AlternatingSubAdd -- Alternating subtract and add
+; x = AlternatingSubAdd(a, b). a, b, x are packed number types.
 
 %macro AlternatingSubAdd.mmf32x4 3
   movdqu xmm0, oword [rdi + %2]
@@ -3455,6 +3491,7 @@ extern free
 
 ; -----------------------------------------------------------------------------
 ; ConditionalNegate -- Conditionally nagate
+; x = ConditionalNegate(a, b). a, b, x are packed number types.
 
 %macro ConditionalNegate.mms32x4 3
   movdqu xmm0, oword [rdi + %2]
@@ -3465,6 +3502,7 @@ extern free
 
 ; -----------------------------------------------------------------------------
 ; DotProduct -- Dot Product
+; TODO: sort out after fixing todo
 
 ; TODO: How to deal with the fourth and fifth parameters?
 %macro DotProduct.mmf32x4 3
@@ -3476,6 +3514,7 @@ extern free
 
 ; -----------------------------------------------------------------------------
 ; StringSubset -- Identify the occurance of characters in a string
+; x = StringSubset(a, b, l). x, a, b are packed bytes. l is a number.
 
 %macro StringSubset.mmu8x16 4
   movdqu xmm0, oword [rdi + %3]
@@ -3500,6 +3539,7 @@ extern free
 
 ; -----------------------------------------------------------------------------
 ; StringRangeCheck -- Find members of a range
+; x = StringRangeCheck(a, b, l). x, a, b are packed bytes. l is a number.
 
 %macro StringRangeCheck.mmu8x16 4
   movdqu xmm0, oword [rdi + %3]
@@ -3513,6 +3553,7 @@ extern free
 
 ; -----------------------------------------------------------------------------
 ; MatchString -- Match string
+; x = MatchString(a, b, l). x, a, b are packed bytes. l is a number.
 
 %macro MatchString.mmu8x16 4
   movdqu xmm0, oword [rdi + %3]
@@ -3526,6 +3567,7 @@ extern free
 
 ; -----------------------------------------------------------------------------
 ; FindSubstring -- Locate string
+; x = FindSubstring(a, b, l). x, a, b are packed bytes. l is a number.
 
 %macro FindSubstring.mmu8x16 4
   movdqu xmm0, oword [rdi + %3]
@@ -3550,6 +3592,7 @@ extern free
 
 ; -----------------------------------------------------------------------------
 ; MovAndDuplicate -- Copy data and duplicate even columns
+; x = MovAndDuplicate(a). x and a are packed number types.
 
 %macro MovAndDuplicate.mf64x2 2
   movdqu xmm0, oword [rdi + %2]
@@ -3565,6 +3608,7 @@ extern free
 
 ; -----------------------------------------------------------------------------
 ; MovAndDuplicateOdd -- Copy data and duplicate odd columns
+; x = MovAndDuplicate(a). x and a are packed number types.
 
 %macro MovAndDuplicateOdd.mf32x4 2
   movdqu xmm0, oword [rdi + %2]
