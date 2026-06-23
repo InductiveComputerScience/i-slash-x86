@@ -1,0 +1,163 @@
+Bgs base64AS
+  ; Input
+  u8a data
+  u64 datap
+  u8x16a datax
+  s64 dataLength
+  
+  ; Output
+  u8x16a output
+  
+  ; Working vars
+  s64 len
+  s64 i
+  u64 j
+  b1 tb10
+  u8x16 element
+  u8x16 in
+  u32x4 t0
+  u32x4 t1
+  u32x4 t2
+  u32x4 t3
+  u8x16 less
+  u8x16 input
+  u8x16 result
+  u8x16 d
+  u32x4 resultx
+  u8x16 upx
+  u32 z
+  u8x16 tu8x160
+  
+  ; Constants
+  u8x16 cInputShuffle
+  u32x4 c1
+  u32x4 c2
+  u32x4 c3
+  u32x4 c4
+  u8x16 c5
+  u8x16 c6
+  u8x16 c7
+  u8x16 cLut
+Ens
+
+Fnc base64A
+
+  ; Set up constants
+  ; Look up table
+  Idw cLut, 0, 'a'-26
+  Idw cLut, 1, '0'-52
+  Idw cLut, 2, '0'-52
+  Idw cLut, 3, '0'-52
+
+  Idw cLut, 4, '0'-52
+  Idw cLut, 5, '0'-52
+  Idw cLut, 6, '0'-52
+  Idw cLut, 7, '0'-52
+
+  Idw cLut, 8, '0'-52
+  Idw cLut, 9, '0'-52
+  Idw cLut, 10, '0'-52
+  Idw cLut, 11, '+'-62
+
+  Idw cLut, 12, '/'-63
+  Idw cLut, 13, 'A'
+  Idw cLut, 14, 0
+  Idw cLut, 15, 0
+  
+  Idw cInputShuffle, 0, 1
+  Idw cInputShuffle, 1, 0
+  Idw cInputShuffle, 2, 2
+  Idw cInputShuffle, 3, 1
+
+  Idw cInputShuffle, 4, 4
+  Idw cInputShuffle, 5, 3
+  Idw cInputShuffle, 6, 5
+  Idw cInputShuffle, 7, 4
+
+  Idw cInputShuffle, 8, 7
+  Idw cInputShuffle, 9, 6
+  Idw cInputShuffle, 10, 8
+  Idw cInputShuffle, 11, 7
+
+  Idw cInputShuffle, 12, 10
+  Idw cInputShuffle, 13, 9
+  Idw cInputShuffle, 14, 11
+  Idw cInputShuffle, 15, 10
+  
+  Mov c1, 0x0fc0fc00
+  Mov c2, 0x04000040
+  Mov c3, 0x003f03f0
+  Mov c4, 0x01000010
+  
+  Mov c5, 51
+  Mov c6, 26
+  Mov c7, 13
+
+  ; We have to have 4 extra bytes on the end because we need 12 bytes in each iteration in a 16 bit register, so we need that 4 byte padding.
+  Sub dataLength, dataLength, 4
+  
+  ; We do 12 bytes in each iteration
+  Div len, dataLength, 12
+  
+  ; We use a raw pointer to data
+  Ptr datap, data
+
+  ; i is our tracks input progress, j track output progress
+  Mov i, 0
+  Mov j, 0
+  
+  Loop
+  If exp b: i < len
+
+    ; Read our data pointer
+    Ptm datax, datap
+    Idr element, datax, 0
+
+    ; Part 1  
+    Shuffle in, element, cInputShuffle
+    
+    ; Part 2
+    And t0, in, c1
+    MulStoreHigh t1, t0, c2
+    And t0, in, c3
+    Mul t0, t0, c4
+    Or input, t1, t0
+    
+    ; Part 3
+    SubSaturated result, input, c5
+    exp b u8x16: result = ((c6 > input) & c7) | result
+    Shuffle result, cLut, result
+    Add result, result, input
+    
+    ; Write result
+    Idw output, i, result
+    
+    Inc i
+    
+    ; Move input pointer forward 12 bytes
+    Add datap, datap, 12
+  EndLoop
+  
+  ; Compute the final number of triplets processed
+  Mul i, i, 4
+  
+Ret
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

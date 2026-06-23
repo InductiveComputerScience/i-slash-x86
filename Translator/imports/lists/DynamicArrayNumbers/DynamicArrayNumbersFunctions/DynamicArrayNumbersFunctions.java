@@ -193,7 +193,7 @@ public class DynamicArrayNumbersFunctions{
         */
 		c = array.length;
 		n = (log(c) - 1d)/log(3d/2d);
-		newCapacity = floor(n) + 1d;
+		newCapacity = ceil(10d*pow(3d/2d, n));
 
 		da = CreateDynamicArrayNumbersWithInitialCapacity(newCapacity);
 

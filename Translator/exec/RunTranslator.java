@@ -1,4 +1,5 @@
 import DataStructures.Array.Structures.Array;
+import Translator.Translator.Translator2;
 import references.references.StringReference;
 
 import java.io.BufferedWriter;
@@ -13,16 +14,23 @@ import static Translator.Translator.Translator.*;
 
 public class RunTranslator {
     public static void main(String[] args) throws IOException {
-        char [] input = ReadStringFromFile(args[0].toCharArray());
+        char [] input;
         Array functions, structures;
         StringReference message, output, cheaderoutput;
         boolean success;
+
+        input = ReadStringFromFile(args[0].toCharArray());
 
         functions = CreateArray();
         structures = CreateArray();
         message = new StringReference();
         output = new StringReference();
         cheaderoutput = new StringReference();
+
+        // New system
+        Array tokens = Translator2.Tokenize(input);
+
+        // --
 
         success = FindFunctionsAndStructures(input, functions, structures, message);
         if(success) {

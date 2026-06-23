@@ -353,7 +353,7 @@ public class Translator {
 
                 "                \"f16x8\": {\"nasmType\": \"reso\", \"ctype\": \"__m128\"},\n" +
                 "                \"f16x16\": {\"nasmType\": \"resy\", \"ctype\": \"__m256\"},\n" +
-                "                \"f16x32\": {\"nasmType\": \"resz\", \"ctype\": \"__m512\"}\n" +
+                "                \"f16x32\": {\"nasmType\": \"resz\", \"ctype\": \"__m512\"},\n" +
 
                 "                \"f32x4\": {\"nasmType\": \"reso\", \"ctype\": \"__m128\"},\n" +
                 "                \"f32x8\": {\"nasmType\": \"resy\", \"ctype\": \"__m256\"},\n" +
@@ -367,7 +367,7 @@ public class Translator {
                 "                \"f64x8\": {\"nasmType\": \"resz\", \"ctype\": \"__m512\"},\n" +
                 "                \"f64x2a\": {\"nasmType\": \"resq\", \"ctype\": \"__m128 *\"},\n" +
                 "                \"f64x4a\": {\"nasmType\": \"resq\", \"ctype\": \"__m256 *\"},\n" +
-                "                \"f64x8a\": {\"nasmType\": \"resq\", \"ctype\": \"__m512 *\"},\n" +
+                "                \"f64x8a\": {\"nasmType\": \"resq\", \"ctype\": \"__m512 *\"}\n" +
 
                 "            }").toCharArray();
 
@@ -382,6 +382,7 @@ public class Translator {
 
         json = ("{\n" +
                 "              \"Mov\": {\"args\": 1, \"typeDecider\": 1},\n" +
+                "              \"Broadcast\": {\"args\": 1, \"typeDecider\": 1},\n" +
                 "\n" +
                 "              \"Add\": {\"args\": 2, \"typeDecider\": 1},\n" +
                 "              \"Sub\": {\"args\": 2, \"typeDecider\": 1},\n" +

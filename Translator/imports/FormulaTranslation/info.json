@@ -1,21 +1,20 @@
 {
   "name": "FormulaTranslation",
-  "version": "0.1.9",
+  "version": "0.1.10",
   "organization namespace": "no.inductive.libraries",
   "scientific namespace": "computerscience.development.formulas",
   "imports": [
     ["", "no.inductive.idea10.programs", "references", "0.1.5"],
-    ["", "no.inductive.idea10.programs", "numbers", "0.1.28"],
+    ["", "no.inductive.idea10.programs", "numbers", "0.1.32"],
     ["char", "no.inductive.libraries", "Characters", "0.1.4"],
     ["arrays", "no.inductive.idea10.programs", "arrays", "0.9.7"],
-    ["", "no.inductive.idea10.programs", "strings", "0.9.14"],
-    ["", "no.inductive.idea10.programs", "lists", "0.1.13"]
+    ["", "no.inductive.idea10.programs", "strings", "0.9.16"],
+    ["", "no.inductive.idea10.programs", "lists", "0.1.14"],
+    ["m", "no.inductive.idea10.programs", "math", "0.1.20"]
   ],
   "development imports": [
-    ["", "no.inductive.idea10.programs", "testing", "0.1.8"],
-    ["m18", "no.inductive.idea10.programs", "math", "0.1.18"]
+    ["", "no.inductive.idea10.programs", "testing", "0.1.8"]
   ],
-  "reprefix": [
-  ],
+  "reprefix": [],
   "ownerCustomerId": "Inductive AS"
 }

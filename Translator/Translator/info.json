@@ -5,12 +5,12 @@
   "scientific namespace": "computerscience.algorithms.templates",
   "imports": [
     ["", "no.inductive.idea10.programs", "references", "0.1.5"],
-    ["", "no.inductive.idea10.programs", "JSON", "0.5.7"],
-    ["", "no.inductive.idea10.programs", "lists", "0.1.13"],
-    ["", "no.inductive.idea10.programs", "strings", "0.9.14"],
+    ["", "no.inductive.idea10.programs", "JSON", "0.5.12"],
+    ["", "no.inductive.idea10.programs", "lists", "0.1.14"],
+    ["", "no.inductive.idea10.programs", "strings", "0.9.16"],
     ["", "no.inductive.idea10.programs", "arrays", "0.9.7"],
-    ["", "no.inductive.libraries", "DataStructures", "0.1.2"],
-    ["", "no.inductive.libraries", "FormulaTranslation", "0.1.11-SNAPSHOT"]
+    ["", "no.inductive.libraries", "DataStructures", "0.1.5"],
+    ["", "no.inductive.libraries", "FormulaTranslation", "0.1.10"]
   ],
   "development imports": [
     ["","no.inductive.idea10.programs","testing","0.1.8"]

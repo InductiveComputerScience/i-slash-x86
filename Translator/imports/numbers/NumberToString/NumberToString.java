@@ -9,7 +9,7 @@ import static strings.strings.strings.*;
 import references.references.*;
 import static references.references.references.*;
 
-import static math.math.math.*;
+import static m18math.math.math.*;
 
 import static lists.NumberList.NumberList.*;
 
@@ -191,7 +191,7 @@ public class NumberToString{
 		}else{
 			characterReference = new CharacterReference();
 
-			if(IsInteger(base)){
+			if(m18IsInteger(base)){
 				success = true;
 
 				maximumDigits = GetMaximumDigitsForBase(base);
@@ -317,7 +317,7 @@ public class NumberToString{
 				power = 15d + i - 2d;
 			}
 
-			if(Round(m) >= pow(10d, 15d)){
+			if(m18Round(m) >= pow(10d, 15d)){
 				power = power + 1d;
 			}
 		}else{
@@ -363,7 +363,7 @@ public class NumberToString{
 				power = maximumDigits + i - 2d;
 			}
 
-			if(Round(m) >= pow(base, maximumDigits)){
+			if(m18Round(m) >= pow(base, maximumDigits)){
 				power = power + 1d;
 			}
 		}else{

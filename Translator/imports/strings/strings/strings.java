@@ -35,6 +35,8 @@ import static references.references.references.*;
 
 import static charCharacters.Characters.Characters.*;
 
+import static arrays.arrays.arrays.*;
+
 
 import static strings.stream.stream.*;
 
@@ -119,17 +121,37 @@ public class strings{
 	}
 
 	public static StringReference [] SplitByCharacter(char [] toSplit, char splitBy){
-		StringReference [] split;
-		char [] stringToSplitBy;
+		StringReference [] parts;
+		double i;
+		char c;
+		LinkedListStrings ll;
+		LinkedListCharacters next;
+		char [] part;
 
-		stringToSplitBy = new char [1];
-		stringToSplitBy[0] = splitBy;
+		ll = CreateLinkedListString();
 
-		split = SplitByString(toSplit, stringToSplitBy);
+		next = CreateLinkedListCharacter();
+		for(i = 0d; i < toSplit.length; i = i + 1d){
+			c = toSplit[(int)(i)];
 
-		delete(stringToSplitBy);
+			if(c == splitBy){
+				part = LinkedListCharactersToArray(next);
+				LinkedListAddString(ll, part);
+				FreeLinkedListCharacter(next);
+				next = CreateLinkedListCharacter();
+			}else{
+				LinkedListAddCharacter(next, c);
+			}
+		}
 
-		return split;
+		part = LinkedListCharactersToArray(next);
+		LinkedListAddString(ll, part);
+		FreeLinkedListCharacter(next);
+
+		parts = LinkedListStringsToArray(ll);
+		FreeLinkedListString(ll);
+
+		return parts;
 	}
 
 	public static boolean IndexOfCharacter(char [] string, char character, NumberReference indexReference){
@@ -138,6 +160,21 @@ public class strings{
 
 		found = false;
 		for(i = 0d; i < string.length && !found; i = i + 1d){
+			if(string[(int)(i)] == character){
+				found = true;
+				indexReference.numberValue = i;
+			}
+		}
+
+		return found;
+	}
+
+	public static boolean LastIndexOfCharacter(char [] string, char character, NumberReference indexReference){
+		double i;
+		boolean found;
+
+		found = false;
+		for(i = 0d; i < string.length; i = i + 1d){
 			if(string[(int)(i)] == character){
 				found = true;
 				indexReference.numberValue = i;
@@ -366,35 +403,39 @@ public class strings{
 	}
 
 	public static StringReference [] SplitByString(char [] toSplit, char [] splitBy){
-		StringReference [] split;
-		char [] next;
+		StringReference [] parts;
 		double i;
 		char c;
-		StringReference n;
+		LinkedListStrings ll;
+		LinkedListCharacters next;
+		char [] part;
 
-		split = new StringReference [0];
+		ll = CreateLinkedListString();
 
-		next = new char [0];
+		next = CreateLinkedListCharacter();
 		for(i = 0d; i < toSplit.length; ){
 			c = toSplit[(int)(i)];
 
 			if(SubstringEquals(toSplit, i, splitBy)){
-				n = new StringReference();
-				n.string = next;
-				split = AddString(split, n);
-				next = new char [0];
+				part = LinkedListCharactersToArray(next);
+				LinkedListAddString(ll, part);
+				FreeLinkedListCharacter(next);
+				next = CreateLinkedListCharacter();
 				i = i + splitBy.length;
 			}else{
-				next = AppendCharacter(next, c);
+				LinkedListAddCharacter(next, c);
 				i = i + 1d;
 			}
 		}
 
-		n = new StringReference();
-		n.string = next;
-		split = AddString(split, n);
+		part = LinkedListCharactersToArray(next);
+		LinkedListAddString(ll, part);
+		FreeLinkedListCharacter(next);
 
-		return split;
+		parts = LinkedListStringsToArray(ll);
+		FreeLinkedListString(ll);
+
+		return parts;
 	}
 
 	public static boolean StringIsBefore(char [] a, char [] b){
@@ -480,6 +521,66 @@ public class strings{
 		delete(index);
 
 		return result;
+	}
+
+	public static double StringOrder(char [] a, char [] b){
+		double order, minimum, i, ac, bc;
+		boolean done;
+
+		minimum = min(a.length, b.length);
+
+		done = false;
+		order = 0d;
+		for(i = 0d; i < minimum && !done; i = i + 1d){
+			ac = a[(int)(i)];
+			bc = b[(int)(i)];
+
+			if(ac < bc){
+				done = true;
+				order = 1d;
+			}else if(ac > bc){
+				done = true;
+				order = -1d;
+			}
+		}
+
+		if(!done){
+			if(a.length < b.length){
+				order = 1d;
+			}else if(a.length > b.length){
+				order = -1d;
+			}
+		}
+
+		return order;
+	}
+
+	public static char [] LeftPad(char [] str, double width){
+		double i;
+		char [] padded;
+
+		padded = new char [(int)(width)];
+		FillString(padded, ' ');
+
+		for(i = 0d; i < str.length; i = i + 1d){
+			padded[(int)(width - str.length + i)] = str[(int)(i)];
+		}
+
+		return padded;
+	}
+
+	public static char [] RightPad(char [] str, double width){
+		double i;
+		char [] padded;
+
+		padded = new char [(int)(width)];
+		FillString(padded, ' ');
+
+		for(i = 0d; i < str.length; i = i + 1d){
+			padded[(int)(i)] = str[(int)(i)];
+		}
+
+		return padded;
 	}
 
   public static void delete(Object object){

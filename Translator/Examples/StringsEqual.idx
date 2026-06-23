@@ -1,0 +1,66 @@
+Bgs StringsEqualAS
+  u16a a
+  u16a b
+  u64 length
+  u16x8 a1
+  u16x8 a2
+  u16x8 a3
+  u16x8 a4
+  u16x8 b1
+  u16x8 b2
+  u16x8 b3
+  u16x8 b4
+	u16x8 tu16x80
+	u16x8 tu16x81
+	u16x8 tu16x82
+	u16x8 all
+  u64 xlen
+  u16x8a aa
+  u16x8a ba
+  u64 i
+  u64 j
+  u32 m
+  b1 tb10
+  b1 tb11
+  b1 equal
+Ens
+
+Fnc StringsEqualA
+	Xu16x8a aa, a
+	Xu16x8a ba, b
+
+	Mov equal, true
+	Mov i, 0
+	Mov j, 0
+	
+	; length is the number of 16-bit characters. We will process 8 of these 4 times per iteration = 32
+	exp a u64: xlen = length / 32
+	
+	Loop
+	If exp b: i < xlen & equal
+		Idro a1, aa, j, 0
+		Idro a2, aa, j, 1
+		Idro a3, aa, j, 2
+		Idro a4, aa, j, 3
+		Idro b1, ba, j, 0
+		Idro b2, ba, j, 1
+		Idro b3, ba, j, 2
+		Idro b4, ba, j, 3
+
+		exp b u16x8: all = ((a1 = b1) & (a2 = b2)) & ((a3 = b3) & (a4 = b4))
+		ExtractMask m, all
+		If exp b: m != 65535
+			Mov equal, false
+		Endb
+
+		Inc i
+		
+		; We process 4 each round
+		exp a u64: j = j + 4
+	EndLoop
+	
+	exp a u64: i = xlen * 32
+Ret
+
+
+

@@ -64,6 +64,14 @@ public class DynamicArrayCharactersFunctions{
 		da.length = da.length + 1d;
 	}
 
+	public static void DynamicArrayAddString(DynamicArrayCharacters da, char [] str){
+		double i;
+
+		for(i = 0d; i < str.length; i = i + 1d){
+			DynamicArrayAddCharacter(da, str[(int)(i)]);
+		}
+	}
+
 	public static void DynamicArrayCharactersIncreaseSize(DynamicArrayCharacters da){
 		double newLength, i;
 		char [] newArray;
@@ -108,7 +116,7 @@ public class DynamicArrayCharactersFunctions{
 		da.array = newArray;
 	}
 
-	public static double DynamicArrayCharactersIndex(DynamicArrayCharacters da, double index){
+	public static char DynamicArrayCharactersIndex(DynamicArrayCharacters da, double index){
 		return da.array[(int)(index)];
 	}
 
@@ -184,7 +192,7 @@ public class DynamicArrayCharactersFunctions{
 
 		c = array.length;
 		n = (log(c) - 1d)/log(3d/2d);
-		newCapacity = floor(n) + 1d;
+		newCapacity = ceil(10d*pow(3d/2d, n));
 
 		da = CreateDynamicArrayCharactersWithInitialCapacity(newCapacity);
 

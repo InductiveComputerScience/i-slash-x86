@@ -11,21 +11,29 @@ import static arrays.arrays.arrays.*;
 import static DataStructures.Array.Arrays.Arrays.*;
 
 public class Structures{
-	public static Data CreateArrayData(){
+	public static Data CreateNewArrayData(){
 		Data data;
 
 		data = new Data();
 		data.isArray = true;
+		data.isStruture = false;
+		data.isNumber = false;
+		data.isBoolean = false;
+		data.isString = false;
 		data.array = CreateArray();
 
 		return data;
 	}
 
-	public static Data CreateStructData(){
+	public static Data CreateNewStructData(){
 		Data data;
 
 		data = new Data();
 		data.isStruture = true;
+		data.isArray = false;
+		data.isNumber = false;
+		data.isBoolean = false;
+		data.isString = false;
 		data.structure = CreateStructure();
 
 		return data;
@@ -46,6 +54,10 @@ public class Structures{
 
 		data = new Data();
 		data.isNumber = true;
+		data.isStruture = false;
+		data.isArray = false;
+		data.isBoolean = false;
+		data.isString = false;
 		data.number = n;
 
 		return data;
@@ -56,6 +68,10 @@ public class Structures{
 
 		data = new Data();
 		data.isBoolean = true;
+		data.isStruture = false;
+		data.isArray = false;
+		data.isNumber = false;
+		data.isString = false;
 		data.booleanx = b;
 
 		return data;
@@ -66,7 +82,39 @@ public class Structures{
 
 		data = new Data();
 		data.isString = true;
+		data.isStruture = false;
+		data.isArray = false;
+		data.isNumber = false;
+		data.isBoolean = false;
 		data.string = string;
+
+		return data;
+	}
+
+	public static Data CreateStructData(Structure structure){
+		Data data;
+
+		data = new Data();
+		data.isString = false;
+		data.isStruture = true;
+		data.isArray = false;
+		data.isNumber = false;
+		data.isBoolean = false;
+		data.structure = structure;
+
+		return data;
+	}
+
+	public static Data CreateArrayData(Array array){
+		Data data;
+
+		data = new Data();
+		data.isString = false;
+		data.isStruture = false;
+		data.isArray = true;
+		data.isNumber = false;
+		data.isBoolean = false;
+		data.array = array;
 
 		return data;
 	}
@@ -87,7 +135,7 @@ public class Structures{
 	public static void AddStructToArray(Array ar, Structure st){
 		Data data;
 
-		data = CreateStructData();
+		data = CreateNewStructData();
 		delete(data.structure);
 		data.structure = st;
 
@@ -97,7 +145,7 @@ public class Structures{
 	public static void AddArrayToArray(Array ar, Array ar2){
 		Data data;
 
-		data = CreateArrayData();
+		data = CreateNewArrayData();
 		delete(data.array);
 		data.array = ar2;
 
@@ -388,70 +436,70 @@ public class Structures{
 	}
 
 	public static boolean IsStructure(Data a){
-		boolean isStructure;
+		boolean itis;
 
-		isStructure = a.isStruture;
+		itis = a.isStruture;
 		if(a.isArray || a.isNumber || a.isBoolean || a.isString){
-			isStructure = false;
+			itis = false;
 		}
 
-		return isStructure;
+		return itis;
 	}
 
 	public static boolean IsArray(Data a){
-		boolean isArray;
+		boolean itis;
 
-		isArray = a.isArray;
+		itis = a.isArray;
 		if(a.isStruture || a.isNumber || a.isBoolean || a.isString){
-			isArray = false;
+			itis = false;
 		}
 
-		return isArray;
+		return itis;
 	}
 
 	public static boolean IsNumber(Data a){
-		boolean isNumber;
+		boolean itis;
 
-		isNumber = a.isNumber;
+		itis = a.isNumber;
 		if(a.isStruture || a.isArray || a.isBoolean || a.isString){
-			isNumber = false;
+			itis = false;
 		}
 
-		return isNumber;
+		return itis;
 	}
 
 	public static boolean IsBoolean(Data a){
-		boolean isBoolean;
+		boolean itis;
 
-		isBoolean = a.isBoolean;
+		itis = a.isBoolean;
 		if(a.isStruture || a.isArray || a.isNumber || a.isString){
-			isBoolean = false;
+			itis = false;
 		}
 
-		return isBoolean;
+		return itis;
 	}
 
 	public static boolean IsString(Data a){
-		boolean isString;
+		boolean itis;
 
-		isString = a.isString;
+		itis = a.isString;
 		if(a.isStruture || a.isArray || a.isNumber || a.isBoolean){
-			isString = false;
+			itis = false;
 		}
 
-		return isString;
+		return itis;
 	}
 
 	public static boolean IsNoType(Data a){
-		boolean isNoType;
+		boolean itis;
 
 		if(!a.isString && !a.isStruture && !a.isArray && !a.isNumber && !a.isBoolean){
-			isNoType = true;
+			itis = true;
 		}else{
-			isNoType = false;
+			itis = false;
 		}
 
-		return isNoType;
+		return itis;
 	}
 
   public static void delete(Object object){

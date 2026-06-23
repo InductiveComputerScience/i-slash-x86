@@ -1,16 +1,17 @@
 {
     "name": "JSON",
-    "version": "0.5.7",
+    "version": "0.5.12",
     "organization namespace": "no.inductive.idea10.programs",
     "scientific namespace": "computerscience.datastructures.interchange",
     "imports": [
         ["", "no.inductive.idea10.programs", "references", "0.1.5"],
-        ["str", "no.inductive.idea10.programs", "strings", "0.9.14"],
-        ["n", "no.inductive.idea10.programs", "numbers", "0.1.28"],
-        ["", "no.inductive.idea10.programs", "math", "0.1.18"],
+        ["str", "no.inductive.idea10.programs", "strings", "0.9.16"],
+        ["n", "no.inductive.idea10.programs", "numbers", "0.1.32"],
+        ["", "no.inductive.idea10.programs", "math", "0.1.20"],
         ["", "no.inductive.idea10.programs", "arrays", "0.9.7"],
         ["char", "no.inductive.libraries", "Characters", "0.1.4"],
-        ["", "no.inductive.libraries", "DataStructures", "0.1.2"]
+        ["", "no.inductive.libraries", "DataStructures", "0.1.5"],
+        ["", "no.inductive.idea10.programs", "lists", "0.1.14"]
     ],
     "development imports": [
         ["", "no.inductive.idea10.programs", "testing", "0.1.8"]

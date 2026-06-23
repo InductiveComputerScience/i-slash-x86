@@ -7,6 +7,8 @@ import static references.references.references.*;
 
 import static nnumbers.NumberToString.NumberToString.*;
 
+import static nnumbers.NumberComputations.NumberComputations.*;
+
 import static nnumbers.StringToNumber.StringToNumber.*;
 
 import static charCharacters.Characters.Characters.*;
@@ -45,6 +47,12 @@ import static lists.DynamicArrayNumbers.DynamicArrayNumbersFunctions.DynamicArra
 
 import static lists.CharacterList.CharacterList.*;
 
+import static math.math.math.*;
+
+import static math.Decimal15E2.Decimal15E2.*;
+
+
+import static FormulaTranslation.ArithmeticFormulaPratt.ArithmeticFormulaPratt.*;
 
 import static FormulaTranslation.ArithmeticFormula.ArithmeticFormula.*;
 
@@ -53,6 +61,8 @@ import static FormulaTranslation.BitwiseFormula.BitwiseFormula.*;
 import static FormulaTranslation.ArithmeticFormulaFunctionWriter.ArithmeticFormulaFunctionWriter.*;
 
 import static FormulaTranslation.TS.TS.*;
+
+import static FormulaTranslation.ArithmeticFormulaEvaluator.ArithmeticFormulaEvaluator.*;
 
 import static FormulaTranslation.BooleanFormulaSymbolicWriter.BooleanFormulaSymbolicWriter.*;
 
@@ -200,35 +210,35 @@ public class BooleanFormula{
 		return success;
 	}
 
-	public static boolean ParseBooleanTokens(StringArrayReference tokens, NumberReference cur, ASTNode ast, StringReference errorMessage){
+	public static boolean ParseBooleanTokens(StringReference [] tokens, NumberReference cur, ASTNode ast, StringReference message){
 		boolean success;
 
-		success = ParseIff(tokens, cur, ast, errorMessage);
+		success = ParseIff(tokens, cur, ast, message);
 
 		if(success){
 			success = TokenIs(tokens, cur, "<end>".toCharArray());
 
 			if(!success){
-				errorMessage.string = "Expected the end of the formula.".toCharArray();
+				message.string = "Expected the end of the formula.".toCharArray();
 			}
 		}
 
 		return success;
 	}
 
-	public static boolean ParseIff(StringArrayReference tokens, NumberReference cur, ASTNode ast, StringReference errorMessage){
+	public static boolean ParseIff(StringReference [] tokens, NumberReference cur, ASTNode ast, StringReference message){
 		boolean success;
 		ASTNode t, t1;
 		char [] op;
 
 		t = new ASTNode();
-		success = ParseImplies(tokens, cur, t, errorMessage);
+		success = ParseImplies(tokens, cur, t, message);
 
 		for(; success && TokenIs(tokens, cur, "<->".toCharArray()); ){
 			op = Index(tokens, cur);
 			AddToNumberReference(cur, 1d);
 			t1 = new ASTNode();
-			success = ParseImplies(tokens, cur, t1, errorMessage);
+			success = ParseImplies(tokens, cur, t1, message);
 			if(success){
 				t = CreateASTNode(t, t1, op);
 			}
@@ -241,19 +251,19 @@ public class BooleanFormula{
 		return success;
 	}
 
-	public static boolean ParseImplies(StringArrayReference tokens, NumberReference cur, ASTNode ast, StringReference errorMessage){
+	public static boolean ParseImplies(StringReference [] tokens, NumberReference cur, ASTNode ast, StringReference message){
 		boolean success;
 		ASTNode t, t1;
 		char [] op;
 
 		t = new ASTNode();
-		success = ParseLogicalOr(tokens, cur, t, errorMessage);
+		success = ParseLogicalOr(tokens, cur, t, message);
 
 		for(; success && TokenIs(tokens, cur, "->".toCharArray()); ){
 			op = Index(tokens, cur);
 			AddToNumberReference(cur, 1d);
 			t1 = new ASTNode();
-			success = ParseLogicalOr(tokens, cur, t1, errorMessage);
+			success = ParseLogicalOr(tokens, cur, t1, message);
 			if(success){
 				t = CreateASTNode(t, t1, op);
 			}
@@ -266,19 +276,19 @@ public class BooleanFormula{
 		return success;
 	}
 
-	public static boolean ParseLogicalOr(StringArrayReference tokens, NumberReference cur, ASTNode ast, StringReference errorMessage){
+	public static boolean ParseLogicalOr(StringReference [] tokens, NumberReference cur, ASTNode ast, StringReference message){
 		boolean success;
 		ASTNode t, t1;
 		char [] op;
 
 		t = new ASTNode();
-		success = ParseLogicalAnd(tokens, cur, t, errorMessage);
+		success = ParseLogicalAnd(tokens, cur, t, message);
 
 		for(; success && TokenIs(tokens, cur, "|".toCharArray()); ){
 			op = Index(tokens, cur);
 			AddToNumberReference(cur, 1d);
 			t1 = new ASTNode();
-			success = ParseLogicalAnd(tokens, cur, t1, errorMessage);
+			success = ParseLogicalAnd(tokens, cur, t1, message);
 			if(success){
 				t = CreateASTNode(t, t1, op);
 			}
@@ -291,19 +301,19 @@ public class BooleanFormula{
 		return success;
 	}
 
-	public static boolean ParseLogicalAnd(StringArrayReference tokens, NumberReference cur, ASTNode ast, StringReference errorMessage){
+	public static boolean ParseLogicalAnd(StringReference [] tokens, NumberReference cur, ASTNode ast, StringReference message){
 		boolean success;
 		ASTNode t, t1;
 		char [] op;
 
 		t = new ASTNode();
-		success = ParseLogicalXor(tokens, cur, t, errorMessage);
+		success = ParseLogicalXor(tokens, cur, t, message);
 
 		for(; success && TokenIs(tokens, cur, "&".toCharArray()); ){
 			op = Index(tokens, cur);
 			AddToNumberReference(cur, 1d);
 			t1 = new ASTNode();
-			success = ParseLogicalXor(tokens, cur, t1, errorMessage);
+			success = ParseLogicalXor(tokens, cur, t1, message);
 			if(success){
 				t = CreateASTNode(t, t1, op);
 			}
@@ -316,19 +326,19 @@ public class BooleanFormula{
 		return success;
 	}
 
-	public static boolean ParseLogicalXor(StringArrayReference tokens, NumberReference cur, ASTNode ast, StringReference errorMessage){
+	public static boolean ParseLogicalXor(StringReference [] tokens, NumberReference cur, ASTNode ast, StringReference message){
 		boolean success;
 		ASTNode t, t1;
 		char [] op;
 
 		t = new ASTNode();
-		success = ParseLogicalComparison(tokens, cur, t, errorMessage);
+		success = ParseLogicalComparison(tokens, cur, t, message);
 
 		for(; success && TokenIs(tokens, cur, "^".toCharArray()); ){
 			op = Index(tokens, cur);
 			AddToNumberReference(cur, 1d);
 			t1 = new ASTNode();
-			success = ParseLogicalComparison(tokens, cur, t1, errorMessage);
+			success = ParseLogicalComparison(tokens, cur, t1, message);
 			if(success){
 				t = CreateASTNode(t, t1, op);
 			}
@@ -341,19 +351,19 @@ public class BooleanFormula{
 		return success;
 	}
 
-	public static boolean ParseLogicalComparison(StringArrayReference tokens, NumberReference cur, ASTNode ast, StringReference errorMessage){
+	public static boolean ParseLogicalComparison(StringReference [] tokens, NumberReference cur, ASTNode ast, StringReference message){
 		boolean success;
 		ASTNode t, t1;
 		char [] op;
 
 		t = new ASTNode();
-		success = ParseLogicalLiteralVariableNotParenthesis(tokens, cur, t, errorMessage);
+		success = ParseLogicalLiteralVariableNotParenthesis(tokens, cur, t, message);
 
 		for(; success && (TokenIs(tokens, cur, "=".toCharArray()) || TokenIs(tokens, cur, "!=".toCharArray()) || TokenIs(tokens, cur, "<".toCharArray()) || TokenIs(tokens, cur, "<=".toCharArray()) || TokenIs(tokens, cur, ">".toCharArray()) || TokenIs(tokens, cur, ">=".toCharArray())); ){
 			op = Index(tokens, cur);
 			AddToNumberReference(cur, 1d);
 			t1 = new ASTNode();
-			success = ParseLogicalLiteralVariableNotParenthesis(tokens, cur, t1, errorMessage);
+			success = ParseLogicalLiteralVariableNotParenthesis(tokens, cur, t1, message);
 			if(success){
 				t = CreateASTNode(t, t1, op);
 			}
@@ -366,7 +376,7 @@ public class BooleanFormula{
 		return success;
 	}
 
-	public static boolean ParseLogicalLiteralVariableNotParenthesis(StringArrayReference tokens, NumberReference cur, ASTNode ast, StringReference errorMessage){
+	public static boolean ParseLogicalLiteralVariableNotParenthesis(StringReference [] tokens, NumberReference cur, ASTNode ast, StringReference message){
 		boolean success;
 		ASTNode t;
 		char [] token;
@@ -382,7 +392,7 @@ public class BooleanFormula{
 			AddToNumberReference(cur, 1d);
 
 			t = new ASTNode();
-			success = ParseIff(tokens, cur, t, errorMessage);
+			success = ParseIff(tokens, cur, t, message);
 
 			if(success){
 				ast.value = "()".toCharArray();
@@ -393,14 +403,14 @@ public class BooleanFormula{
 				if(success){
 					AddToNumberReference(cur, 1d);
 				}else{
-					errorMessage.string = "Epected \')\'.".toCharArray();
+					message.string = "Epected \')\'.".toCharArray();
 				}
 			}
 		}else if(TokenIs(tokens, cur, "!".toCharArray())){
 			AddToNumberReference(cur, 1d);
 
 			t = new ASTNode();
-			success = ParseLogicalLiteralVariableNotParenthesis(tokens, cur, t, errorMessage);
+			success = ParseLogicalLiteralVariableNotParenthesis(tokens, cur, t, message);
 
 			if(success){
 				ast.value = "!".toCharArray();
@@ -409,7 +419,7 @@ public class BooleanFormula{
 			}
 		}else{
 			success = false;
-			errorMessage.string = "Unexpected token.".toCharArray();
+			message.string = "Unexpected token.".toCharArray();
 		}
 
 		return success;

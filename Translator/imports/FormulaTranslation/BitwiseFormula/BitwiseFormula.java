@@ -7,6 +7,8 @@ import static references.references.references.*;
 
 import static nnumbers.NumberToString.NumberToString.*;
 
+import static nnumbers.NumberComputations.NumberComputations.*;
+
 import static nnumbers.StringToNumber.StringToNumber.*;
 
 import static charCharacters.Characters.Characters.*;
@@ -45,14 +47,22 @@ import static lists.DynamicArrayNumbers.DynamicArrayNumbersFunctions.DynamicArra
 
 import static lists.CharacterList.CharacterList.*;
 
+import static math.math.math.*;
+
+import static math.Decimal15E2.Decimal15E2.*;
+
 
 import static FormulaTranslation.BooleanFormula.BooleanFormula.*;
+
+import static FormulaTranslation.ArithmeticFormulaPratt.ArithmeticFormulaPratt.*;
 
 import static FormulaTranslation.ArithmeticFormula.ArithmeticFormula.*;
 
 import static FormulaTranslation.ArithmeticFormulaFunctionWriter.ArithmeticFormulaFunctionWriter.*;
 
 import static FormulaTranslation.TS.TS.*;
+
+import static FormulaTranslation.ArithmeticFormulaEvaluator.ArithmeticFormulaEvaluator.*;
 
 import static FormulaTranslation.BooleanFormulaSymbolicWriter.BooleanFormulaSymbolicWriter.*;
 
@@ -143,7 +153,7 @@ public class BitwiseFormula{
 		return success;
 	}
 
-	public static boolean ParseBitwiseTokens(StringArrayReference tokens, NumberReference cur, ASTNode ast, StringReference errorMessage){
+	public static boolean ParseBitwiseTokens(StringReference [] tokens, NumberReference cur, ASTNode ast, StringReference errorMessage){
 		boolean success;
 
 		success = ParseOr(tokens, cur, ast, errorMessage);
@@ -159,7 +169,7 @@ public class BitwiseFormula{
 		return success;
 	}
 
-	public static boolean ParseOr(StringArrayReference tokens, NumberReference cur, ASTNode ast, StringReference errorMessage){
+	public static boolean ParseOr(StringReference [] tokens, NumberReference cur, ASTNode ast, StringReference errorMessage){
 		boolean success;
 		ASTNode t, t1;
 		char [] op;
@@ -184,7 +194,7 @@ public class BitwiseFormula{
 		return success;
 	}
 
-	public static boolean ParseXor(StringArrayReference tokens, NumberReference cur, ASTNode ast, StringReference errorMessage){
+	public static boolean ParseXor(StringReference [] tokens, NumberReference cur, ASTNode ast, StringReference errorMessage){
 		boolean success;
 		ASTNode t, t1;
 		char [] op;
@@ -209,7 +219,7 @@ public class BitwiseFormula{
 		return success;
 	}
 
-	public static boolean ParseAnd(StringArrayReference tokens, NumberReference cur, ASTNode ast, StringReference errorMessage){
+	public static boolean ParseAnd(StringReference [] tokens, NumberReference cur, ASTNode ast, StringReference errorMessage){
 		boolean success;
 		ASTNode t, t1;
 		char [] op;
@@ -234,7 +244,7 @@ public class BitwiseFormula{
 		return success;
 	}
 
-	public static boolean ParseShift(StringArrayReference tokens, NumberReference cur, ASTNode ast, StringReference errorMessage){
+	public static boolean ParseShift(StringReference [] tokens, NumberReference cur, ASTNode ast, StringReference errorMessage){
 		boolean success;
 		ASTNode t, t1;
 		char [] op;
@@ -259,7 +269,7 @@ public class BitwiseFormula{
 		return success;
 	}
 
-	public static boolean ParseLiteralVariableNotParenthesis(StringArrayReference tokens, NumberReference cur, ASTNode ast, StringReference errorMessage){
+	public static boolean ParseLiteralVariableNotParenthesis(StringReference [] tokens, NumberReference cur, ASTNode ast, StringReference message){
 		boolean success;
 		ASTNode t;
 		char [] token;
@@ -275,7 +285,7 @@ public class BitwiseFormula{
 			AddToNumberReference(cur, 1d);
 
 			t = new ASTNode();
-			success = ParseOr(tokens, cur, t, errorMessage);
+			success = ParseOr(tokens, cur, t, message);
 
 			if(success){
 				ast.value = "()".toCharArray();
@@ -286,14 +296,14 @@ public class BitwiseFormula{
 				if(success){
 					AddToNumberReference(cur, 1d);
 				}else{
-					errorMessage.string = "Epected \')\'.".toCharArray();
+					message.string = "Epected \')\'.".toCharArray();
 				}
 			}
 		}else if(TokenIs(tokens, cur, "~".toCharArray())){
 			AddToNumberReference(cur, 1d);
 
 			t = new ASTNode();
-			success = ParseLiteralVariableNotParenthesis(tokens, cur, t, errorMessage);
+			success = ParseLiteralVariableNotParenthesis(tokens, cur, t, message);
 
 			if(success){
 				ast.value = "~".toCharArray();
@@ -302,7 +312,7 @@ public class BitwiseFormula{
 			}
 		}else{
 			success = false;
-			errorMessage.string = "Unexpected token.".toCharArray();
+			message.string = "Unexpected token.".toCharArray();
 		}
 
 		return success;

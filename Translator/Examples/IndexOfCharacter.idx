@@ -1,0 +1,48 @@
+Bgs IndexOfCharacterAS
+	u64 i
+	u16 c
+	u16 x
+	u64 len
+	u64 xlen
+	u16a str
+	u64 index
+	b1 found
+	b1 tb10
+	b1 tb11
+	u16x8a stra
+	u16x8 sc
+	u16x8 cc
+	u16 mask1
+	u64 zcnt
+	u64 tu640
+	u64 tu641
+Ens
+
+Fnc IndexOfCharacterA
+	Xu16x8a stra, str
+	Broadcast cc, c
+
+	exp a u64: xlen = len / 8
+
+	Loop
+	If exp b: i < xlen & !found
+	
+		Idr sc, stra, i
+		
+		FindSubstring mask1, sc, cc, 2
+		Lzcnt zcnt, mask1
+		
+		If exp b: zcnt != 16
+			Mov found, true
+			exp a u64: index = i * 8 + (16 - zcnt)/2
+		Endb
+
+		Inc i
+	EndLoop
+	
+	exp a u64: i = xlen * 8
+
+Ret
+
+
+

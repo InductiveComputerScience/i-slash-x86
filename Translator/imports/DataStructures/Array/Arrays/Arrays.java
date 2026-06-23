@@ -41,6 +41,46 @@ public class Arrays{
 		array.length = array.length + 1d;
 	}
 
+	public static void ArrayAddString(Array array, char [] value){
+		Data data;
+
+		data = CreateStringData(value);
+
+		ArrayAdd(array, data);
+	}
+
+	public static void ArrayAddBoolean(Array array, boolean value){
+		Data data;
+
+		data = CreateBooleanData(value);
+
+		ArrayAdd(array, data);
+	}
+
+	public static void ArrayAddNumber(Array array, double value){
+		Data data;
+
+		data = CreateNumberData(value);
+
+		ArrayAdd(array, data);
+	}
+
+	public static void ArrayAddStruct(Array array, Structure value){
+		Data data;
+
+		data = CreateStructData(value);
+
+		ArrayAdd(array, data);
+	}
+
+	public static void ArrayAddArray(Array array, Array value){
+		Data data;
+
+		data = CreateArrayData(value);
+
+		ArrayAdd(array, data);
+	}
+
 	public static void ArrayIncreaseSize(Array array){
 		double newLength, i;
 		Data [] newArray;
@@ -89,6 +129,26 @@ public class Arrays{
 		return array.array[(int)(index)];
 	}
 
+	public static Array ArrayIndexArray(Array array, double index){
+		return array.array[(int)(index)].array;
+	}
+
+	public static Structure ArrayIndexStruct(Array array, double index){
+		return array.array[(int)(index)].structure;
+	}
+
+	public static boolean ArrayIndexBoolean(Array array, double index){
+		return array.array[(int)(index)].booleanx;
+	}
+
+	public static char [] ArrayIndexString(Array array, double index){
+		return array.array[(int)(index)].string;
+	}
+
+	public static double ArrayIndexNumber(Array array, double index){
+		return array.array[(int)(index)].number;
+	}
+
 	public static double ArrayLength(Array array){
 		return array.length;
 	}
@@ -109,6 +169,46 @@ public class Arrays{
 		array.length = array.length + 1d;
 	}
 
+	public static void ArrayInsertString(Array array, double index, char [] value){
+		Data data;
+
+		data = CreateStringData(value);
+
+		ArrayInsert(array, index, data);
+	}
+
+	public static void ArrayInsertBoolean(Array array, double index, boolean value){
+		Data data;
+
+		data = CreateBooleanData(value);
+
+		ArrayInsert(array, index, data);
+	}
+
+	public static void ArrayInsertNumber(Array array, double index, double value){
+		Data data;
+
+		data = CreateNumberData(value);
+
+		ArrayInsert(array, index, data);
+	}
+
+	public static void ArrayInsertStruct(Array array, double index, Structure value){
+		Data data;
+
+		data = CreateStructData(value);
+
+		ArrayInsert(array, index, data);
+	}
+
+	public static void ArrayInsertArray(Array array, double index, Array value){
+		Data data;
+
+		data = CreateArrayData(value);
+
+		ArrayInsert(array, index, data);
+	}
+
 	public static boolean ArraySet(Array array, double index, Data value){
 		boolean success;
 
@@ -120,6 +220,46 @@ public class Arrays{
 		}
 
 		return success;
+	}
+
+	public static void ArraySetString(Array array, double index, char [] value){
+		Data data;
+
+		data = CreateStringData(value);
+
+		ArraySet(array, index, data);
+	}
+
+	public static void ArraySetBoolean(Array array, double index, boolean value){
+		Data data;
+
+		data = CreateBooleanData(value);
+
+		ArraySet(array, index, data);
+	}
+
+	public static void ArraySetNumber(Array array, double index, double value){
+		Data data;
+
+		data = CreateNumberData(value);
+
+		ArraySet(array, index, data);
+	}
+
+	public static void ArraySetStruct(Array array, double index, Structure value){
+		Data data;
+
+		data = CreateStructData(value);
+
+		ArraySet(array, index, data);
+	}
+
+	public static void ArraySetArray(Array array, double index, Array value){
+		Data data;
+
+		data = CreateArrayData(value);
+
+		ArraySet(array, index, data);
 	}
 
 	public static void ArrayRemove(Array array, double index){
@@ -265,42 +405,6 @@ public class Arrays{
 		dst.length = src.length;
 
 		return dst;
-	}
-
-	public static boolean ArraysEqual(Array a, Array b){
-		boolean equal;
-		double i;
-
-		equal = true;
-		if(a.length == b.length){
-			for(i = 0d; i < a.length && equal; i = i + 1d){
-				if(a.array[(int)(i)] != b.array[(int)(i)]){
-					equal = false;
-				}
-			}
-		}else{
-			equal = false;
-		}
-
-		return equal;
-	}
-
-	public static boolean DataArraysEqual(Data [] a, Data [] b){
-		boolean equal;
-		double i;
-
-		equal = true;
-		if(a.length == b.length){
-			for(i = 0d; i < a.length && equal; i = i + 1d){
-				if(a[(int)(i)] != b[(int)(i)]){
-					equal = false;
-				}
-			}
-		}else{
-			equal = false;
-		}
-
-		return equal;
 	}
 
   public static void delete(Object object){

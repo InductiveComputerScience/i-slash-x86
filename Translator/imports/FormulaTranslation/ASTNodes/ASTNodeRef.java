@@ -1,7 +1,5 @@
 package FormulaTranslation.ASTNodes;
 
-import static java.lang.Math.*;
-
 import references.references.*;
 import static references.references.references.*;
 
@@ -52,6 +50,7 @@ import static math.math.math.*;
 import static math.Decimal15E2.Decimal15E2.*;
 
 
+
 import static FormulaTranslation.BooleanFormula.BooleanFormula.*;
 
 import static FormulaTranslation.ArithmeticFormulaPratt.ArithmeticFormulaPratt.*;
@@ -76,47 +75,6 @@ import static FormulaTranslation.BitwiseFormulaSymbolicWriter.BitwiseFormulaSymb
 
 import static FormulaTranslation.BooleanFormulaFunctionWriter.BooleanFormulaFunctionWriter.*;
 
-public class ASTNodes{
-	public static void AddToNumberReference(NumberReference cur, double val){
-		cur.numberValue = cur.numberValue + val;
-	}
-
-	public static boolean TokenIs(StringReference [] tokens, NumberReference cur, char [] s){
-		return StringsEqual(Index(tokens, cur), s);
-	}
-
-	public static boolean NextTokenIs(StringReference [] tokens, NumberReference cur, char [] s){
-		return StringsEqual(NextIndex(tokens, cur), s);
-	}
-
-	public static char [] NextIndex(StringReference [] stringArray, NumberReference index){
-		return stringArray[(int)(index.numberValue + 1d)].string;
-	}
-
-	public static char [] Index(StringReference [] stringArray, NumberReference index){
-		return stringArray[(int)(index.numberValue)].string;
-	}
-
-	public static void AssignASTNode(ASTNode x, ASTNode a){
-		x.leaf = a.leaf;
-		x.l = a.l;
-		x.r = a.r;
-		x.value = a.value;
-	}
-
-	public static ASTNode CreateASTNode(ASTNode l, ASTNode r, char [] op){
-		ASTNode t;
-
-		t = new ASTNode();
-		t.value = op;
-		t.l = l;
-		t.r = r;
-		t.leaf = false;
-
-		return t;
-	}
-
-  public static void delete(Object object){
-    // Java has garbage collection.
-  }
+public class ASTNodeRef{
+	public ASTNode node;
 }

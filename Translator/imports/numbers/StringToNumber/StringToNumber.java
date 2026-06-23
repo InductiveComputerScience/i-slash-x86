@@ -9,7 +9,7 @@ import static strings.strings.strings.*;
 import references.references.*;
 import static references.references.references.*;
 
-import static math.math.math.*;
+import static m18math.math.math.*;
 
 import static lists.NumberList.NumberList.*;
 

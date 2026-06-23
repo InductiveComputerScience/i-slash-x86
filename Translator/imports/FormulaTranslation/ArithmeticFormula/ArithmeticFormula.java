@@ -7,6 +7,8 @@ import static references.references.references.*;
 
 import static nnumbers.NumberToString.NumberToString.*;
 
+import static nnumbers.NumberComputations.NumberComputations.*;
+
 import static nnumbers.StringToNumber.StringToNumber.*;
 
 import static charCharacters.Characters.Characters.*;
@@ -45,14 +47,22 @@ import static lists.DynamicArrayNumbers.DynamicArrayNumbersFunctions.DynamicArra
 
 import static lists.CharacterList.CharacterList.*;
 
+import static math.math.math.*;
+
+import static math.Decimal15E2.Decimal15E2.*;
+
 
 import static FormulaTranslation.BooleanFormula.BooleanFormula.*;
+
+import static FormulaTranslation.ArithmeticFormulaPratt.ArithmeticFormulaPratt.*;
 
 import static FormulaTranslation.BitwiseFormula.BitwiseFormula.*;
 
 import static FormulaTranslation.ArithmeticFormulaFunctionWriter.ArithmeticFormulaFunctionWriter.*;
 
 import static FormulaTranslation.TS.TS.*;
+
+import static FormulaTranslation.ArithmeticFormulaEvaluator.ArithmeticFormulaEvaluator.*;
 
 import static FormulaTranslation.BooleanFormulaSymbolicWriter.BooleanFormulaSymbolicWriter.*;
 
@@ -68,7 +78,7 @@ import static FormulaTranslation.BitwiseFormulaSymbolicWriter.BitwiseFormulaSymb
 import static FormulaTranslation.BooleanFormulaFunctionWriter.BooleanFormulaFunctionWriter.*;
 
 public class ArithmeticFormula{
-	public static boolean TokenizeArithmeticFormula(char [] f, StringArrayReference tokens, StringReference errorMessage){
+	public static boolean TokenizeArithmeticFormula(char [] f, StringArrayReference tokens, StringReference message){
 		boolean success;
 		double i;
 		LinkedListStrings ll;
@@ -124,7 +134,7 @@ public class ArithmeticFormula{
 				llc = CreateLinkedListCharacter();
 			}else{
 				success = false;
-				errorMessage.string = "Unknown token in formula.".toCharArray();
+				message.string = "Unknown token in formula.".toCharArray();
 			}
 		}
 
@@ -138,35 +148,38 @@ public class ArithmeticFormula{
 		return success;
 	}
 
-	public static boolean ParseArithmeticTokens(StringArrayReference tokens, NumberReference cur, ASTNode ast, StringReference errorMessage){
+	public static boolean ParseArithmeticTokens(StringReference [] tokens, ASTNode ast, StringReference message){
 		boolean success;
+		NumberReference cur;
 
-		success = ParseAdditionOrSubtraction(tokens, cur, ast, errorMessage);
+		cur = CreateNumberReference(0d);
+
+		success = ParseAdditionOrSubtraction(tokens, cur, ast, message);
 
 		if(success){
 			success = TokenIs(tokens, cur, "<end>".toCharArray());
 
 			if(!success){
-				errorMessage.string = "Expected the end of the formula.".toCharArray();
+				message.string = "Expected the end of the formula.".toCharArray();
 			}
 		}
 
 		return success;
 	}
 
-	public static boolean ParseAdditionOrSubtraction(StringArrayReference tokens, NumberReference cur, ASTNode ast, StringReference errorMessage){
+	public static boolean ParseAdditionOrSubtraction(StringReference [] tokens, NumberReference cur, ASTNode ast, StringReference message){
 		boolean success;
 		ASTNode t, t1;
 		char [] op;
 
 		t = new ASTNode();
-		success = ParseMultiplicationOrDivision(tokens, cur, t, errorMessage);
+		success = ParseMultiplicationOrDivision(tokens, cur, t, message);
 
 		for(; success && (TokenIs(tokens, cur, "+".toCharArray()) || TokenIs(tokens, cur, "-".toCharArray())); ){
 			op = Index(tokens, cur);
 			AddToNumberReference(cur, 1d);
 			t1 = new ASTNode();
-			success = ParseMultiplicationOrDivision(tokens, cur, t1, errorMessage);
+			success = ParseMultiplicationOrDivision(tokens, cur, t1, message);
 			if(success){
 				t = CreateASTNode(t, t1, op);
 			}
@@ -179,19 +192,19 @@ public class ArithmeticFormula{
 		return success;
 	}
 
-	public static boolean ParseMultiplicationOrDivision(StringArrayReference tokens, NumberReference cur, ASTNode ast, StringReference errorMessage){
+	public static boolean ParseMultiplicationOrDivision(StringReference [] tokens, NumberReference cur, ASTNode ast, StringReference message){
 		boolean success;
 		ASTNode t, t1;
 		char [] op;
 
 		t = new ASTNode();
-		success = ParseExponentiation(tokens, cur, t, errorMessage);
+		success = ParseExponentiation(tokens, cur, t, message);
 
 		for(; success && (TokenIs(tokens, cur, "*".toCharArray()) || TokenIs(tokens, cur, "/".toCharArray()) || TokenIs(tokens, cur, "mod".toCharArray())); ){
 			op = Index(tokens, cur);
 			AddToNumberReference(cur, 1d);
 			t1 = new ASTNode();
-			success = ParseExponentiation(tokens, cur, t1, errorMessage);
+			success = ParseExponentiation(tokens, cur, t1, message);
 			if(success){
 				t = CreateASTNode(t, t1, op);
 			}
@@ -204,19 +217,19 @@ public class ArithmeticFormula{
 		return success;
 	}
 
-	public static boolean ParseExponentiation(StringArrayReference tokens, NumberReference cur, ASTNode ast, StringReference errorMessage){
+	public static boolean ParseExponentiation(StringReference [] tokens, NumberReference cur, ASTNode ast, StringReference message){
 		boolean success;
 		ASTNode t, t1;
 		char [] op;
 
 		t = new ASTNode();
-		success = ParseLiteralVariableUnaryParenthesis(tokens, cur, t, errorMessage);
+		success = ParseLiteralVariableUnaryParenthesis(tokens, cur, t, message);
 
 		if(success && TokenIs(tokens, cur, "^".toCharArray())){
 			op = Index(tokens, cur);
 			AddToNumberReference(cur, 1d);
 			t1 = new ASTNode();
-			success = ParseExponentiation(tokens, cur, t1, errorMessage);
+			success = ParseExponentiation(tokens, cur, t1, message);
 			if(success){
 				t = CreateASTNode(t, t1, op);
 			}
@@ -229,7 +242,7 @@ public class ArithmeticFormula{
 		return success;
 	}
 
-	public static boolean ParseLiteralVariableUnaryParenthesis(StringArrayReference tokens, NumberReference cur, ASTNode ast, StringReference errorMessage){
+	public static boolean ParseLiteralVariableUnaryParenthesis(StringReference [] tokens, NumberReference cur, ASTNode ast, StringReference message){
 		boolean success;
 		ASTNode t;
 		char [] token;
@@ -245,7 +258,7 @@ public class ArithmeticFormula{
 				AddToNumberReference(cur, 1d);
 
 				t = new ASTNode();
-				success = ParseAdditionOrSubtraction(tokens, cur, t, errorMessage);
+				success = ParseAdditionOrSubtraction(tokens, cur, t, message);
 
 				if(success){
 					success = TokenIs(tokens, cur, ")".toCharArray());
@@ -256,11 +269,11 @@ public class ArithmeticFormula{
 
 						AddToNumberReference(cur, 1d);
 					}else{
-						errorMessage.string = "Epected \')\'.".toCharArray();
+						message.string = "Epected \')\'.".toCharArray();
 					}
 				}
 			}else{
-				errorMessage.string = "Epected \'(\'.".toCharArray();
+				message.string = "Epected \'(\'.".toCharArray();
 			}
 		}else if(charIsLetter(token[0])){
 			ast.leaf = true;
@@ -284,7 +297,7 @@ public class ArithmeticFormula{
 			AddToNumberReference(cur, 1d);
 
 			t = new ASTNode();
-			success = ParseAdditionOrSubtraction(tokens, cur, t, errorMessage);
+			success = ParseAdditionOrSubtraction(tokens, cur, t, message);
 
 			if(success){
 				ast.value = "()".toCharArray();
@@ -295,14 +308,14 @@ public class ArithmeticFormula{
 				if(success){
 					AddToNumberReference(cur, 1d);
 				}else{
-					errorMessage.string = "Epected \')\'.".toCharArray();
+					message.string = "Epected \')\'.".toCharArray();
 				}
 			}
 		}else if(TokenIs(tokens, cur, "-".toCharArray()) || TokenIs(tokens, cur, "+".toCharArray())){
 			AddToNumberReference(cur, 1d);
 
 			t = new ASTNode();
-			success = ParseExponentiation(tokens, cur, t, errorMessage);
+			success = ParseExponentiation(tokens, cur, t, message);
 
 			if(success){
 				if(StringsEqual(token, "-".toCharArray())){
@@ -315,14 +328,14 @@ public class ArithmeticFormula{
 			}
 		}else{
 			success = false;
-			errorMessage.string = "Unexpected token.".toCharArray();
+			message.string = "Unexpected token.".toCharArray();
 		}
 
 		return success;
 	}
 
 	public static boolean IsKnownArithmeticFunction(char [] token){
-		return StringsEqual(token, "sqrt".toCharArray()) || StringsEqual(token, "ceil".toCharArray()) || StringsEqual(token, "floor".toCharArray()) || StringsEqual(token, "truncate".toCharArray()) || StringsEqual(token, "abs".toCharArray()) || StringsEqual(token, "log".toCharArray()) || StringsEqual(token, "ln".toCharArray()) || StringsEqual(token, "exp".toCharArray()) || StringsEqual(token, "sin".toCharArray()) || StringsEqual(token, "cos".toCharArray()) || StringsEqual(token, "tan".toCharArray()) || StringsEqual(token, "asin".toCharArray()) || StringsEqual(token, "acos".toCharArray()) || StringsEqual(token, "atan".toCharArray());
+		return StringsEqual(token, "sqrt".toCharArray()) || StringsEqual(token, "ceil".toCharArray()) || StringsEqual(token, "floor".toCharArray()) || StringsEqual(token, "truncate".toCharArray()) || StringsEqual(token, "abs".toCharArray()) || StringsEqual(token, "log".toCharArray()) || StringsEqual(token, "ln".toCharArray()) || StringsEqual(token, "exp".toCharArray()) || StringsEqual(token, "sin".toCharArray()) || StringsEqual(token, "cos".toCharArray()) || StringsEqual(token, "tan".toCharArray()) || StringsEqual(token, "asin".toCharArray()) || StringsEqual(token, "acos".toCharArray()) || StringsEqual(token, "atan".toCharArray()) || StringsEqual(token, "gamma".toCharArray()) || StringsEqual(token, "cbrt".toCharArray());
 	}
 
 	public static boolean IsKnownMatrixFunction(char [] token){

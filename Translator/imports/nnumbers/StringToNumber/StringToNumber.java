@@ -11,6 +11,8 @@ import static references.references.references.*;
 
 import static math.math.math.*;
 
+import static math.Decimal15E2.Decimal15E2.*;
+
 import static lists.NumberList.NumberList.*;
 
 import static lists.StringList.StringList.*;
@@ -41,6 +43,8 @@ import static lists.CharacterList.CharacterList.*;
 
 
 import static nnumbers.NumberToString.NumberToString.*;
+
+import static nnumbers.NumberComputations.NumberComputations.*;
 
 public class StringToNumber{
 	public static boolean nCreateNumberFromDecimalStringWithCheck(char [] string, NumberReference decimalReference, StringReference message){

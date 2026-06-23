@@ -35,6 +35,8 @@ import static references.references.references.*;
 
 import static charCharacters.Characters.Characters.*;
 
+import static arrays.arrays.arrays.*;
+
 
 import static strings.strings.strings.*;
 

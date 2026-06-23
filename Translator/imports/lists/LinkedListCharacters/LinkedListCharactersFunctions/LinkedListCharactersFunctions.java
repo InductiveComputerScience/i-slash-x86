@@ -109,6 +109,30 @@ public class LinkedListCharactersFunctions{
 		}
 	}
 
+	public static void LinkedListInsertCharacter(LinkedListCharacters ll, double index, char value){
+		double i;
+		LinkedListNodeCharacters node, tmp;
+
+		if(index == 0d){
+			tmp = ll.first;
+			ll.first = new LinkedListNodeCharacters();
+			ll.first.next = tmp;
+			ll.first.value = value;
+			ll.first.end = false;
+		}else{
+			node = ll.first;
+			for(i = 0d; i < index - 1d; i = i + 1d){
+				node = node.next;
+			}
+
+			tmp = node.next;
+			node.next = new LinkedListNodeCharacters();
+			node.next.next = tmp;
+			node.next.value = value;
+			node.next.end = false;
+		}
+	}
+
   public static void delete(Object object){
     // Java has garbage collection.
   }

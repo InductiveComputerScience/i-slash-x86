@@ -1,6 +1,4 @@
-package JSON.Validator;
-
-import static java.lang.Math.*;
+package JSON.Writer;
 
 import references.references.*;
 import static references.references.references.*;
@@ -57,36 +55,23 @@ import static lists.DynamicArrayNumbers.DynamicArrayNumbersFunctions.DynamicArra
 import static lists.CharacterList.CharacterList.*;
 
 
-import static JSON.Comparator.Comparator.*;
 
-import JSON.Writer.*;
-import static JSON.Writer.Writer.*;
+import static JSON.Comparator.Comparator.*;
 
 import static JSON.Parser.Parser.*;
 
 import static JSON.TokenReader.TokenReader.*;
 
+import static JSON.Validator.Validator.*;
+
 import static JSON.TypeMatcher.TypeMatcher.*;
 
 import static JSON.LengthComputer.LengthComputer.*;
 
-public class Validator{
-	public static boolean IsValidJSON(char [] json, StringReference message){
-		boolean success;
-		DataReference elementReference;
-
-		elementReference = new DataReference();
-
-		success = ReadJSON(json, elementReference, message);
-
-		if(success){
-			FreeData(elementReference.data);
-		}
-
-		return success;
-	}
-
-  public static void delete(Object object){
-    // Java has garbage collection.
-  }
+public class WriterSettings{
+	public boolean prettyprint;
+	public boolean humanreadable;
+	public boolean binary;
+	public double level;
+	public char [] indentString;
 }

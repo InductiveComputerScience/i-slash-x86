@@ -7,6 +7,8 @@ import static references.references.references.*;
 
 import static nnumbers.NumberToString.NumberToString.*;
 
+import static nnumbers.NumberComputations.NumberComputations.*;
+
 import static nnumbers.StringToNumber.StringToNumber.*;
 
 import static charCharacters.Characters.Characters.*;
@@ -45,14 +47,22 @@ import static lists.DynamicArrayNumbers.DynamicArrayNumbersFunctions.DynamicArra
 
 import static lists.CharacterList.CharacterList.*;
 
+import static math.math.math.*;
+
+import static math.Decimal15E2.Decimal15E2.*;
+
 
 import static FormulaTranslation.BooleanFormula.BooleanFormula.*;
+
+import static FormulaTranslation.ArithmeticFormulaPratt.ArithmeticFormulaPratt.*;
 
 import static FormulaTranslation.ArithmeticFormula.ArithmeticFormula.*;
 
 import static FormulaTranslation.BitwiseFormula.BitwiseFormula.*;
 
 import static FormulaTranslation.ArithmeticFormulaFunctionWriter.ArithmeticFormulaFunctionWriter.*;
+
+import static FormulaTranslation.ArithmeticFormulaEvaluator.ArithmeticFormulaEvaluator.*;
 
 import static FormulaTranslation.BooleanFormulaSymbolicWriter.BooleanFormulaSymbolicWriter.*;
 

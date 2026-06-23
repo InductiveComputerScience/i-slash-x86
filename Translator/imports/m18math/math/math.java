@@ -1,4 +1,4 @@
-package math.math;
+package m18math.math;
 
 import static java.lang.Math.*;
 
@@ -6,18 +6,16 @@ import references.references.*;
 import static references.references.references.*;
 
 
-import static math.Decimal15E2.Decimal15E2.*;
-
 public class math{
-	public static double Negate(double x){
+	public static double m18Negate(double x){
 		return -x;
 	}
 
-	public static double Positive(double x){
+	public static double m18Positive(double x){
 		return +x;
 	}
 
-	public static double Factorial(double x){
+	public static double m18Factorial(double x){
 		double i, f;
 
 		f = 1d;
@@ -29,39 +27,35 @@ public class math{
 		return f;
 	}
 
-	public static double Round(double x){
+	public static double m18Round(double x){
 		return floor(x + 0.5);
 	}
 
-	public static double RoundToDigits(double element, double digitsAfterPoint){
-		return Round(element*pow(10d, digitsAfterPoint))/pow(10d, digitsAfterPoint);
-	}
-
-	public static double BankersRound(double x){
+	public static double m18BankersRound(double x){
 		double r;
 
-		if(Absolute(x - Truncate(x)) == 0.5){
-			if(!DivisibleBy(Round(x), 2d)){
-				r = Round(x) - 1d;
+		if(m18Absolute(x - m18Truncate(x)) == 0.5){
+			if(!m18DivisibleBy(m18Round(x), 2d)){
+				r = m18Round(x) - 1d;
 			}else{
-				r = Round(x);
+				r = m18Round(x);
 			}
 		}else{
-			r = Round(x);
+			r = m18Round(x);
 		}
 
 		return r;
 	}
 
-	public static double Ceil(double x){
+	public static double m18Ceil(double x){
 		return ceil(x);
 	}
 
-	public static double Floor(double x){
+	public static double m18Floor(double x){
 		return floor(x);
 	}
 
-	public static double Truncate(double x){
+	public static double m18Truncate(double x){
 		double t;
 
 		if(x >= 0d){
@@ -73,54 +67,54 @@ public class math{
 		return t;
 	}
 
-	public static double Absolute(double x){
+	public static double m18Absolute(double x){
 		return abs(x);
 	}
 
-	public static double Logarithm(double x){
+	public static double m18Logarithm(double x){
 		return log10(x);
 	}
 
-	public static double NaturalLogarithm(double x){
+	public static double m18NaturalLogarithm(double x){
 		return log(x);
 	}
 
-	public static double Sin(double x){
+	public static double m18Sin(double x){
 		return sin(x);
 	}
 
-	public static double Cos(double x){
+	public static double m18Cos(double x){
 		return cos(x);
 	}
 
-	public static double Tan(double x){
+	public static double m18Tan(double x){
 		return tan(x);
 	}
 
-	public static double Asin(double x){
+	public static double m18Asin(double x){
 		return asin(x);
 	}
 
-	public static double Acos(double x){
+	public static double m18Acos(double x){
 		return acos(x);
 	}
 
-	public static double Atan(double x){
+	public static double m18Atan(double x){
 		return atan(x);
 	}
 
-	public static double Atan2(double y, double x){
+	public static double m18Atan2(double y, double x){
 		double a;
 
 		/* Atan2 is an invalid operation when x = 0 and y = 0, but this method does not return errors.*/
 		a = 0d;
 
 		if(x > 0d){
-			a = Atan(y/x);
+			a = m18Atan(y/x);
 		}else if(x < 0d && y >= 0d){
-			a = Atan(y/x) + PI;
+			a = m18Atan(y/x) + PI;
 		}else if(x < 0d && y < 0d){
-			a = Atan(y/x) - PI;
+			a = m18Atan(y/x) - PI;
 		}else if(x == 0d && y > 0d){
 			a = PI/2d;
 		}else if(x == 0d && y < 0d){
@@ -130,19 +124,19 @@ public class math{
 		return a;
 	}
 
-	public static double Squareroot(double x){
+	public static double m18Squareroot(double x){
 		return sqrt(x);
 	}
 
-	public static double Exp(double x){
+	public static double m18Exp(double x){
 		return exp(x);
 	}
 
-	public static boolean DivisibleBy(double a, double b){
+	public static boolean m18DivisibleBy(double a, double b){
 		return ((a%b) == 0d);
 	}
 
-	public static double Combinations(double n, double k){
+	public static double m18Combinations(double n, double k){
 		double i, j, c;
 
 		c = 1d;
@@ -160,7 +154,7 @@ public class math{
 		return c;
 	}
 
-	public static double Permutations(double n, double k){
+	public static double m18Permutations(double n, double k){
 		double i, c;
 
 		c = 1d;
@@ -172,11 +166,11 @@ public class math{
 		return c;
 	}
 
-	public static boolean EpsilonCompare(double a, double b, double epsilon){
+	public static boolean m18EpsilonCompare(double a, double b, double epsilon){
 		return abs(a - b) < epsilon;
 	}
 
-	public static double GreatestCommonDivisor(double a, double b){
+	public static double m18GreatestCommonDivisor(double a, double b){
 		double t;
 
 		for(; b != 0d; ){
@@ -188,7 +182,7 @@ public class math{
 		return a;
 	}
 
-	public static double GCDWithSubtraction(double a, double b){
+	public static double m18GCDWithSubtraction(double a, double b){
 		double g;
 
 		if(a == 0d){
@@ -208,16 +202,16 @@ public class math{
 		return g;
 	}
 
-	public static boolean IsInteger(double a){
+	public static boolean m18IsInteger(double a){
 		return (a - floor(a)) == 0d;
 	}
 
-	public static boolean GreatestCommonDivisorWithCheck(double a, double b, NumberReference gcdReference){
+	public static boolean m18GreatestCommonDivisorWithCheck(double a, double b, NumberReference gcdReference){
 		boolean success;
 		double gcd;
 
-		if(IsInteger(a) && IsInteger(b)){
-			gcd = GreatestCommonDivisor(a, b);
+		if(m18IsInteger(a) && m18IsInteger(b)){
+			gcd = m18GreatestCommonDivisor(a, b);
 			gcdReference.numberValue = gcd;
 			success = true;
 		}else{
@@ -227,11 +221,11 @@ public class math{
 		return success;
 	}
 
-	public static double LeastCommonMultiple(double a, double b){
+	public static double m18LeastCommonMultiple(double a, double b){
 		double lcm;
 
 		if(a > 0d && b > 0d){
-			lcm = abs(a*b)/GreatestCommonDivisor(a, b);
+			lcm = abs(a*b)/m18GreatestCommonDivisor(a, b);
 		}else{
 			lcm = 0d;
 		}
@@ -239,7 +233,7 @@ public class math{
 		return lcm;
 	}
 
-	public static double Sign(double a){
+	public static double m18Sign(double a){
 		double s;
 
 		if(a > 0d){
@@ -253,27 +247,27 @@ public class math{
 		return s;
 	}
 
-	public static double Max(double a, double b){
+	public static double m18Max(double a, double b){
 		return max(a, b);
 	}
 
-	public static double Min(double a, double b){
+	public static double m18Min(double a, double b){
 		return min(a, b);
 	}
 
-	public static double Power(double a, double b){
+	public static double m18Power(double a, double b){
 		return pow(a, b);
 	}
 
-	public static double Gamma(double x){
-		return LanczosApproximation(x);
+	public static double m18Gamma(double x){
+		return m18LanczosApproximation(x);
 	}
 
-	public static double LogGamma(double x){
-		return log(Gamma(x));
+	public static double m18LogGamma(double x){
+		return log(m18Gamma(x));
 	}
 
-	public static double LanczosApproximation(double z){
+	public static double m18LanczosApproximation(double z){
 		double [] p;
 		double i, y, t, x;
 
@@ -288,7 +282,7 @@ public class math{
 		p[7] = 1.5056327351493116e-7;
 
 		if(z < 0.5){
-			y = PI/(sin(PI*z)*LanczosApproximation(1d - z));
+			y = PI/(sin(PI*z)*m18LanczosApproximation(1d - z));
 		}else{
 			z = z - 1d;
 			x = 0.99999999999980993;
@@ -302,53 +296,53 @@ public class math{
 		return y;
 	}
 
-	public static double Beta(double x, double y){
-		return Gamma(x)*Gamma(y)/Gamma(x + y);
+	public static double m18Beta(double x, double y){
+		return m18Gamma(x)*m18Gamma(y)/m18Gamma(x + y);
 	}
 
-	public static double Sinh(double x){
+	public static double m18Sinh(double x){
 		return (exp(x) - exp(-x))/2d;
 	}
 
-	public static double Cosh(double x){
+	public static double m18Cosh(double x){
 		return (exp(x) + exp(-x))/2d;
 	}
 
-	public static double Tanh(double x){
-		return Sinh(x)/Cosh(x);
+	public static double m18Tanh(double x){
+		return m18Sinh(x)/m18Cosh(x);
 	}
 
-	public static double Cot(double x){
+	public static double m18Cot(double x){
 		return 1d/tan(x);
 	}
 
-	public static double Sec(double x){
+	public static double m18Sec(double x){
 		return 1d/cos(x);
 	}
 
-	public static double Csc(double x){
+	public static double m18Csc(double x){
 		return 1d/sin(x);
 	}
 
-	public static double Coth(double x){
-		return Cosh(x)/Sinh(x);
+	public static double m18Coth(double x){
+		return m18Cosh(x)/m18Sinh(x);
 	}
 
-	public static double Sech(double x){
-		return 1d/Cosh(x);
+	public static double m18Sech(double x){
+		return 1d/m18Cosh(x);
 	}
 
-	public static double Csch(double x){
-		return 1d/Sinh(x);
+	public static double m18Csch(double x){
+		return 1d/m18Sinh(x);
 	}
 
-	public static double Error(double x){
+	public static double m18Error(double x){
 		double y, t, tau, c1, c2, c3, c4, c5, c6, c7, c8, c9, c10;
 
 		if(x == 0d){
 			y = 0d;
 		}else if(x < 0d){
-			y = -Error(-x);
+			y = -m18Error(-x);
 		}else{
 			c1 = -1.26551223;
 			c2 = +1.00002368;
@@ -371,18 +365,18 @@ public class math{
 		return y;
 	}
 
-	public static double ErrorInverse(double x){
+	public static double m18ErrorInverse(double x){
 		double y, a, t;
 
 		a = (8d*(PI - 3d))/(3d*PI*(4d - PI));
 
 		t = 2d/(PI*a) + log(1d - pow(x, 2d))/2d;
-		y = Sign(x)*sqrt(sqrt(pow(t, 2d) - log(1d - pow(x, 2d))/a) - t);
+		y = m18Sign(x)*sqrt(sqrt(pow(t, 2d) - log(1d - pow(x, 2d))/a) - t);
 
 		return y;
 	}
 
-	public static double FallingFactorial(double x, double n){
+	public static double m18FallingFactorial(double x, double n){
 		double k, y;
 
 		y = 1d;
@@ -394,7 +388,7 @@ public class math{
 		return y;
 	}
 
-	public static double RisingFactorial(double x, double n){
+	public static double m18RisingFactorial(double x, double n){
 		double k, y;
 
 		y = 1d;
@@ -406,19 +400,19 @@ public class math{
 		return y;
 	}
 
-	public static double Hypergeometric(double a, double b, double c, double z, double maxIterations, double precision){
+	public static double m18Hypergeometric(double a, double b, double c, double z, double maxIterations, double precision){
 		double y;
 
 		if(abs(z) >= 0.5){
-			y = pow(1d - z, -a)*HypergeometricDirect(a, c - b, c, z/(z - 1d), maxIterations, precision);
+			y = pow(1d - z, -a)*m18HypergeometricDirect(a, c - b, c, z/(z - 1d), maxIterations, precision);
 		}else{
-			y = HypergeometricDirect(a, b, c, z, maxIterations, precision);
+			y = m18HypergeometricDirect(a, b, c, z, maxIterations, precision);
 		}
 
 		return y;
 	}
 
-	public static double HypergeometricDirect(double a, double b, double c, double z, double maxIterations, double precision){
+	public static double m18HypergeometricDirect(double a, double b, double c, double z, double maxIterations, double precision){
 		double y, yp, n;
 		boolean done;
 
@@ -426,7 +420,7 @@ public class math{
 		done = false;
 
 		for(n = 0d; n < maxIterations && !done; n = n + 1d){
-			yp = RisingFactorial(a, n)*RisingFactorial(b, n)/RisingFactorial(c, n)*pow(z, n)/Factorial(n);
+			yp = m18RisingFactorial(a, n)*m18RisingFactorial(b, n)/m18RisingFactorial(c, n)*pow(z, n)/m18Factorial(n);
 			if(abs(yp) < precision){
 				done = true;
 			}
@@ -436,11 +430,11 @@ public class math{
 		return y;
 	}
 
-	public static double BernouilliNumber(double n){
-		return AkiyamaTanigawaAlgorithm(n);
+	public static double m18BernouilliNumber(double n){
+		return m18AkiyamaTanigawaAlgorithm(n);
 	}
 
-	public static double AkiyamaTanigawaAlgorithm(double n){
+	public static double m18AkiyamaTanigawaAlgorithm(double n){
 		double m, j, B;
 		double [] A;
 

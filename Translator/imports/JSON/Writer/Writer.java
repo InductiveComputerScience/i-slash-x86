@@ -11,9 +11,13 @@ import static strings.strings.strings.*;
 
 import static nnumbers.NumberToString.NumberToString.*;
 
+import static nnumbers.NumberComputations.NumberComputations.*;
+
 import static nnumbers.StringToNumber.StringToNumber.*;
 
 import static math.math.math.*;
+
+import static math.Decimal15E2.Decimal15E2.*;
 
 import static arrays.arrays.arrays.*;
 
@@ -24,6 +28,34 @@ import static DataStructures.Array.Structures.Structures.*;
 
 import static DataStructures.Array.Arrays.Arrays.*;
 
+import static lists.NumberList.NumberList.*;
+
+import static lists.StringList.StringList.*;
+
+import lists.DynamicArrayCharacters.Structures.*;
+
+import static lists.DynamicArrayCharacters.DynamicArrayCharactersFunctions.DynamicArrayCharactersFunctions.*;
+
+import static lists.BooleanList.BooleanList.*;
+
+import lists.LinkedListStrings.Structures.*;
+
+import static lists.LinkedListStrings.LinkedListStringsFunctions.LinkedListStringsFunctions.*;
+
+import lists.LinkedListNumbers.Structures.*;
+
+import static lists.LinkedListNumbers.LinkedListNumbersFunctions.LinkedListNumbersFunctions.*;
+
+import static lists.LinkedListCharacters.LinkedListCharactersFunctions.LinkedListCharactersFunctions.*;
+
+import lists.LinkedListCharacters.Structures.*;
+
+import lists.DynamicArrayNumbers.Structures.*;
+
+import static lists.DynamicArrayNumbers.DynamicArrayNumbersFunctions.DynamicArrayNumbersFunctions.*;
+
+import static lists.CharacterList.CharacterList.*;
+
 
 import static JSON.Comparator.Comparator.*;
 
@@ -33,47 +65,95 @@ import static JSON.TokenReader.TokenReader.*;
 
 import static JSON.Validator.Validator.*;
 
+import static JSON.TypeMatcher.TypeMatcher.*;
+
 import static JSON.LengthComputer.LengthComputer.*;
 
 public class Writer{
 	public static char [] WriteJSON(Data data){
-		char [] result;
-		double length;
-		NumberReference index;
+		WriterSettings writerSettings;
 
-		length = ComputeJSONStringLength(data);
-		result = new char [(int)(length)];
-		index = CreateNumberReference(0d);
+		writerSettings = CreateDefaultWriterSettings();
+
+		return WriteJSONWithOptions(data, writerSettings);
+	}
+
+	public static char [] WriteJSONPretty(Data data){
+		WriterSettings writerSettings;
+
+		writerSettings = CreateDefaultWriterSettings();
+		writerSettings.prettyprint = true;
+
+		return WriteJSONWithOptions(data, writerSettings);
+	}
+
+	public static char [] WriteJSONPrettyBinary(Data data){
+		WriterSettings writerSettings;
+
+		writerSettings = CreateDefaultWriterSettings();
+		writerSettings.prettyprint = true;
+		writerSettings.humanreadable = true;
+		writerSettings.binary = true;
+
+		return WriteJSONWithOptions(data, writerSettings);
+	}
+
+	public static WriterSettings CreateDefaultWriterSettings(){
+		WriterSettings writerSettings;
+
+		writerSettings = new WriterSettings();
+		writerSettings.prettyprint = false;
+		writerSettings.humanreadable = false;
+		writerSettings.binary = false;
+		writerSettings.level = 0d;
+		writerSettings.indentString = "  ".toCharArray();
+
+		return writerSettings;
+	}
+
+	public static char [] WriteJSONWithOptions(Data data, WriterSettings settings){
+		DynamicArrayCharacters da;
+		char [] result;
+
+		da = CreateDynamicArrayCharacters();
 
 		if(IsStructure(data)){
-			WriteObject(data, result, index);
+			WriteObject(data, da, settings);
 		}else if(IsString(data)){
-			WriteString(data, result, index);
+			WriteString(data, da);
 		}else if(IsArray(data)){
-			WriteArray(data, result, index);
+			WriteArray(data, da, settings);
 		}else if(IsNumber(data)){
-			WriteNumber(data, result, index);
+			WriteNumber(data, da, settings);
 		}else if(IsNoType(data)){
-			WriteStringToStingStream(result, index, "null".toCharArray());
+			DynamicArrayAddString(da, "null".toCharArray());
 		}else if(IsBoolean(data)){
-			WriteBooleanValue(data, result, index);
+			WriteBooleanValue(data, da);
 		}
+
+		result = DynamicArrayCharactersToArray(da);
 
 		return result;
 	}
 
-	public static void WriteBooleanValue(Data element, char [] result, NumberReference index){
+	public static void WriteBooleanValue(Data element, DynamicArrayCharacters da){
 		if(element.booleanx){
-			WriteStringToStingStream(result, index, "true".toCharArray());
+			DynamicArrayAddString(da, "true".toCharArray());
 		}else{
-			WriteStringToStingStream(result, index, "false".toCharArray());
+			DynamicArrayAddString(da, "false".toCharArray());
 		}
 	}
 
-	public static void WriteNumber(Data element, char [] result, NumberReference index){
+	public static void WriteNumber(Data element, DynamicArrayCharacters da, WriterSettings settings){
 		char [] numberString;
 
-		if(element.number != 0d){
+		if(settings.humanreadable){
+			if(settings.binary){
+				numberString = nNumberToHumanReadableBinary(element.number);
+			}else{
+				numberString = nNumberToHumanReadableShortScale(element.number);
+			}
+		}else if(element.number != 0d){
 			if(abs(element.number) >= pow(10d, 15d) || abs(element.number) <= pow(10d, -15d)){
 				numberString = nCreateStringScientificNotationDecimalFromNumber(element.number);
 			}else{
@@ -83,35 +163,71 @@ public class Writer{
 			numberString = nCreateStringDecimalFromNumber(element.number);
 		}
 
-		WriteStringToStingStream(result, index, numberString);
+		if(settings.humanreadable){
+			DynamicArrayAddCharacter(da, '\"');
+		}
+		DynamicArrayAddString(da, numberString);
+		if(settings.humanreadable){
+			DynamicArrayAddCharacter(da, '\"');
+		}
 	}
 
-	public static void WriteArray(Data data, char [] result, NumberReference index){
+	public static void WriteArray(Data data, DynamicArrayCharacters da, WriterSettings settings){
 		char [] s;
 		Data entry;
-		double i;
+		double i, j;
 
-		WriteStringToStingStream(result, index, "[".toCharArray());
+		DynamicArrayAddString(da, "[".toCharArray());
+
+		if(settings.prettyprint){
+			settings.level = settings.level + 1d;
+			if(data.array.length > 0d){
+				DynamicArrayAddCharacter(da, '\n');
+			}
+		}
 
 		for(i = 0d; i < data.array.length; i = i + 1d){
 			entry = ArrayIndex(data.array, i);
 
-			s = WriteJSON(entry);
-			WriteStringToStingStream(result, index, s);
+			if(settings.prettyprint){
+				for(j = 0d; j < settings.level; j = j + 1d){
+					DynamicArrayAddString(da, settings.indentString);
+				}
+			}
+
+			s = WriteJSONWithOptions(entry, settings);
+			DynamicArrayAddString(da, s);
 
 			if(i + 1d != data.array.length){
-				WriteStringToStingStream(result, index, ",".toCharArray());
+				DynamicArrayAddString(da, ",".toCharArray());
+				if(settings.prettyprint){
+					DynamicArrayAddString(da, "\n".toCharArray());
+				}
 			}
 		}
 
-		WriteStringToStingStream(result, index, "]".toCharArray());
+		if(settings.prettyprint){
+			settings.level = settings.level - 1d;
+			if(data.array.length > 0d){
+				DynamicArrayAddCharacter(da, '\n');
+				for(i = 0d; i < settings.level; i = i + 1d){
+					DynamicArrayAddString(da, settings.indentString);
+				}
+			}
+		}
+
+		DynamicArrayAddString(da, "]".toCharArray());
 	}
 
-	public static void WriteString(Data element, char [] result, NumberReference index){
-		WriteStringToStingStream(result, index, "\"".toCharArray());
-		element.string = JSONEscapeString(element.string);
-		WriteStringToStingStream(result, index, element.string);
-		WriteStringToStingStream(result, index, "\"".toCharArray());
+	public static void WriteString(Data element, DynamicArrayCharacters da){
+		char [] str;
+
+		DynamicArrayAddString(da, "\"".toCharArray());
+		str = JSONEscapeString(element.string);
+		DynamicArrayAddString(da, str);
+		DynamicArrayAddString(da, "\"".toCharArray());
+
+		delete(str);
 	}
 
 	public static char [] JSONEscapeString(char [] string){
@@ -260,41 +376,72 @@ public class Writer{
 		return mustBeEscaped;
 	}
 
-	public static void WriteObject(Data data, char [] result, NumberReference index){
+	public static void WriteObject(Data data, DynamicArrayCharacters da, WriterSettings settings){
 		char [] s, key, escapedKey;
-		double i;
+		double i, j;
 		StringReference [] keys;
 		Data objectElement;
 
-		WriteStringToStingStream(result, index, "{".toCharArray());
+		DynamicArrayAddString(da, "{".toCharArray());
 
 		keys = GetStructKeys(data.structure);
+
+		if(settings.prettyprint){
+			settings.level = settings.level + 1d;
+			if(keys.length > 0d){
+				DynamicArrayAddCharacter(da, '\n');
+			}
+		}
+
 		for(i = 0d; i < keys.length; i = i + 1d){
 			key = keys[(int)(i)].string;
 			objectElement = GetDataFromStruct(data.structure, key);
 
-			escapedKey = JSONEscapeString(key);
-			WriteStringToStingStream(result, index, "\"".toCharArray());
-			WriteStringToStingStream(result, index, escapedKey);
-			WriteStringToStingStream(result, index, "\"".toCharArray());
-			WriteStringToStingStream(result, index, ":".toCharArray());
+			if(settings.prettyprint){
+				for(j = 0d; j < settings.level; j = j + 1d){
+					DynamicArrayAddString(da, settings.indentString);
+				}
+			}
 
-			s = WriteJSON(objectElement);
-			WriteStringToStingStream(result, index, s);
+			escapedKey = JSONEscapeString(key);
+			DynamicArrayAddString(da, "\"".toCharArray());
+			DynamicArrayAddString(da, escapedKey);
+			DynamicArrayAddString(da, "\"".toCharArray());
+			DynamicArrayAddString(da, ":".toCharArray());
+
+			if(settings.prettyprint){
+				DynamicArrayAddString(da, " ".toCharArray());
+			}
+
+			s = WriteJSONWithOptions(objectElement, settings);
+			DynamicArrayAddString(da, s);
 
 			if(i + 1d != keys.length){
-				WriteStringToStingStream(result, index, ",".toCharArray());
+				DynamicArrayAddString(da, ",".toCharArray());
+				if(settings.prettyprint){
+					DynamicArrayAddCharacter(da, '\n');
+				}
 			}
 		}
 
-		WriteStringToStingStream(result, index, "}".toCharArray());
+		if(settings.prettyprint){
+			settings.level = settings.level - 1d;
+			if(keys.length > 0d){
+				DynamicArrayAddCharacter(da, '\n');
+				for(i = 0d; i < settings.level; i = i + 1d){
+					DynamicArrayAddString(da, settings.indentString);
+				}
+			}
+		}
+
+		DynamicArrayAddCharacter(da, '}');
 	}
 
 	public static char [] WriteJSONFromStruct(Structure struct){
 		Data data;
 		char [] json;
 
-		data = CreateStructData();
+		data = CreateNewStructData();
 		data.structure = struct;
 		json = WriteJSON(data);
 
@@ -305,7 +452,7 @@ public class Writer{
 		Data data;
 		char [] json;
 
-		data = CreateArrayData();
+		data = CreateNewArrayData();
 		data.array = array;
 		json = WriteJSON(data);
 
