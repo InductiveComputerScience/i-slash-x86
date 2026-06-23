@@ -1,4 +1,5 @@
 import DataStructures.Array.Structures.Array;
+import DataStructures.Array.Structures.DataReference;
 import Translator.Translator.Translator2;
 import references.references.StringReference;
 
@@ -28,7 +29,12 @@ public class RunTranslator {
         cheaderoutput = new StringReference();
 
         // New system
-        Array tokens = Translator2.Tokenize(input);
+        Array tokens;
+        DataReference tokensRef = new DataReference();
+        success = Translator2.Tokenize(input, tokensRef);
+        if(success){
+            tokens = tokensRef.data.array;
+        }
 
         // --
 

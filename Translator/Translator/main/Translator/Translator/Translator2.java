@@ -1,18 +1,90 @@
 package Translator.Translator;
 
 import DataStructures.Array.Structures.Array;
+import DataStructures.Array.Structures.DataReference;
+import lists.LinkedListCharacters.LinkedListCharactersFunctions.LinkedListCharactersFunctions;
+import lists.LinkedListCharacters.Structures.LinkedListCharacters;
 
 import static DataStructures.Array.Arrays.Arrays.ArrayAddString;
 import static DataStructures.Array.Arrays.Arrays.CreateArray;
+import static DataStructures.Array.Structures.Structures.CreateArrayData;
+import static charCharacters.Characters.Characters.charIsLetter;
+import static charCharacters.Characters.Characters.charIsNumber;
+import static lists.LinkedListCharacters.LinkedListCharactersFunctions.LinkedListCharactersFunctions.*;
 
 public class Translator2 {
-    public static Array Tokenize(char[] input) {
+    public static boolean Tokenize(char[] input, DataReference tokensRef) {
         Array tokens, ins;
+        double i, state;
+        char c;
+        LinkedListCharacters ll;
+        char [] str;
+        boolean success;
+
+        success = true;
+
+        ll = CreateLinkedListCharacter();
 
         tokens = CreateArray();
         ins = GetInstructionTokens();
 
-        return tokens;
+        state = 0d;
+        for(i = 0; i < input.length + 1; i = i + 1d){
+            if(i < input.length) {
+                c = input[(int) i];
+            }else{
+                c = '\n';
+            }
+
+            if(state == 0d) {
+                if (c == ' ' || c == '\t' || c == '\n') {
+                    // skip
+                }else if(charIsLetter(c)){
+                    state = 1d;
+                    ll = CreateLinkedListCharacter();
+                }else if(charIsNumber(c) || c == '-'){
+                    state = 2d;
+                    ll = CreateLinkedListCharacter();
+                }else if(c == ';'){
+                    state = 3d;
+                }else if(c == ','){
+                    ArrayAddString(tokens, "<comma>".toCharArray());
+                    System.out.println("<comma>");
+                }
+            }
+
+            if(state == 1d){
+                if(charIsLetter(c)){
+                    LinkedListAddCharacter(ll, c);
+                }else if(charIsNumber(c)){
+                    LinkedListAddCharacter(ll, c);
+                }else if(c == '_'){
+                    LinkedListAddCharacter(ll, c);
+                }else if(c == '\n' || c == ' ' || c == '\t' || c == ','){
+                    // Done
+                    str = LinkedListCharactersToArray(ll);
+                    ArrayAddString(tokens, str);
+                    System.out.println(new String(str));
+                    state = 0d;
+
+                    i = i - 1d;
+                }else{
+                    System.out.println("Invalid character in token.");
+                    success = false;
+                }
+            }
+
+            if(state == 3d){
+                if(c == '\n'){
+                    state = 0d;
+                }else{
+                    // skip
+                }
+            }
+        }
+
+        tokensRef.data = CreateArrayData(tokens);
+        return success;
     }
 
     public static Array GetInstructionTokens() {
