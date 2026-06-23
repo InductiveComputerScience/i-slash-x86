@@ -4,6 +4,7 @@ import DataStructures.Array.Structures.Array;
 import DataStructures.Array.Structures.DataReference;
 import lists.LinkedListCharacters.LinkedListCharactersFunctions.LinkedListCharactersFunctions;
 import lists.LinkedListCharacters.Structures.LinkedListCharacters;
+import references.references.StringReference;
 
 import static DataStructures.Array.Arrays.Arrays.ArrayAddString;
 import static DataStructures.Array.Arrays.Arrays.CreateArray;
@@ -13,7 +14,7 @@ import static charCharacters.Characters.Characters.charIsNumber;
 import static lists.LinkedListCharacters.LinkedListCharactersFunctions.LinkedListCharactersFunctions.*;
 
 public class Translator2 {
-    public static boolean Tokenize(char[] input, DataReference tokensRef) {
+    public static boolean Tokenize(char[] input, DataReference tokensRef, StringReference message) {
         Array tokens, ins;
         double i, state;
         char c;
@@ -22,11 +23,11 @@ public class Translator2 {
         boolean success;
 
         success = true;
+        message.string = "".toCharArray();
 
         ll = CreateLinkedListCharacter();
 
         tokens = CreateArray();
-        ins = GetInstructionTokens();
 
         state = 0d;
         for(i = 0; i < input.length + 1; i = i + 1d){
@@ -37,8 +38,11 @@ public class Translator2 {
             }
 
             if(state == 0d) {
-                if (c == ' ' || c == '\t' || c == '\n') {
+                if (c == ' ' || c == '\t') {
                     // skip
+                }else if(c == '\n'){
+                    ArrayAddString(tokens, "<newline>".toCharArray());
+                    System.out.println("<newline>");
                 }else if(charIsLetter(c)){
                     state = 1d;
                     ll = CreateLinkedListCharacter();
@@ -50,9 +54,13 @@ public class Translator2 {
                 }else if(c == ','){
                     ArrayAddString(tokens, "<comma>".toCharArray());
                     System.out.println("<comma>");
+                }else{
+                    success = false;
+                    message.string = "Character not allowed in token.".toCharArray();
                 }
             }
 
+            // Identifier
             if(state == 1d){
                 if(charIsLetter(c)){
                     LinkedListAddCharacter(ll, c);
@@ -69,11 +77,36 @@ public class Translator2 {
 
                     i = i - 1d;
                 }else{
-                    System.out.println("Invalid character in token.");
+                    message.string = "Character not allowed in token.".toCharArray();
                     success = false;
                 }
             }
 
+            // Literal
+            if(state == 2d){
+                if(charIsNumber(c)){
+                    LinkedListAddCharacter(ll, c);
+                }else if(c == '.'){
+                    LinkedListAddCharacter(ll, c);
+                }else if(c == 'e'){
+                    LinkedListAddCharacter(ll, c);
+                }else if(c == '-'){
+                    LinkedListAddCharacter(ll, c);
+                }else if(c == '\n' || c == ' ' || c == '\t' || c == ','){
+                    // Done
+                    str = LinkedListCharactersToArray(ll);
+                    ArrayAddString(tokens, str);
+                    System.out.println(new String(str));
+                    state = 0d;
+
+                    i = i - 1d;
+                }else{
+                    message.string = "Character not allowed in token.".toCharArray();
+                    success = false;
+                }
+            }
+
+            // Comment
             if(state == 3d){
                 if(c == '\n'){
                     state = 0d;
@@ -430,5 +463,16 @@ public class Translator2 {
         ArrayAddString(ins, "Acr".toCharArray());
 
         return ins;
+    }
+
+    public static boolean Parse(Array tokens, Ast ast, StringReference message) {
+        Array ins;
+        boolean success;
+
+        success = true;
+
+        ins = GetInstructionTokens();
+
+        return success;
     }
 }

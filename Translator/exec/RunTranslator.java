@@ -1,5 +1,6 @@
 import DataStructures.Array.Structures.Array;
 import DataStructures.Array.Structures.DataReference;
+import Translator.Translator.Ast;
 import Translator.Translator.Translator2;
 import references.references.StringReference;
 
@@ -31,9 +32,14 @@ public class RunTranslator {
         // New system
         Array tokens;
         DataReference tokensRef = new DataReference();
-        success = Translator2.Tokenize(input, tokensRef);
+        success = Translator2.Tokenize(input, tokensRef, message);
         if(success){
             tokens = tokensRef.data.array;
+
+            Ast ast = new Ast();
+            success = Translator2.Parse(tokens, ast, message);
+        }else{
+            System.out.println(message.string);
         }
 
         // --
