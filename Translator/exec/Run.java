@@ -8,8 +8,8 @@ public class Run {
             RunTranslator.main(new String[]{args[1], args[2], args[3]});
         }else{
             System.err.println("I/x86 Translator");
-            System.err.println("(c) 2023 Martin F. Johansen / inductive.no / progsbase.com");
-            System.err.println("https://github.com/InductiveComputerScience/i-slash-x86");
+            System.err.println("(c) 2023-6 Martin F. Johansen / inductive.no / progsbase.com");
+            System.err.println("https://github.com/martinfjohansen/i-slash-x86");
             System.err.println("");
             System.err.println("Usage: <input file> <output intermediate results> <output assembly file> <output c header>");
             System.err.println("");
