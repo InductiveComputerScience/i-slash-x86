@@ -38,8 +38,14 @@ public class RunTranslator {
 
             Ast ast = new Ast();
             success = Translator2.Parse(tokens, ast, message);
+
+            if(success){
+                System.out.println("success");
+            }else{
+                System.out.println("Failed: " + new String(message.string));
+            }
         }else{
-            System.out.println(message.string);
+            System.out.println("Failed: " + new String(message.string));
         }
 
         // --

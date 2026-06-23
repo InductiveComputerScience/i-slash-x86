@@ -2,16 +2,17 @@ package Translator.Translator;
 
 import DataStructures.Array.Structures.Array;
 import DataStructures.Array.Structures.DataReference;
-import lists.LinkedListCharacters.LinkedListCharactersFunctions.LinkedListCharactersFunctions;
 import lists.LinkedListCharacters.Structures.LinkedListCharacters;
+import references.references.NumberReference;
 import references.references.StringReference;
 
-import static DataStructures.Array.Arrays.Arrays.ArrayAddString;
-import static DataStructures.Array.Arrays.Arrays.CreateArray;
+import static DataStructures.Array.Arrays.Arrays.*;
 import static DataStructures.Array.Structures.Structures.CreateArrayData;
+import static arrays.arrays.arrays.StringsEqual;
 import static charCharacters.Characters.Characters.charIsLetter;
 import static charCharacters.Characters.Characters.charIsNumber;
 import static lists.LinkedListCharacters.LinkedListCharactersFunctions.LinkedListCharactersFunctions.*;
+import static references.references.references.CreateNumberReference;
 
 public class Translator2 {
     public static boolean Tokenize(char[] input, DataReference tokensRef, StringReference message) {
@@ -120,16 +121,10 @@ public class Translator2 {
         return success;
     }
 
-    public static Array GetInstructionTokens() {
+    public static Array GetTypeInstructionTokens() {
         Array ins;
 
         ins = CreateArray();
-
-        // Basics
-        ArrayAddString(ins, "Bgs".toCharArray());
-        ArrayAddString(ins, "Ens".toCharArray());
-        ArrayAddString(ins, "Fnc".toCharArray());
-        ArrayAddString(ins, "Ret".toCharArray());
 
         // Types
         ArrayAddString(ins, "u8".toCharArray());
@@ -304,6 +299,21 @@ public class Translator2 {
         ArrayAddString(ins, "f64x4a".toCharArray());
         ArrayAddString(ins, "f64x8a".toCharArray());
 
+        return ins;
+    }
+
+    public static Array GetInstructionTokens() {
+        Array ins;
+
+        ins = CreateArray();
+
+        // Basics
+        // ArrayAddString(ins, "Bgs".toCharArray());
+        // ArrayAddString(ins, "Ens".toCharArray());
+        // ArrayAddString(ins, "Fnc".toCharArray());
+        // ArrayAddString(ins, "Ret".toCharArray());
+
+        // Types
         // Computations
         ArrayAddString(ins, "Mov".toCharArray());
         ArrayAddString(ins, "Broadcast".toCharArray());
@@ -468,11 +478,150 @@ public class Translator2 {
     public static boolean Parse(Array tokens, Ast ast, StringReference message) {
         Array ins;
         boolean success;
+        double functions, structures, i, st, fnc;
+        char [] token;
+        NumberReference tokenRef;
+        Struct struct;
+        Function function;
 
         success = true;
 
         ins = GetInstructionTokens();
 
+        // Count structures and functions
+        functions = 0d;
+        structures = 0d;
+        for(i = 0d; i < ArrayLength(tokens); i = i + 1d){
+            token = ArrayIndexString(tokens, i);
+            if(StringsEqual(token, "Bgs".toCharArray())){
+                structures = structures + 1d;
+            }
+            if(StringsEqual(token, "Fnc".toCharArray())){
+                functions = functions + 1d;
+            }
+        }
+
+        ast.fnc = new Function[(int)functions];
+        ast.st = new Struct[(int)structures];
+
+        // Parse functions and structures
+        st = 0d;
+        fnc = 0d;
+        tokenRef = CreateNumberReference(0d);
+        for(; tokenRef.numberValue < ArrayLength(tokens) && success; ){
+            token = ArrayIndexString(tokens, tokenRef.numberValue);
+            if(StringsEqual(token, "Bgs".toCharArray())){
+                struct = new Struct();
+                ast.st[(int)st] = struct;
+
+                success = ParseStructure(struct, tokens, tokenRef, message);
+
+                st = st + 1d;
+            }else if(StringsEqual(token, "Fnc".toCharArray())){
+                function = new Function();
+                ast.fnc[(int)fnc] = function;
+
+                success = ParseFunction(function, tokens, tokenRef, message);
+
+                fnc = fnc + 1d;
+            }else if(StringsEqual(token, "<newline>".toCharArray())){
+                // OK
+            }else{
+                success = false;
+                message.string = ("Unexpected token outside functions and structures: " + new String(token)).toCharArray();
+            }
+        }
+
+        return success;
+    }
+
+    public static boolean ParseStructure(Struct struct, Array tokens, NumberReference tokenRef, StringReference message) {
+        boolean success;
+        char [] token;
+
+        success = true;
+
+        token = GetNextToken(tokens, tokenRef);
+
+        success = IsValidIdentifier(token, message);
+        if(success){
+            struct.name = token;
+
+            System.out.println("Bgs " + new String(struct.name));
+
+            token = GetNextToken(tokens, tokenRef);
+
+            success = IsNewline(token, message);
+
+        }
+
+        return success;
+    }
+
+    private static boolean IsNewline(char[] token, StringReference message) {
+        boolean valid;
+
+        valid = StringsEqual(token, "<newline>".toCharArray());
+
+        if(valid){
+
+        }else{
+            message.string = "Newline expected.".toCharArray();
+        }
+
+        return valid;
+    }
+
+    public static char[] GetNextToken(Array tokens, NumberReference tokenRef) {
+        Inc(tokenRef);
+        return ArrayIndexString(tokens, tokenRef.numberValue);
+    }
+
+    public static void Inc(NumberReference tokenRef) {
+        tokenRef.numberValue = tokenRef.numberValue + 1d;
+    }
+
+    public static boolean IsValidIdentifier(char[] token, StringReference message) {
+        boolean valid;
+        double i;
+        char c;
+
+        valid = token.length > 0;
+
+        if(valid) {
+            c = token[0];
+            valid = charIsLetter(c);
+
+            for (i = 0d; i < token.length && valid; i = i + 1d) {
+                c = token[(int) i];
+                if (charIsLetter(c) || charIsNumber(c) || c == '_') {
+                    // OK
+                }else{
+                    valid = false;
+                    message.string = ("Invalid identifier: " + new String(token)).toCharArray();
+                }
+            }
+        }
+
+        return valid;
+    }
+
+    public static boolean ParseFunction(Function function, Array tokens, NumberReference tokenRef, StringReference message) {
+        boolean success;
+
+        success = true;
+
         return success;
     }
 }
+
+
+
+
+
+
+
+
+
+
+
