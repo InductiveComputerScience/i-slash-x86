@@ -2696,7 +2696,7 @@ extern free
 ; -----------------------------------------------------------------------------
 ; Reinterpret as a different type
 ; Xu32x4, Xb128
-; x = (B)a. x must be target type. TODO: What must a be?
+; x = (B)a. x must be target type. a must be one of the supported types. TODO: Add explicit types.
 
 ; Pointer to integer
 %macro Xu64.m 2
