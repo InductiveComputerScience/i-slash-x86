@@ -564,7 +564,7 @@
 ; Mod
 ; x = a % b. x, a, b of the same type.
 
-%macro Mod.mmu8 4
+%macro Mod.mmu8 3
   mov al, byte [rdi + %2]
   mov ah, 0
   mov cl, byte [rdi + %3]
@@ -2334,7 +2334,7 @@ extern free
 
 ; -----------------------------------------------------------------------------
 ; Usigned integer to larger unsigned types
-; u8tou16, u16tou32, u32tou64
+; u8tou16, u8tou32, u16tou32, u32tou64
 ; x = (AtoB)a. a must be of type A, x must be of type B.
 
 %macro u8tou16.m 2
