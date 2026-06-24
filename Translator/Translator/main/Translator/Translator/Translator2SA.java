@@ -11,7 +11,8 @@ import static arrays.arrays.arrays.StringsEqual;
 public class Translator2SA {
     public static boolean StaticAnalysis(Ast ast, StringReference message) {
         boolean success;
-        double i;
+        double i, j, k;
+        Function fnc;
 
         success = true;
 
@@ -26,13 +27,69 @@ public class Translator2SA {
 
         if(success){
             for(i = 0; i < ast.fnc.length && success; i = i + 1d) {
-                success = CheckExistenceOfFunctionStructure(ast.fnc[(int) i], ast.st, message);
+                fnc = ast.fnc[(int) i];
+                success = CheckExistenceOfFunctionStructure(fnc, ast.st, message);
             }
         }
 
+        if(success){
+            for(i = 0; i < ast.fnc.length && success; i = i + 1d) {
+                fnc = ast.fnc[(int) i];
 
+                for(j = 0; j < fnc.ins.length && success; j = j + 1d) {
+                    Instruction ins = fnc.ins[(int) j];
+
+                    for(k = 0; k < ins.params.length && success; k = k + 1d) {
+                        Param param = ins.params[(int) k];
+
+                        if(StringsEqual(param.type, "var".toCharArray())) {
+                            success = CheckThatVariableIsDeclared(param, fnc.functionStructure, message);
+                        }
+                    }
+                }
+            }
+        }
+
+        if(success){
+            // Check parameter count
+            // TODO
+        }
+
+        if(success){
+            // Check parameter types
+            // TODO
+        }
+
+        if(success){
+            // Check control flow and compute labels
+            // TODO
+        }
 
         return success;
+    }
+
+    public static boolean CheckThatVariableIsDeclared(Param param, Struct fncSt, StringReference message) {
+        double i;
+        boolean found;
+
+        found = false;
+
+        for(i = 0d; i < fncSt.vars.length; i = i + 1d){
+            Var var = fncSt.vars[(int) i];
+
+            if(StringsEqual(param.varname, var.name)){
+                found = true;
+                param.var = var;
+            }
+        }
+
+        if(found){
+
+        }else{
+            message.string = ("Variable not declared: " + new String(param.varname)).toCharArray();
+        }
+
+        return found;
     }
 
     public static boolean CheckExistenceOfFunctionStructure(Function fnc, Struct [] sts, StringReference message) {

@@ -6,5 +6,6 @@ public class Instruction {
 
     // Computed
     public char [] typePostfix;
-    public Param [] addParams;
+    public char [] label1;
+    public char [] label2;
 }

@@ -907,12 +907,12 @@ public class Translator2 {
 
         success = true;
 
-        if(IsValidIdentifier(token, message)){
-            p.type = "var".toCharArray();
-            p.varname = token;
-        }else if(IsValidLiteral(token, message)){
+        if(IsValidLiteral(token, message)){
             p.type = "literal".toCharArray();
             p.literal = token;
+        }else if(IsValidIdentifier(token, message)){
+            p.type = "var".toCharArray();
+            p.varname = token;
         }else{
             success = false;
             message.string = "Parameter is neither variable nor literal.".toCharArray();
@@ -929,6 +929,22 @@ public class Translator2 {
         if(IsValidNumber(token)){
             valid = true;
         }else if(IsValidCharacter(token)){
+            valid = true;
+        }else if(IsValidBoolean(token)){
+            valid = true;
+        }else{
+            valid = false;
+        }
+
+        return valid;
+    }
+
+    private static boolean IsValidBoolean(char[] token) {
+        boolean valid;
+
+        if(StringsEqual(token, "true".toCharArray())){
+            valid = true;
+        }else if(StringsEqual(token, "false".toCharArray())){
             valid = true;
         }else{
             valid = false;
