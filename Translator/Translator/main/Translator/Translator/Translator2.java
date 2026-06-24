@@ -536,10 +536,12 @@ public class Translator2 {
     }
 
     public static boolean ParseStructure(Struct struct, Array tokens, NumberReference tokenRef, StringReference message) {
-        boolean success;
-        char [] token;
+        boolean success, done, found;
+        char [] token, type, name;
+        Array typeInstructions;
+        double typeDecs, typeDec, startOfTypeDecs, i;
 
-        success = true;
+        typeInstructions = GetTypeInstructionTokens();
 
         token = GetNextToken(tokens, tokenRef);
 
@@ -553,9 +555,128 @@ public class Translator2 {
 
             success = IsNewline(token, message);
 
+            if(success) {
+                // Check that there is an Ens.
+                found = false;
+                for (i = tokenRef.numberValue; i < ArrayLength(tokens) && !found; i = i + 1d) {
+                    token = ArrayIndexString(tokens, i);
+
+                    if (StringsEqual(token, "Ens".toCharArray())) {
+                        found = true;
+                    }
+                }
+
+                if (found) {
+                    // Count type declarations
+                    done = false;
+                    typeDecs = 0d;
+                    startOfTypeDecs = tokenRef.numberValue;
+
+                    for (; !done && success; ) {
+                        token = GetNextToken(tokens, tokenRef);
+
+                        if (StringsEqual(token, "Ens".toCharArray())) {
+                            done = true;
+                        } else if (IsNewline(token, message)) {
+                            // Skip
+                        } else {
+                            if (StringIsInArray(token, typeInstructions)) {
+                                token = GetNextToken(tokens, tokenRef);
+
+                                success = IsValidIdentifier(token, message);
+
+                                if (success) {
+                                    token = GetNextToken(tokens, tokenRef);
+
+                                    success = IsNewline(token, message);
+
+                                    if (success) {
+                                        typeDecs = typeDecs + 1d;
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    // Create vars
+                    struct.vars = new Var[(int) typeDecs];
+
+                    done = false;
+                    typeDec = 0d;
+                    tokenRef.numberValue = startOfTypeDecs;
+
+                    for (; !done && success; ) {
+                        token = GetNextToken(tokens, tokenRef);
+
+                        if (StringsEqual(token, "Ens".toCharArray())) {
+                            done = true;
+
+                            System.out.println("Ens");
+
+                            token = GetNextToken(tokens, tokenRef);
+                        } else {
+                            if (StringIsInArray(token, typeInstructions)) {
+                                type = token;
+                                token = GetNextToken(tokens, tokenRef);
+
+                                success = IsValidIdentifier(token, message);
+
+                                if (success) {
+                                    name = token;
+                                    token = GetNextToken(tokens, tokenRef);
+
+                                    success = IsNewline(token, message);
+
+                                    if (success) {
+                                        struct.vars[(int) typeDec] = CreateTypeDec(type, name);
+
+                                        System.out.println("\t" + new String(type) + " " + new String(name));
+
+                                        typeDec = typeDec + 1d;
+                                    }
+                                }
+                            } else {
+                                success = false;
+                                message.string = ("Token not a type instruction: " + new String(token)).toCharArray();
+                            }
+                        }
+                    }
+
+                } else {
+                    success = false;
+                    message.string = "Structure must end with Ens-instruction.".toCharArray();
+                }
+            }
         }
 
         return success;
+    }
+
+    private static Var CreateTypeDec(char[] type, char[] name) {
+        Var var = new Var();
+
+        var.type = type;
+        var.name = name;
+
+        return var;
+    }
+
+    private static boolean StringIsInArray(char[] token, Array typeInstructions) {
+        boolean isIn;
+        double i;
+        char [] cToken;
+
+        isIn = false;
+
+        for(i = 0d; i < ArrayLength(typeInstructions) && !isIn; i = i + 1d){
+            cToken = ArrayIndexString(typeInstructions, i);
+
+            if(StringsEqual(token, cToken)){
+                isIn = true;
+            }
+        }
+
+        return isIn;
     }
 
     private static boolean IsNewline(char[] token, StringReference message) {
