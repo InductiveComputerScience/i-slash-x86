@@ -44,7 +44,7 @@ public class Translator2 {
                     // skip
                 }else if(c == '\n'){
                     ArrayAddString(tokens, "<newline>".toCharArray());
-                    System.out.println("<newline>");
+                    //System.out.println("<newline>");
                 }else if(charIsLetter(c)){
                     state = 1d;
                     ll = CreateLinkedListCharacter();
@@ -55,7 +55,7 @@ public class Translator2 {
                     state = 3d;
                 }else if(c == ','){
                     ArrayAddString(tokens, "<comma>".toCharArray());
-                    System.out.println("<comma>");
+                    //System.out.println("<comma>");
                 }else{
                     success = false;
                     message.string = "Character not allowed in token.".toCharArray();
@@ -74,7 +74,7 @@ public class Translator2 {
                     // Done
                     str = LinkedListCharactersToArray(ll);
                     ArrayAddString(tokens, str);
-                    System.out.println(new String(str));
+                    //System.out.println(new String(str));
                     state = 0d;
 
                     i = i - 1d;
@@ -98,7 +98,7 @@ public class Translator2 {
                     // Done
                     str = LinkedListCharactersToArray(ll);
                     ArrayAddString(tokens, str);
-                    System.out.println(new String(str));
+                    //System.out.println(new String(str));
                     state = 0d;
 
                     i = i - 1d;
@@ -550,7 +550,7 @@ public class Translator2 {
         if(success){
             struct.name = token;
 
-            System.out.println("Bgs " + new String(struct.name));
+            //System.out.println("Bgs " + new String(struct.name));
 
             token = GetNextToken(tokens, tokenRef);
 
@@ -612,7 +612,7 @@ public class Translator2 {
                         if (StringsEqual(token, "Ens".toCharArray())) {
                             done = true;
 
-                            System.out.println("Ens");
+                            //System.out.println("Ens");
 
                             token = GetNextToken(tokens, tokenRef);
                         } else {
@@ -631,7 +631,7 @@ public class Translator2 {
                                     if (success) {
                                         struct.vars[(int) typeDec] = CreateTypeDec(type, name);
 
-                                        System.out.println("\t" + new String(type) + " " + new String(name));
+                                        //System.out.println("\t" + new String(type) + " " + new String(name));
 
                                         typeDec = typeDec + 1d;
                                     }
@@ -747,7 +747,7 @@ public class Translator2 {
         if(success) {
             function.name = token;
 
-            System.out.println("Fnc " + new String(function.name));
+            //System.out.println("Fnc " + new String(function.name));
 
             token = GetNextToken(tokens, tokenRef);
 
@@ -802,7 +802,7 @@ public class Translator2 {
                                 insCount = insCount + 1d;
                             }
                         }else if(StringsEqual(token, "Ret".toCharArray())) {
-                            System.out.println("Ret");
+                            //System.out.println("Ret");
 
                             done = true;
                         }else if(IsNewline(token, message)) {
@@ -833,7 +833,7 @@ public class Translator2 {
 
         instruction.name = name;
 
-        System.out.print("\t" + new String(name) + " ");
+        //System.out.print("\t" + new String(name) + " ");
 
         // Count parameters
         done = false;
@@ -874,7 +874,7 @@ public class Translator2 {
                 if(IsNewline(token, message)){
                     done = true;
                 }else if(IsComma(token, message)){
-                    System.out.print(", ");
+                    //System.out.print(", ");
                 }else{
                     success = false;
                     message.string = "Expected newline or comma.".toCharArray();
@@ -882,7 +882,7 @@ public class Translator2 {
             }
         }
 
-        System.out.print("\n");
+        //System.out.print("\n");
 
         return success;
     }
@@ -918,7 +918,7 @@ public class Translator2 {
             message.string = "Parameter is neither variable nor literal.".toCharArray();
         }
 
-        System.out.print(token);
+        //System.out.print(token);
 
         return success;
     }

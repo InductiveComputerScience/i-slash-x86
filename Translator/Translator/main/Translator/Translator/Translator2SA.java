@@ -51,8 +51,6 @@ public class Translator2SA {
 
         if(success){
             // Check parameter count
-            // TODO
-
             for(i = 0; i < ast.fnc.length && success; i = i + 1d) {
                 fnc = ast.fnc[(int) i];
 
@@ -66,7 +64,15 @@ public class Translator2SA {
 
         if(success){
             // Check parameter types
-            // TODO
+            for(i = 0; i < ast.fnc.length && success; i = i + 1d) {
+                fnc = ast.fnc[(int) i];
+
+                for(j = 0; j < fnc.ins.length && success; j = j + 1d) {
+                    Instruction ins = fnc.ins[(int) j];
+
+                    success = CheckParameterTypes(ins, message);
+                }
+            }
         }
 
         if(success){
@@ -391,6 +397,38 @@ public class Translator2SA {
                 valid = false;
                 message.string = ("Two structures have the name name: " + new String(struct.name)).toCharArray();
             }
+        }
+
+        return valid;
+    }
+
+    public static boolean CheckParameterTypes(Instruction ins, StringReference message) {
+        boolean valid;
+        char [] targetType, memoryPostfix;
+
+        valid = true;
+
+        if(StringsEqual(ins.name, "Add".toCharArray()) || StringsEqual(ins.name, "Mul".toCharArray())){
+            Param target = ins.params[0];
+            targetType = target.var.type;
+            ins.typePostfix = targetType;
+            memoryPostfix = new char [2];
+
+            if(StringsEqual(ins.params[1].type, "var".toCharArray())){
+                memoryPostfix[0] = 'm';
+            }else{
+                memoryPostfix[0] = 'i';
+            }
+
+            if(StringsEqual(ins.params[2].type, "var".toCharArray())){
+                memoryPostfix[1] = 'm';
+            }else{
+                memoryPostfix[1] = 'i';
+            }
+
+            ins.memoryPostfix = memoryPostfix;
+        }else{
+            //valid = false;
         }
 
         return valid;

@@ -6,6 +6,8 @@ public class Instruction {
 
     // Computed
     public char [] typePostfix;
+    public char [] memoryPostfix;
     public char [] label1;
     public char [] label2;
+    public double indentation;
 }
