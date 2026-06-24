@@ -404,7 +404,7 @@ public class Translator2SA {
 
     public static boolean CheckParameterTypes(Instruction ins, StringReference message) {
         boolean valid;
-        char [] targetType, memoryPostfix;
+        char [] targetType;
         Array sameAsAssigneeNumber, numbersToBits;
         double i;
 
@@ -480,6 +480,11 @@ public class Translator2SA {
         ArrayAddString(bitwiseAndNumberToBitwise, "Ror".toCharArray());
         ArrayAddString(bitwiseAndNumberToBitwise, "Rol".toCharArray());
 
+        // Conversion or reinterpretation
+
+        Array convreint = CreateArray();
+        ArrayAddString(convreint, "Xu16x8a".toCharArray());
+
         /*
 
         Other:
@@ -506,78 +511,97 @@ public class Translator2SA {
         */
 
         if(StringIsInArray(ins.name, sameAsAssigneeNumber)) {
-            Param assigneeType = ins.params[0];
-            targetType = assigneeType.var.type;
-            char first, last;
+            valid = CheckInstructionWithSameTypeAsAssigneeWithNumbers(ins, message);
+        }else if(StringIsInArray(ins.name, sameAsAssigneeBitfields)){
+            valid = CheckInstructionWithSameTypeAsAssigneeWithBitfields(ins, message);
+        //}else if(StringIsInArray(ins.name, convreint)){
 
-            first = targetType[0];
-            last = targetType[targetType.length - 1];
 
-            // Check that type is a number type.
-            if (first == 's' || first == 'u' || first == 'f') {
-                if (last != 'a') {
+        }else{
+            valid = false;
+            message.string = ("Unknown typing rules for instruction: " + new String(ins.name)).toCharArray();
+        }
 
-                } else {
-                    valid = false;
-                    message.string = "Instruction does not work on arrays.".toCharArray();
-                }
+        // Compute memory postfix.
+        if(valid){
+            ComputeMemoryPostfix(ins);
+        }
+
+        return valid;
+    }
+
+    private static boolean CheckInstructionWithSameTypeAsAssigneeWithBitfields(Instruction ins, StringReference message) {
+        char[] targetType;
+        Param assigneeType = ins.params[0];
+        targetType = assigneeType.var.type;
+        char first, last;
+        boolean valid;
+
+        valid = true;
+
+        first = targetType[0];
+        last = targetType[targetType.length - 1];
+
+        if(first == 'b'){
+            if(last != 'a'){
+
+            }else{
+                valid = false;
+                message.string = "Instruction does not work on arrays.".toCharArray();
+            }
+        }else{
+            valid = false;
+            message.string = "Instruction only works on bitfield variables.".toCharArray();
+        }
+
+        if(valid) {
+            ins.typePostfix = targetType;
+        }
+        return valid;
+    }
+
+    private static boolean CheckInstructionWithSameTypeAsAssigneeWithNumbers(Instruction ins, StringReference message) {
+        double i;
+        char[] targetType;
+        Param assigneeType = ins.params[0];
+        targetType = assigneeType.var.type;
+        char first, last;
+        boolean valid;
+
+        valid = true;
+
+        first = targetType[0];
+        last = targetType[targetType.length - 1];
+
+        // Check that type is a number type.
+        if (first == 's' || first == 'u' || first == 'f') {
+            if (last != 'a') {
+
             } else {
                 valid = false;
-                message.string = "Instruction only works on number variables.".toCharArray();
+                message.string = "Instruction does not work on arrays.".toCharArray();
             }
+        } else {
+            valid = false;
+            message.string = "Instruction only works on number variables.".toCharArray();
+        }
 
-            // Check that all parameters are the correct type.
-            if(valid) {
-                ins.typePostfix = targetType;
+        // Check that all parameters are the correct type.
+        if(valid) {
+            ins.typePostfix = targetType;
 
-                for (i = 0; i < ins.params.length && valid; i = i + 1d) {
-                    Param p = ins.params[(int) i];
-                    if (ParamIsVariable(p)) {
-                        if (StringsEqual(p.var.type, ins.typePostfix)) {
-                            // OK
-                        } else {
-                            valid = false;
-                            message.string = ("Parameter is not the correct type: " + new String(p.varname)).toCharArray();
-                        }
+            for (i = 0; i < ins.params.length && valid; i = i + 1d) {
+                Param p = ins.params[(int) i];
+                if (ParamIsVariable(p)) {
+                    if (StringsEqual(p.var.type, ins.typePostfix)) {
+                        // OK
+                    } else {
+                        valid = false;
+                        message.string = ("Parameter is not the correct type: " + new String(p.varname)).toCharArray();
                     }
                 }
             }
-
-            // Compute memory postfix.
-            if(valid){
-                ComputeMemoryPostfix(ins);
-            }
-
-        }else if(StringIsInArray(ins.name, sameAsAssigneeBitfields)){
-            Param assigneeType = ins.params[0];
-            targetType = assigneeType.var.type;
-            char first, last;
-
-            first = targetType[0];
-            last = targetType[targetType.length - 1];
-
-            if(first == 'b'){
-                if(last != 'a'){
-
-                }else{
-                    valid = false;
-                    message.string = "Instruction does not work on arrays.".toCharArray();
-                }
-            }else{
-                valid = false;
-                message.string = "Instruction only works on bitfield variables.".toCharArray();
-            }
-
-            if(valid) {
-                ins.typePostfix = targetType;
-
-                ComputeMemoryPostfix(ins);
-            }
-
-        }else{
-            //valid = false;
         }
-
         return valid;
     }
 
