@@ -513,6 +513,7 @@ public class Translator2SA {
             first = targetType[0];
             last = targetType[targetType.length - 1];
 
+            // Check that type is a number type.
             if (first == 's' || first == 'u' || first == 'f') {
                 if (last != 'a') {
 
@@ -525,25 +526,26 @@ public class Translator2SA {
                 message.string = "Instruction only works on number variables.".toCharArray();
             }
 
-            if (valid) {
-
+            // Check that all parameters are the correct type.
+            if(valid) {
                 ins.typePostfix = targetType;
 
-                memoryPostfix = new char[0];
-
-                if (ins.params.length >= 1) {
-                    memoryPostfix = new char[ins.params.length - 1];
-
-                    for (i = 0; i < ins.params.length - 1d; i = i + 1d) {
-                        if (StringsEqual(ins.params[(int) (i + 1)].type, "var".toCharArray())) {
-                            memoryPostfix[(int) i] = 'm';
+                for (i = 0; i < ins.params.length && valid; i = i + 1d) {
+                    Param p = ins.params[(int) i];
+                    if (ParamIsVariable(p)) {
+                        if (StringsEqual(p.var.type, ins.typePostfix)) {
+                            // OK
                         } else {
-                            memoryPostfix[(int) i] = 'i';
+                            valid = false;
+                            message.string = ("Parameter is not the correct type: " + new String(p.varname)).toCharArray();
                         }
                     }
                 }
+            }
 
-                ins.memoryPostfix = memoryPostfix;
+            // Compute memory postfix.
+            if(valid){
+                ComputeMemoryPostfix(ins);
             }
 
         }else if(StringIsInArray(ins.name, sameAsAssigneeBitfields)){
@@ -567,24 +569,9 @@ public class Translator2SA {
             }
 
             if(valid) {
-
                 ins.typePostfix = targetType;
 
-                memoryPostfix = new char[0];
-
-                if (ins.params.length >= 1) {
-                    memoryPostfix = new char[ins.params.length - 1];
-
-                    for (i = 0; i < ins.params.length - 1d; i = i + 1d) {
-                        if (StringsEqual(ins.params[(int) (i + 1)].type, "var".toCharArray())) {
-                            memoryPostfix[(int) i] = 'm';
-                        } else {
-                            memoryPostfix[(int) i] = 'i';
-                        }
-                    }
-                }
-
-                ins.memoryPostfix = memoryPostfix;
+                ComputeMemoryPostfix(ins);
             }
 
         }else{
@@ -594,4 +581,39 @@ public class Translator2SA {
         return valid;
     }
 
+    private static void ComputeMemoryPostfix(Instruction ins) {
+        double i;
+        char[] memoryPostfix;
+        memoryPostfix = new char[0];
+
+        if (ins.params.length >= 1) {
+            memoryPostfix = new char[ins.params.length - 1];
+
+            for (i = 0; i < ins.params.length - 1d; i = i + 1d) {
+                if (StringsEqual(ins.params[(int) (i + 1)].type, "var".toCharArray())) {
+                    memoryPostfix[(int) i] = 'm';
+                } else {
+                    memoryPostfix[(int) i] = 'i';
+                }
+            }
+        }
+
+        ins.memoryPostfix = memoryPostfix;
+    }
+
+    public static boolean ParamIsVariable(Param param) {
+        boolean isVar;
+
+        isVar = StringsEqual(param.type, "var".toCharArray());
+
+        return isVar;
+    }
+
+    public static boolean ParamIsLiteral(Param param) {
+        boolean isLit;
+
+        isLit = StringsEqual(param.type, "literal".toCharArray());
+
+        return isLit;
+    }
 }
