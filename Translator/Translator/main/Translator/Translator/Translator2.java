@@ -12,6 +12,7 @@ import static arrays.arrays.arrays.StringsEqual;
 import static charCharacters.Characters.Characters.charIsLetter;
 import static charCharacters.Characters.Characters.charIsNumber;
 import static lists.LinkedListCharacters.LinkedListCharactersFunctions.LinkedListCharactersFunctions.*;
+import static numbers.StringToNumber.StringToNumber.CreateNumberFromDecimalStringWithCheck;
 import static references.references.references.CreateNumberReference;
 
 public class Translator2 {
@@ -509,7 +510,7 @@ public class Translator2 {
         fnc = 0d;
         tokenRef = CreateNumberReference(0d);
         for(; tokenRef.numberValue < ArrayLength(tokens) && success; ){
-            token = ArrayIndexString(tokens, tokenRef.numberValue);
+            token = GetNextToken(tokens, tokenRef);
             if(StringsEqual(token, "Bgs".toCharArray())){
                 struct = new Struct();
                 ast.st[(int)st] = struct;
@@ -694,8 +695,13 @@ public class Translator2 {
     }
 
     public static char[] GetNextToken(Array tokens, NumberReference tokenRef) {
+        char [] token;
+
+        token = ArrayIndexString(tokens, tokenRef.numberValue);
+
         Inc(tokenRef);
-        return ArrayIndexString(tokens, tokenRef.numberValue);
+
+        return token;
     }
 
     public static void Inc(NumberReference tokenRef) {
@@ -728,13 +734,271 @@ public class Translator2 {
     }
 
     public static boolean ParseFunction(Function function, Array tokens, NumberReference tokenRef, StringReference message) {
-        boolean success;
+        boolean success, found, done;
+        char [] token;
+        double i, state, insCount;
+        Array ins;
 
-        success = true;
+        ins = GetInstructionTokens();
+
+        token = GetNextToken(tokens, tokenRef);
+
+        success = IsValidIdentifier(token, message);
+        if(success) {
+            function.name = token;
+
+            System.out.println("Fnc " + new String(function.name));
+
+            token = GetNextToken(tokens, tokenRef);
+
+            success = IsNewline(token, message);
+
+            if(success) {
+                // Find Ret
+                found = false;
+                for (i = tokenRef.numberValue; i < ArrayLength(tokens) && !found; i = i + 1d) {
+                    token = ArrayIndexString(tokens, i);
+
+                    if (StringsEqual(token, "Ret".toCharArray())) {
+                        found = true;
+                    }
+                }
+
+                if (found) {
+
+                    // Count instructions
+                    state = 0d;
+                    insCount = 0d;
+                    for(i = tokenRef.numberValue; i < ArrayLength(tokens); i = i + 1d){
+                        token = ArrayIndexString(tokens, i);
+
+                        if(state == 0d) {
+                            if (StringIsInArray(token, ins)) {
+                                insCount = insCount + 1d;
+                                state = 1d;
+                            }
+                        }else if(state == 1d){
+                            if (StringsEqual(token, "<newline>".toCharArray())) {
+                                state = 0d;
+                            }else{
+                                // Skip
+                            }
+                        }
+                    }
+
+                    // Create instructions
+                    function.ins = new Instruction[(int)insCount];
+                    insCount = 0d;
+                    done = false;
+                    for(; !done && success;  ){
+                        token = GetNextToken(tokens, tokenRef);
+
+                        if (StringIsInArray(token, ins)) {
+                            Instruction instruction = new Instruction();
+                            success = ParseInstruction(instruction, token, tokens, tokenRef, message);
+
+                            if(success){
+                                function.ins[(int)insCount] = instruction;
+                                insCount = insCount + 1d;
+                            }
+                        }else if(StringsEqual(token, "Ret".toCharArray())) {
+                            System.out.println("Ret");
+
+                            done = true;
+                        }else if(IsNewline(token, message)) {
+                            // Skip
+                        }else{
+                            success = false;
+                            message.string = ("Instruction not one of the valid instructions: " + new String(token)).toCharArray();
+                        }
+                    }
+
+                } else {
+                    success = false;
+                    message.string = "Function must end with Ret.".toCharArray();
+                }
+            }
+        }
 
         return success;
     }
+
+    public static boolean ParseInstruction(Instruction instruction, char[] name, Array tokens, NumberReference tokenRef, StringReference message) {
+        boolean success, done;
+        char [] token;
+        double i, param;
+        Param p;
+
+        success = true;
+
+        instruction.name = name;
+
+        System.out.print("\t" + new String(name) + " ");
+
+        // Count parameters
+        done = false;
+        param = 0d;
+        for(i = tokenRef.numberValue; i < ArrayLength(tokens) && !done; i = i + 1d){
+            token = ArrayIndexString(tokens, i);
+
+            if(StringsEqual(token, "<comma>".toCharArray())){
+
+            }else if(StringsEqual(token, "<newline>".toCharArray())){
+                done = true;
+            }else{
+                param = param + 1d;
+            }
+        }
+
+        // Create parameters
+        instruction.params = new Param[(int)param];
+
+        done = false;
+        param = 0d;
+        for(; !done && success; ){
+            token = GetNextToken(tokens, tokenRef);
+
+            if(StringsEqual(token, "<newline>".toCharArray())){
+                done = true;
+            }else{
+                p = new Param();
+
+                success = CreateParameter(p, token, message);
+
+                instruction.params[(int)param] = p;
+
+                param = param + 1d;
+
+                token = GetNextToken(tokens, tokenRef);
+
+                if(IsNewline(token, message)){
+                    done = true;
+                }else if(IsComma(token, message)){
+                    System.out.print(", ");
+                }else{
+                    success = false;
+                    message.string = "Expected newline or comma.".toCharArray();
+                }
+            }
+        }
+
+        System.out.print("\n");
+
+        return success;
+    }
+
+    private static boolean IsComma(char[] token, StringReference message) {
+        boolean valid;
+
+        valid = StringsEqual(token, "<comma>".toCharArray());
+
+        if(valid){
+
+        }else{
+            message.string = "Comma expected.".toCharArray();
+        }
+
+        return valid;
+    }
+
+    public static boolean CreateParameter(Param p, char[] token, StringReference message) {
+        boolean success;
+
+
+        success = true;
+
+        if(IsValidIdentifier(token, message)){
+            p.type = "var".toCharArray();
+            p.varname = token;
+        }else if(IsValidLiteral(token, message)){
+            p.type = "literal".toCharArray();
+            p.literal = token;
+        }else{
+            success = false;
+            message.string = "Parameter is neither variable nor literal.".toCharArray();
+        }
+
+        System.out.print(token);
+
+        return success;
+    }
+
+    public static boolean IsValidLiteral(char[] token, StringReference message) {
+        boolean valid;
+
+        if(IsValidNumber(token)){
+            valid = true;
+        }else if(IsValidCharacter(token)){
+            valid = true;
+        }else{
+            valid = false;
+        }
+
+        return valid;
+    }
+
+    public static boolean IsValidCharacter(char[] token) {
+        boolean valid;
+
+        valid = true;
+
+        // TODO: Expand this to more valid types.
+        if(token.length == 3d){
+            if(token[0] == '\'' && token[2] == '\''){
+
+            }else{
+                valid = false;
+            }
+        }else{
+            valid = false;
+        }
+
+
+        return valid;
+    }
+
+    public static boolean IsValidNumber(char[] token) {
+        NumberReference numRef = new NumberReference();
+        boolean valid;
+        StringReference message = new StringReference();
+
+        valid = CreateNumberFromDecimalStringWithCheck(token, numRef, message);
+
+        return valid;
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
