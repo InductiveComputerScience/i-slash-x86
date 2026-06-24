@@ -405,28 +405,188 @@ public class Translator2SA {
     public static boolean CheckParameterTypes(Instruction ins, StringReference message) {
         boolean valid;
         char [] targetType, memoryPostfix;
+        Array sameAsAssigneeNumber, numbersToBits;
+        double i;
 
         valid = true;
 
-        if(StringsEqual(ins.name, "Add".toCharArray()) || StringsEqual(ins.name, "Mul".toCharArray())){
-            Param target = ins.params[0];
-            targetType = target.var.type;
-            ins.typePostfix = targetType;
-            memoryPostfix = new char [2];
+        sameAsAssigneeNumber = CreateArray();
 
-            if(StringsEqual(ins.params[1].type, "var".toCharArray())){
-                memoryPostfix[0] = 'm';
-            }else{
-                memoryPostfix[0] = 'i';
+        // All parameters are the same, all are numbers. The type of the assigned var is the type of the instruction.
+        ArrayAddString(sameAsAssigneeNumber, "Add".toCharArray());
+        ArrayAddString(sameAsAssigneeNumber, "Sub".toCharArray());
+        ArrayAddString(sameAsAssigneeNumber, "Mul".toCharArray());
+        ArrayAddString(sameAsAssigneeNumber, "Div".toCharArray());
+        ArrayAddString(sameAsAssigneeNumber, "DivMod".toCharArray());
+        ArrayAddString(sameAsAssigneeNumber, "Mod".toCharArray());
+        ArrayAddString(sameAsAssigneeNumber, "MulDiv".toCharArray());
+        ArrayAddString(sameAsAssigneeNumber, "AddSaturated".toCharArray());
+        ArrayAddString(sameAsAssigneeNumber, "SubSaturated".toCharArray());
+        ArrayAddString(sameAsAssigneeNumber, "Round".toCharArray());
+        ArrayAddString(sameAsAssigneeNumber, "Floor".toCharArray());
+        ArrayAddString(sameAsAssigneeNumber, "Ceil".toCharArray());
+        ArrayAddString(sameAsAssigneeNumber, "Truncate".toCharArray());
+        ArrayAddString(sameAsAssigneeNumber, "Abs".toCharArray());
+        ArrayAddString(sameAsAssigneeNumber, "Inc".toCharArray());
+        ArrayAddString(sameAsAssigneeNumber, "Dec".toCharArray());
+        ArrayAddString(sameAsAssigneeNumber, "MulStoreHigh".toCharArray());
+        ArrayAddString(sameAsAssigneeNumber, "MultiplyAndAdd".toCharArray());
+        ArrayAddString(sameAsAssigneeNumber, "Avg".toCharArray());
+        ArrayAddString(sameAsAssigneeNumber, "Min".toCharArray());
+        ArrayAddString(sameAsAssigneeNumber, "Max".toCharArray());
+        ArrayAddString(sameAsAssigneeNumber, "Sqrt".toCharArray());
+        ArrayAddString(sameAsAssigneeNumber, "ApproxReciprocal".toCharArray());
+        ArrayAddString(sameAsAssigneeNumber, "ApproxReciprocalSqrt".toCharArray());
+        ArrayAddString(sameAsAssigneeNumber, "SumAbsoluteDifference".toCharArray());
+        ArrayAddString(sameAsAssigneeNumber, "PairwiseAdd".toCharArray());
+        ArrayAddString(sameAsAssigneeNumber, "PairwiseSub".toCharArray());
+        ArrayAddString(sameAsAssigneeNumber, "PairwiseMulAdd".toCharArray());
+        ArrayAddString(sameAsAssigneeNumber, "AlternatingSubAdd".toCharArray());
+        ArrayAddString(sameAsAssigneeNumber, "ConditionalNegate".toCharArray());
+        ArrayAddString(sameAsAssigneeNumber, "MovAndDuplicate".toCharArray());
+        ArrayAddString(sameAsAssigneeNumber, "MovAndDuplicateOdd".toCharArray());
+
+        // These return a boolean. The type is the type of one of the: b <- num or bw <- num. If both are immediates, use f64
+        numbersToBits = CreateArray();
+        ArrayAddString(numbersToBits, "Lt".toCharArray());
+        ArrayAddString(numbersToBits, "Lte".toCharArray());
+        ArrayAddString(numbersToBits, "Gt".toCharArray());
+        ArrayAddString(numbersToBits, "Gte".toCharArray());
+        ArrayAddString(numbersToBits, "Eq".toCharArray());
+        ArrayAddString(numbersToBits, "Neq".toCharArray());
+
+        // These take a bitfield and return a number.
+        Array bitfieldToNumber = CreateArray();
+        ArrayAddString(bitfieldToNumber, "Popcnt".toCharArray());
+        ArrayAddString(bitfieldToNumber, "Lzcnt".toCharArray());
+        ArrayAddString(bitfieldToNumber, "Tzcnt".toCharArray());
+        ArrayAddString(bitfieldToNumber, "Blsi".toCharArray());
+
+        // These are bitfields for all inputs
+        Array sameAsAssigneeBitfields = CreateArray();
+        ArrayAddString(sameAsAssigneeBitfields, "Not".toCharArray());
+        ArrayAddString(sameAsAssigneeBitfields, "And".toCharArray());
+        ArrayAddString(sameAsAssigneeBitfields, "Andnot".toCharArray());
+        ArrayAddString(sameAsAssigneeBitfields, "Or".toCharArray());
+        ArrayAddString(sameAsAssigneeBitfields, "Xor".toCharArray());
+        ArrayAddString(sameAsAssigneeBitfields, "Pdep".toCharArray());
+        ArrayAddString(sameAsAssigneeBitfields, "Pext".toCharArray());
+
+        // bw <- bw, number
+        Array bitwiseAndNumberToBitwise = CreateArray();
+        ArrayAddString(bitwiseAndNumberToBitwise, "Shl".toCharArray());
+        ArrayAddString(bitwiseAndNumberToBitwise, "Shr".toCharArray());
+        ArrayAddString(bitwiseAndNumberToBitwise, "Sar".toCharArray());
+        ArrayAddString(bitwiseAndNumberToBitwise, "Ror".toCharArray());
+        ArrayAddString(bitwiseAndNumberToBitwise, "Rol".toCharArray());
+
+        /*
+
+        Other:
+        Mov
+        Idr
+        Idro
+        Acw
+        Acr
+        MulFull
+        DivFull
+        Call
+        New
+        Del
+        Idw
+        Rdrand
+        Set
+        Movzx
+        StringSubset
+        StringSubset
+        StringRangeCheck
+        MatchString
+        FindSubstring
+
+        */
+
+        if(StringIsInArray(ins.name, sameAsAssigneeNumber)) {
+            Param assigneeType = ins.params[0];
+            targetType = assigneeType.var.type;
+            char first, last;
+
+            first = targetType[0];
+            last = targetType[targetType.length - 1];
+
+            if (first == 's' || first == 'u' || first == 'f') {
+                if (last != 'a') {
+
+                } else {
+                    valid = false;
+                    message.string = "Instruction does not work on arrays.".toCharArray();
+                }
+            } else {
+                valid = false;
+                message.string = "Instruction only works on number variables.".toCharArray();
             }
 
-            if(StringsEqual(ins.params[2].type, "var".toCharArray())){
-                memoryPostfix[1] = 'm';
-            }else{
-                memoryPostfix[1] = 'i';
+            if (valid) {
+
+                ins.typePostfix = targetType;
+
+                memoryPostfix = new char[0];
+
+                if (ins.params.length >= 1) {
+                    memoryPostfix = new char[ins.params.length - 1];
+
+                    for (i = 0; i < ins.params.length - 1d; i = i + 1d) {
+                        if (StringsEqual(ins.params[(int) (i + 1)].type, "var".toCharArray())) {
+                            memoryPostfix[(int) i] = 'm';
+                        } else {
+                            memoryPostfix[(int) i] = 'i';
+                        }
+                    }
+                }
+
+                ins.memoryPostfix = memoryPostfix;
             }
 
-            ins.memoryPostfix = memoryPostfix;
+        }else if(StringIsInArray(ins.name, sameAsAssigneeBitfields)){
+            Param assigneeType = ins.params[0];
+            targetType = assigneeType.var.type;
+            char first, last;
+
+            first = targetType[0];
+            last = targetType[targetType.length - 1];
+
+            if(first == 'b'){
+                if(last != 'a'){
+
+                }else{
+                    valid = false;
+                    message.string = "Instruction does not work on arrays.".toCharArray();
+                }
+            }else{
+                valid = false;
+                message.string = "Instruction only works on bitfield variables.".toCharArray();
+            }
+
+            if(valid) {
+
+                ins.typePostfix = targetType;
+
+                memoryPostfix = new char[0];
+
+                if (ins.params.length >= 1) {
+                    memoryPostfix = new char[ins.params.length - 1];
+
+                    for (i = 0; i < ins.params.length - 1d; i = i + 1d) {
+                        if (StringsEqual(ins.params[(int) (i + 1)].type, "var".toCharArray())) {
+                            memoryPostfix[(int) i] = 'm';
+                        } else {
+                            memoryPostfix[(int) i] = 'i';
+                        }
+                    }
+                }
+
+                ins.memoryPostfix = memoryPostfix;
+            }
+
         }else{
             //valid = false;
         }
