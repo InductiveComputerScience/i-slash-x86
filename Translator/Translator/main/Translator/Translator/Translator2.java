@@ -17,7 +17,7 @@ import static references.references.references.CreateNumberReference;
 
 public class Translator2 {
     public static boolean Tokenize(char[] input, DataReference tokensRef, StringReference message) {
-        Array tokens, ins;
+        Array tokens;
         double i, state;
         char c;
         LinkedListCharacters ll;
@@ -662,7 +662,7 @@ public class Translator2 {
         return var;
     }
 
-    private static boolean StringIsInArray(char[] token, Array typeInstructions) {
+    public static boolean StringIsInArray(char[] token, Array typeInstructions) {
         boolean isIn;
         double i;
         char [] cToken;
@@ -965,6 +965,11 @@ public class Translator2 {
         valid = CreateNumberFromDecimalStringWithCheck(token, numRef, message);
 
         return valid;
+    }
+
+
+    public static boolean PrettyPrint(Ast ast, StringReference message) {
+        return false;
     }
 }
 

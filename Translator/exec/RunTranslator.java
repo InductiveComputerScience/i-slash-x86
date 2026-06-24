@@ -2,6 +2,8 @@ import DataStructures.Array.Structures.Array;
 import DataStructures.Array.Structures.DataReference;
 import Translator.Translator.Ast;
 import Translator.Translator.Translator2;
+import Translator.Translator.Translator2SA;
+import Translator.Translator.Translator2T;
 import references.references.StringReference;
 
 import java.io.BufferedWriter;
@@ -40,7 +42,17 @@ public class RunTranslator {
             success = Translator2.Parse(tokens, ast, message);
 
             if(success){
-                System.out.println("success");
+                success = Translator2SA.StaticAnalysis(ast, message);
+
+                if(success){
+                    success = Translator2.PrettyPrint(ast, message);
+
+                    success = Translator2T.Translate(ast, message);
+
+                    System.out.println("success");
+                }else{
+                    System.out.println("Failed: " + new String(message.string));
+                }
             }else{
                 System.out.println("Failed: " + new String(message.string));
             }
