@@ -400,6 +400,7 @@ public class Translator2 {
         ArrayAddString(ins, "Xb16".toCharArray());
         ArrayAddString(ins, "Xb32".toCharArray());
         ArrayAddString(ins, "Xb64".toCharArray());
+        ArrayAddString(ins, "Xu64".toCharArray());
         ArrayAddString(ins, "Xb128".toCharArray());
         ArrayAddString(ins, "Xb256".toCharArray());
 

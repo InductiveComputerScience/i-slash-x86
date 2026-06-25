@@ -341,6 +341,7 @@ public class Translator2SA {
         ArrayAddString(p3, "Eq".toCharArray());
         ArrayAddString(p3, "Neq".toCharArray());
         ArrayAddString(p3, "Unequal".toCharArray());
+        ArrayAddString(p3, "Equal".toCharArray());
         ArrayAddString(p3, "Acw".toCharArray());
         ArrayAddString(p3, "Acr".toCharArray());
         ArrayAddString(p3, "Shl".toCharArray());
@@ -571,7 +572,7 @@ public class Translator2SA {
         ArrayAddString(numbersToBits, "Eq".toCharArray());
         ArrayAddString(numbersToBits, "Neq".toCharArray());
         ArrayAddString(numbersToBits, "Unequal".toCharArray());
-        ArrayAddString(numbersToBits, "Equals".toCharArray());
+        ArrayAddString(numbersToBits, "Equal".toCharArray());
         ArrayAddString(numbersToBits, "LessThan".toCharArray());
 
         // These take a bitfield and return a number.
@@ -628,6 +629,7 @@ public class Translator2SA {
         ArrayAddString(reint, "Xb16".toCharArray());
         ArrayAddString(reint, "Xb32".toCharArray());
         ArrayAddString(reint, "Xb64".toCharArray());
+        ArrayAddString(reint, "Xu64".toCharArray());
         ArrayAddString(reint, "Xb128".toCharArray());
         ArrayAddString(reint, "Xb256".toCharArray());
 
@@ -989,11 +991,11 @@ public class Translator2SA {
                 }
             } else {
                 success = false;
-                message.string = "Instruction only works on number variables as input.".toCharArray();
+                message.string = ("Instruction only works on number variables as input: " + new String(ins.name)).toCharArray();
             }
         } else {
             success = false;
-            message.string = "Assigned variable must be bitfield type.".toCharArray();
+            message.string = ("Assigned variable must be bitfield type: " + new String(ins.params[0].varname)).toCharArray();
         }
 
         // Check that all input parameters are the correct type.
@@ -1088,7 +1090,7 @@ public class Translator2SA {
             }
         }else{
             success = false;
-            message.string = "Instruction only works on bitfield variables.".toCharArray();
+            message.string = ("Instruction only works on bitfield variables: " + new String(ins.name)).toCharArray();
         }
 
         // Check that all parameters are the correct type.
