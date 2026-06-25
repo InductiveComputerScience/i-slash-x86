@@ -2337,6 +2337,7 @@ extern free
 ; u8tou16, u8tou32, u16tou32, u32tou64
 ; x = (AtoB)a. a must be of type A, x must be of type B.
 
+; TODO Use the following format instead? cvtu16.mu8ZZZ
 %macro u8tou16.m 2
   mov al, byte [rdi + %2]
   movzx ax, al

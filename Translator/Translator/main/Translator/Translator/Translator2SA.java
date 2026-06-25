@@ -462,7 +462,7 @@ public class Translator2SA {
         ArrayAddString(bitfieldToNumber, "Tzcnt".toCharArray());
         ArrayAddString(bitfieldToNumber, "Blsi".toCharArray());
 
-        // These are bitfields for all inputs
+        // These are bitfields for all parameters
         Array sameAsAssigneeBitfields = CreateArray();
         ArrayAddString(sameAsAssigneeBitfields, "Not".toCharArray());
         ArrayAddString(sameAsAssigneeBitfields, "And".toCharArray());
@@ -480,10 +480,37 @@ public class Translator2SA {
         ArrayAddString(bitwiseAndNumberToBitwise, "Ror".toCharArray());
         ArrayAddString(bitwiseAndNumberToBitwise, "Rol".toCharArray());
 
-        // Conversion or reinterpretation
+        // Conversion
+        Array conversion = CreateArray();
+        ArrayAddString(conversion, "s8tos16".toCharArray());
+        ArrayAddString(conversion, "s16tof32".toCharArray());
+        ArrayAddString(conversion, "f32tof64".toCharArray());
+        ArrayAddString(conversion, "s16tos8".toCharArray());
+        ArrayAddString(conversion, "f32tos16".toCharArray());
+        ArrayAddString(conversion, "f64tof32".toCharArray());
+        ArrayAddString(conversion, "u8tou16".toCharArray());
+        ArrayAddString(conversion, "u8tou32".toCharArray());
+        ArrayAddString(conversion, "u8x8tou16x8".toCharArray());
+        ArrayAddString(conversion, "u8x4tou32x4".toCharArray());
+        ArrayAddString(conversion, "u16tou32".toCharArray());
+        ArrayAddString(conversion, "u32tou64".toCharArray());
+        ArrayAddString(conversion, "f64x2tof32x2".toCharArray());
+        ArrayAddString(conversion, "f64x4tof32x4".toCharArray());
+        ArrayAddString(conversion, "f32x4tof16x4".toCharArray());
+        ArrayAddString(conversion, "f32x8tof16x8".toCharArray());
+        ArrayAddString(conversion, "f32x4tof64x4".toCharArray());
+        ArrayAddString(conversion, "u32tou16s".toCharArray());
 
-        Array convreint = CreateArray();
-        ArrayAddString(convreint, "Xu16x8a".toCharArray());
+        // Reinterpretation
+        Array reint = CreateArray();
+        ArrayAddString(reint, "Xu16x8a".toCharArray());
+        ArrayAddString(reint, "Xu32x4".toCharArray());
+        ArrayAddString(reint, "Xb8".toCharArray());
+        ArrayAddString(reint, "Xb16".toCharArray());
+        ArrayAddString(reint, "Xb32".toCharArray());
+        ArrayAddString(reint, "Xb64".toCharArray());
+        ArrayAddString(reint, "Xb128".toCharArray());
+        ArrayAddString(reint, "Xb256".toCharArray());
 
         /*
 
@@ -511,15 +538,16 @@ public class Translator2SA {
         */
 
         if(StringIsInArray(ins.name, sameAsAssigneeNumber)) {
-            valid = CheckInstructionWithSameTypeAsAssigneeWithNumbers(ins, message);
+            valid = CheckSameTypeAsAssigneeWithNumbers(ins, message);
         }else if(StringIsInArray(ins.name, sameAsAssigneeBitfields)){
-            valid = CheckInstructionWithSameTypeAsAssigneeWithBitfields(ins, message);
-        //}else if(StringIsInArray(ins.name, convreint)){
-
-
+            valid = CheckSameTypeAsAssigneeWithBitfields(ins, message);
+        }else if(StringIsInArray(ins.name, reint)){
+            valid = CheckReintepretations(ins, message);
+        }else if(StringIsInArray(ins.name, conversion)){
+            valid = CheckConversions(ins, message);
         }else{
-            valid = false;
-            message.string = ("Unknown typing rules for instruction: " + new String(ins.name)).toCharArray();
+            //valid = false;
+            //message.string = ("Unknown typing rules for instruction: " + new String(ins.name)).toCharArray();
         }
 
         // Compute memory postfix.
@@ -530,15 +558,29 @@ public class Translator2SA {
         return valid;
     }
 
-    private static boolean CheckInstructionWithSameTypeAsAssigneeWithBitfields(Instruction ins, StringReference message) {
+    private static boolean CheckConversions(Instruction ins, StringReference message) {
+        return false;
+    }
+
+    private static boolean CheckReintepretations(Instruction ins, StringReference message) {
+        return false;
+    }
+
+    private static boolean CheckSameTypeAsAssigneeWithBitfields(Instruction ins, StringReference message) {
         char[] targetType;
-        Param assigneeType = ins.params[0];
-        targetType = assigneeType.var.type;
+        Param assigneeType;
         char first, last;
-        boolean valid;
+        boolean success;
+        double i;
 
-        valid = true;
+        success = true;
 
+        // Compute type
+        assigneeType = ins.params[0];
+        targetType = assigneeType.var.type;
+        ins.typePostfix = targetType;
+
+        // Check that the type is a bitfield type
         first = targetType[0];
         last = targetType[targetType.length - 1];
 
@@ -546,63 +588,78 @@ public class Translator2SA {
             if(last != 'a'){
 
             }else{
-                valid = false;
+                success = false;
                 message.string = "Instruction does not work on arrays.".toCharArray();
             }
         }else{
-            valid = false;
+            success = false;
             message.string = "Instruction only works on bitfield variables.".toCharArray();
         }
 
-        if(valid) {
-            ins.typePostfix = targetType;
-        }
-        return valid;
-    }
-
-    private static boolean CheckInstructionWithSameTypeAsAssigneeWithNumbers(Instruction ins, StringReference message) {
-        double i;
-        char[] targetType;
-        Param assigneeType = ins.params[0];
-        targetType = assigneeType.var.type;
-        char first, last;
-        boolean valid;
-
-        valid = true;
-
-        first = targetType[0];
-        last = targetType[targetType.length - 1];
-
-        // Check that type is a number type.
-        if (first == 's' || first == 'u' || first == 'f') {
-            if (last != 'a') {
-
-            } else {
-                valid = false;
-                message.string = "Instruction does not work on arrays.".toCharArray();
-            }
-        } else {
-            valid = false;
-            message.string = "Instruction only works on number variables.".toCharArray();
-        }
-
         // Check that all parameters are the correct type.
-        if(valid) {
-            ins.typePostfix = targetType;
-
-            for (i = 0; i < ins.params.length && valid; i = i + 1d) {
+        if(success) {
+            for (i = 0; i < ins.params.length && success; i = i + 1d) {
                 Param p = ins.params[(int) i];
                 if (ParamIsVariable(p)) {
                     if (StringsEqual(p.var.type, ins.typePostfix)) {
                         // OK
                     } else {
-                        valid = false;
+                        success = false;
                         message.string = ("Parameter is not the correct type: " + new String(p.varname)).toCharArray();
                     }
                 }
             }
         }
-        return valid;
+
+        return success;
+    }
+
+    private static boolean CheckSameTypeAsAssigneeWithNumbers(Instruction ins, StringReference message) {
+        double i;
+        char[] targetType;
+        Param assigneeType;
+        char first, last;
+        boolean success;
+
+        success = true;
+
+        // Determine the type
+        assigneeType = ins.params[0];
+        targetType = assigneeType.var.type;
+        ins.typePostfix = targetType;
+
+        // Check that type is a number type.
+        first = targetType[0];
+        last = targetType[targetType.length - 1];
+
+        if (first == 's' || first == 'u' || first == 'f') {
+            if (last != 'a') {
+
+            } else {
+                success = false;
+                message.string = "Instruction does not work on arrays.".toCharArray();
+            }
+        } else {
+            success = false;
+            message.string = "Instruction only works on number variables.".toCharArray();
+        }
+
+        // Check that all parameters are the correct type.
+        if(success) {
+            for (i = 0; i < ins.params.length && success; i = i + 1d) {
+                Param p = ins.params[(int) i];
+                if (ParamIsVariable(p)) {
+                    if (StringsEqual(p.var.type, ins.typePostfix)) {
+                        // OK
+                    } else {
+                        success = false;
+                        message.string = ("Parameter is not the correct type: " + new String(p.varname)).toCharArray();
+                    }
+                }
+            }
+        }
+
+        return success;
     }
 
     private static void ComputeMemoryPostfix(Instruction ins) {
