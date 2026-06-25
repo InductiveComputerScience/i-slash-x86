@@ -456,6 +456,9 @@ public class Translator2SA {
         ArrayAddString(numbersToBits, "Gte".toCharArray());
         ArrayAddString(numbersToBits, "Eq".toCharArray());
         ArrayAddString(numbersToBits, "Neq".toCharArray());
+        ArrayAddString(numbersToBits, "Unequal".toCharArray());
+        ArrayAddString(numbersToBits, "Equals".toCharArray());
+        ArrayAddString(numbersToBits, "LessThan".toCharArray());
 
         // These take a bitfield and return a number.
         Array bitfieldToNumber = CreateArray();
@@ -547,6 +550,12 @@ public class Translator2SA {
             valid = CheckReinterpretations(ins, message);
         }else if(StringIsInArray(ins.name, conversion)){
             valid = CheckConversions(ins, message);
+        }else if(StringIsInArray(ins.name, numbersToBits)){
+            valid = CheckNumbersToBits(ins, message);
+        }else if(StringIsInArray(ins.name, bitfieldToNumber)){
+            valid = CheckBitfieldToNumber(ins, message);
+        }else if(StringsEqual(ins.name, "Broadcast".toCharArray())){
+            valid = CheckBroadcast(ins, message);
         }else{
             //valid = false;
             //message.string = ("Unknown typing rules for instruction: " + new String(ins.name)).toCharArray();
@@ -558,6 +567,108 @@ public class Translator2SA {
         }
 
         return valid;
+    }
+
+    private static boolean CheckBroadcast(Instruction ins, StringReference message) {
+        return false;
+    }
+
+    private static boolean CheckBitfieldToNumber(Instruction ins, StringReference message) {
+        char[] type1, type2;
+        boolean success;
+
+        success = true;
+
+        // Determine the type
+        type1 = ins.params[0].var.type;
+
+        //System.out.println(type1);
+
+        if(ParamIsVariable(ins.params[1])){
+            type2 = ins.params[1].var.type;
+        }else{
+            // If input types is a literal, use b64 as it is the native non-simd bitfield.
+            type2 = "b64".toCharArray();
+        }
+
+        ins.typePostfix = (new String(type1) + new String(type2)).toCharArray();
+        ins.hasTypePostfix = true;
+
+        if (TypeIsNumberType(type1) && !TypeIsArrayType(type1)) {
+            if (TypeIsBitfieldType(type2) && !TypeIsArrayType(type2)) {
+                // OK
+            } else {
+                success = false;
+                message.string = ("Instruction only works on non-array bitfield variables as input: " + new String(ins.name)).toCharArray();
+            }
+        } else {
+            success = false;
+            message.string = "Assigned variable must be non-array number type.".toCharArray();
+        }
+
+        return success;
+    }
+
+    private static boolean CheckNumbersToBits(Instruction ins, StringReference message) {
+        char[] type1, type2;
+        boolean success;
+
+        success = true;
+
+        // Determine the type
+        type1 = ins.params[0].var.type;
+
+        System.out.println(type1);
+
+        if(ParamIsVariable(ins.params[1])){
+            type2 = ins.params[1].var.type;
+        }else if(ParamIsVariable(ins.params[2])){
+            type2 = ins.params[2].var.type;
+        }else{
+            // If both input types are literals, then we use the largest number type available.
+            type2 = "f64".toCharArray();
+        }
+
+        ins.typePostfix = (new String(type1) + new String(type2)).toCharArray();
+        ins.hasTypePostfix = true;
+
+        if (TypeIsBitfieldType(type1)) {
+            if (TypeIsNumberType(type2)) {
+                if (!TypeIsArrayType(type2)) {
+
+                } else {
+                    success = false;
+                    message.string = "Instruction does not work on arrays as input.".toCharArray();
+                }
+            } else {
+                success = false;
+                message.string = "Instruction only works on number variables as input.".toCharArray();
+            }
+        } else {
+            success = false;
+            message.string = "Assigned variable must be bitfield type.".toCharArray();
+        }
+
+        // Check that all input parameters are the correct type.
+        if(ParamIsVariable(ins.params[1])){
+            if(StringsEqual(ins.params[1].var.type, type2)){
+                // OK
+            } else {
+                success = false;
+                message.string = "Input type not the correct type.".toCharArray();
+            }
+        }
+
+        if(ParamIsVariable(ins.params[2])){
+            if(StringsEqual(ins.params[2].var.type, type2)){
+                // OK
+            } else {
+                success = false;
+                message.string = "Input type not the correct type.".toCharArray();
+            }
+        }
+
+        return success;
     }
 
     private static boolean CheckConversions(Instruction ins, StringReference message) {
@@ -609,7 +720,6 @@ public class Translator2SA {
     private static boolean CheckSameTypeAsAssigneeWithBitfields(Instruction ins, StringReference message) {
         char[] targetType;
         Param assigneeType;
-        char first, last;
         boolean success;
         double i;
 
@@ -622,11 +732,8 @@ public class Translator2SA {
         ins.hasTypePostfix = true;
 
         // Check that the type is a bitfield type
-        first = targetType[0];
-        last = targetType[targetType.length - 1];
-
-        if(first == 'b'){
-            if(last != 'a'){
+        if(TypeIsBitfieldType(targetType)){
+            if(!TypeIsArrayType(targetType)){
 
             }else{
                 success = false;
@@ -659,7 +766,6 @@ public class Translator2SA {
         double i;
         char[] targetType;
         Param assigneeType;
-        char first, last;
         boolean success;
 
         success = true;
@@ -670,12 +776,9 @@ public class Translator2SA {
         ins.typePostfix = targetType;
         ins.hasTypePostfix = true;
 
-        // Check that type is a number type.
-        first = targetType[0];
-        last = targetType[targetType.length - 1];
-
-        if (first == 's' || first == 'u' || first == 'f') {
-            if (last != 'a') {
+        // Check type.
+        if (TypeIsNumberType(targetType)) {
+            if (!TypeIsArrayType(targetType)) {
 
             } else {
                 success = false;
@@ -702,6 +805,25 @@ public class Translator2SA {
         }
 
         return success;
+    }
+
+
+    private static boolean TypeIsBitfieldType(char[] type) {
+        char first = type[0];
+
+        return first == 'b';
+    }
+
+    private static boolean TypeIsNumberType(char [] type) {
+        char first = type[0];
+
+        return first == 's' || first == 'u' || first == 'f';
+    }
+
+    private static boolean TypeIsArrayType(char [] type) {
+        char last = type[type.length - 1];
+
+        return last == 'a';
     }
 
     private static void ComputeMemoryPostfix(Instruction ins) {

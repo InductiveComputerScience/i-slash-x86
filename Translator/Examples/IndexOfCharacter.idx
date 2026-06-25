@@ -12,7 +12,7 @@ Bgs IndexOfCharacterAS
 	u16x8a stra
 	u16x8 sc
 	u16x8 cc
-	u16 mask1
+	b16 mask1
 	u64 zcnt
 	u64 tu640
 	u64 tu641
