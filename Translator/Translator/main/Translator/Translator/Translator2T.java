@@ -31,7 +31,11 @@ public class Translator2T {
     private static void PrintInstruction(Instruction ins) {
         double i;
 
-        System.out.print("  " + new String(ins.name));
+        for(i = 0; i < ins.indentation; i = i + 1d){
+            System.out.print("  ");
+        }
+
+        System.out.print(new String(ins.name));
 
         if(ins.hasTypePostfix || ins.params.length > 0) {
             System.out.print(".");
@@ -63,6 +67,18 @@ public class Translator2T {
 
             if(i + 1d < ins.params.length) {
                 System.out.print(", ");
+            }
+        }
+
+        if(ins.label1 != null){
+            if(ins.params.length > 0){
+                System.out.print(", ");
+            }
+
+            System.out.print(new String(ins.label1));
+
+            if(ins.label2 != null){
+                System.out.print(", " + new String(ins.label2));
             }
         }
 

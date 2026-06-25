@@ -3,6 +3,8 @@ package Translator.Translator;
 import DataStructures.Array.Structures.Array;
 import references.references.StringReference;
 
+import java.util.Stack;
+
 import static DataStructures.Array.Arrays.Arrays.*;
 import static Translator.Translator.Translator2.IsValidNumber;
 import static Translator.Translator.Translator2.StringIsInArray;
@@ -79,7 +81,76 @@ public class Translator2SA {
 
         if(success){
             // Check control flow and compute labels
-            // TODO
+            for(i = 0; i < ast.fnc.length && success; i = i + 1d) {
+                fnc = ast.fnc[(int) i];
+
+                success = CheckControlFlowAndComputeLabels(fnc, message);
+            }
+        }
+
+        return success;
+    }
+
+    private static boolean CheckControlFlowAndComputeLabels(Function fnc, StringReference message) {
+        double i, ind;
+        boolean success, loopPreState;
+        Stack<String> labels;
+        int next;
+        String label;
+
+        next = 1;
+
+        labels = new Stack<>();
+
+        success = true;
+
+        ind = 1d;
+        loopPreState = false;
+
+        for(i = 0d; i < fnc.ins.length; i = i + 1d){
+            Instruction ins = fnc.ins[(int) i];
+
+            ins.indentation = ind;
+
+            if(StringsEqual(ins.name, "If".toCharArray())){
+                if(!loopPreState) {
+                    ind = ind + 1d;
+                }else{
+                    ins.indentation = ins.indentation - 1d;
+                }
+
+                label = "L" + next;
+                next = next + 1;
+                ins.label1 = label.toCharArray();
+                labels.push(label);
+
+                loopPreState = false;
+            }
+
+            if(StringsEqual(ins.name, "Loop".toCharArray())){
+                ind = ind + 1d;
+                loopPreState = true;
+
+                label = "L" + next;
+                next = next + 1;
+                ins.label1 = label.toCharArray();
+                labels.push(label);
+            }
+
+            if(StringsEqual(ins.name, "Endb".toCharArray())){
+                ind = ind - 1d;
+                ins.indentation = ins.indentation - 1d;
+
+                ins.label1 = labels.pop().toCharArray();
+            }
+
+            if(StringsEqual(ins.name, "EndLoop".toCharArray())){
+                ind = ind - 1d;
+                ins.indentation = ins.indentation - 1d;
+
+                ins.label2 = labels.pop().toCharArray();
+                ins.label1 = labels.pop().toCharArray();
+            }
         }
 
         return success;
