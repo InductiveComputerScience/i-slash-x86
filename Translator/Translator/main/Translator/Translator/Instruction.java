@@ -5,6 +5,7 @@ public class Instruction {
     public Param [] params;
 
     // Computed
+    boolean hasTypePostfix;
     public char [] typePostfix;
     public char [] memoryPostfix;
     public char [] label1;

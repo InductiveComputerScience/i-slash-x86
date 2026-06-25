@@ -6,6 +6,8 @@ import references.references.StringReference;
 import static DataStructures.Array.Arrays.Arrays.*;
 import static Translator.Translator.Translator2.StringIsInArray;
 import static arrays.arrays.arrays.StringsEqual;
+import static strings.strings.strings.SplitByString;
+import static strings.strings.strings.Substring;
 
 public class Translator2SA {
     public static boolean StaticAnalysis(Ast ast, StringReference message) {
@@ -542,7 +544,7 @@ public class Translator2SA {
         }else if(StringIsInArray(ins.name, sameAsAssigneeBitfields)){
             valid = CheckSameTypeAsAssigneeWithBitfields(ins, message);
         }else if(StringIsInArray(ins.name, reint)){
-            valid = CheckReintepretations(ins, message);
+            valid = CheckReinterpretations(ins, message);
         }else if(StringIsInArray(ins.name, conversion)){
             valid = CheckConversions(ins, message);
         }else{
@@ -559,11 +561,49 @@ public class Translator2SA {
     }
 
     private static boolean CheckConversions(Instruction ins, StringReference message) {
-        return false;
+        boolean success;
+        StringReference[] types;
+
+        // Compute type
+        types = SplitByString(ins.name, "to".toCharArray());
+
+        // Check that the parameters are of the correct types.
+        if(StringsEqual(ins.params[0].var.type, types[0].string)){
+            if(StringsEqual(ins.params[1].var.type, types[1].string)){
+                success = true;
+            }else{
+                success = false;
+                message.string = ("Input variable is of wrong type: " + new String(ins.params[1].var.type)).toCharArray();
+            }
+        }else{
+            success = false;
+            message.string = ("Variable assigned to is of wrong type: " + new String(ins.params[0].var.type)).toCharArray();
+        }
+
+        return success;
     }
 
-    private static boolean CheckReintepretations(Instruction ins, StringReference message) {
-        return false;
+    private static boolean CheckReinterpretations(Instruction ins, StringReference message) {
+        char[] type;
+        Param paramType;
+        boolean success;
+
+        // Compute type
+        paramType = ins.params[1];
+        type = paramType.var.type;
+        ins.typePostfix = type;
+        ins.hasTypePostfix = true;
+
+        // Check that the first parameter is of the correct type.
+        type = Substring(ins.name, 1, ins.name.length);
+        if(StringsEqual(ins.params[0].var.type, type)){
+            success = true;
+        }else{
+            success = false;
+            message.string = ("Variable assigned to is of wrong type: " + new String(ins.params[0].var.type)).toCharArray();
+        }
+
+        return success;
     }
 
     private static boolean CheckSameTypeAsAssigneeWithBitfields(Instruction ins, StringReference message) {
@@ -579,6 +619,7 @@ public class Translator2SA {
         assigneeType = ins.params[0];
         targetType = assigneeType.var.type;
         ins.typePostfix = targetType;
+        ins.hasTypePostfix = true;
 
         // Check that the type is a bitfield type
         first = targetType[0];
@@ -627,6 +668,7 @@ public class Translator2SA {
         assigneeType = ins.params[0];
         targetType = assigneeType.var.type;
         ins.typePostfix = targetType;
+        ins.hasTypePostfix = true;
 
         // Check that type is a number type.
         first = targetType[0];

@@ -31,7 +31,11 @@ public class Translator2T {
     private static void PrintInstruction(Instruction ins) {
         double i;
 
-        System.out.print("  " + new String(ins.name) + ".");
+        System.out.print("  " + new String(ins.name));
+
+        if(ins.hasTypePostfix || ins.params.length > 0) {
+            System.out.print(".");
+        }
 
         if(ins.memoryPostfix != null){
             System.out.print(new String(ins.memoryPostfix));
@@ -39,10 +43,12 @@ public class Translator2T {
             System.out.print("_");
         }
 
-        if(ins.typePostfix != null){
-            System.out.print(new String(ins.typePostfix));
-        }else{
-            System.out.print("_");
+        if(ins.hasTypePostfix) {
+            if (ins.typePostfix != null) {
+                System.out.print(new String(ins.typePostfix));
+            } else {
+                System.out.print("_");
+            }
         }
 
         System.out.print(" ");
