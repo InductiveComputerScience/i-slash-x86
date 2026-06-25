@@ -16,6 +16,7 @@ public class Translator2SA {
         boolean success;
         double i, j, k;
         Function fnc;
+        Struct st;
 
         success = true;
 
@@ -26,6 +27,13 @@ public class Translator2SA {
 
         if(success){
             success = CheckUniqueFunctionNames(ast.fnc, message);
+        }
+
+        if(success){
+            for(i = 0; i < ast.st.length && success; i = i + 1d) {
+                st = ast.st[(int) i];
+                success = CheckUnqiueVariableNames(st, message);
+            }
         }
 
         if(success){
@@ -91,6 +99,28 @@ public class Translator2SA {
         return success;
     }
 
+    private static boolean CheckUnqiueVariableNames(Struct st, StringReference message) {
+        double i;
+        boolean valid;
+        Array names;
+
+        names = CreateArray();
+        valid = true;
+
+        for(i = 0d; i < st.vars.length; i = i + 1d){
+            Var var = st.vars[(int) i];
+
+            if(!StringIsInArray(var.name, names)){
+                ArrayAddString(names, var.name);
+            }else{
+                valid = false;
+                message.string = ("Two variables in a structure have the name name: " + new String(var.name)).toCharArray();
+            }
+        }
+
+        return valid;
+    }
+
     private static boolean CheckControlFlowAndComputeLabels(Function fnc, StringReference message) {
         double i, ind;
         boolean success, loopPreState;
@@ -141,16 +171,29 @@ public class Translator2SA {
                 ind = ind - 1d;
                 ins.indentation = ins.indentation - 1d;
 
-                ins.label1 = labels.pop().toCharArray();
+                if(!labels.empty()) {
+                    ins.label1 = labels.pop().toCharArray();
+                }
             }
 
             if(StringsEqual(ins.name, "EndLoop".toCharArray())){
                 ind = ind - 1d;
                 ins.indentation = ins.indentation - 1d;
 
-                ins.label2 = labels.pop().toCharArray();
-                ins.label1 = labels.pop().toCharArray();
+                if(!labels.empty()) {
+                    ins.label2 = labels.pop().toCharArray();
+                }
+                if(!labels.empty()) {
+                    ins.label1 = labels.pop().toCharArray();
+                }
             }
+        }
+
+        if(ind == 1){
+            // OK, balanced
+        }else{
+            success = false;
+            message.string = "Blocks were not balanced out.".toCharArray();
         }
 
         return success;
