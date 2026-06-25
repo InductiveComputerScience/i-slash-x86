@@ -127,6 +127,8 @@ public class Translator2 {
 
         ins = CreateArray();
 
+        // Naming rules: numbers: u, s, f. bitfield: b. Followed by size. Array: a-ending. Multitypes has x followed by multiple.
+
         // Types
         ArrayAddString(ins, "u8".toCharArray());
         ArrayAddString(ins, "u16".toCharArray());

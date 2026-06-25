@@ -4,10 +4,10 @@ import DataStructures.Array.Structures.Array;
 import references.references.StringReference;
 
 import static DataStructures.Array.Arrays.Arrays.*;
+import static Translator.Translator.Translator2.IsValidNumber;
 import static Translator.Translator.Translator2.StringIsInArray;
 import static arrays.arrays.arrays.StringsEqual;
-import static strings.strings.strings.SplitByString;
-import static strings.strings.strings.Substring;
+import static strings.strings.strings.*;
 
 public class Translator2SA {
     public static boolean StaticAnalysis(Ast ast, StringReference message) {
@@ -556,7 +556,21 @@ public class Translator2SA {
             valid = CheckBitfieldToNumber(ins, message);
         }else if(StringsEqual(ins.name, "Broadcast".toCharArray())){
             valid = CheckBroadcast(ins, message);
-        }else{
+        }else if(StringsEqual(ins.name, "If".toCharArray())){
+            valid = CheckIf(ins, message);
+        }else if(StringsEqual(ins.name, "Idr".toCharArray())){
+            valid = CheckIdr(ins, message);
+        }else if(StringsEqual(ins.name, "Idro".toCharArray())){
+            valid = CheckIdro(ins, message);
+        }else if(StringsEqual(ins.name, "Idw".toCharArray())){
+            valid = CheckIdw(ins, message);
+        }else if(StringsEqual(ins.name, "Mov".toCharArray())){
+            valid = CheckMov(ins, message);
+        }/*else if(StringsEqual(ins.name, "Acw".toCharArray())){
+            valid = CheckAcw(ins, message);
+        }else if(StringsEqual(ins.name, "Acr".toCharArray())){
+            valid = CheckAcr(ins, message);
+        }*/else{
             //valid = false;
             //message.string = ("Unknown typing rules for instruction: " + new String(ins.name)).toCharArray();
         }
@@ -569,8 +583,227 @@ public class Translator2SA {
         return valid;
     }
 
-    private static boolean CheckBroadcast(Instruction ins, StringReference message) {
+    private static boolean CheckAcr(Instruction ins, StringReference message) {
         return false;
+    }
+
+    private static boolean CheckAcw(Instruction ins, StringReference message) {
+        return false;
+    }
+
+    private static boolean CheckMov(Instruction ins, StringReference message) {
+        char[] type1, type2;
+        boolean success;
+
+        success = true;
+
+        // Determine the type
+        type1 = ins.params[0].var.type;
+
+        ins.hasTypePostfix = true;
+        ins.typePostfix = type1;
+
+        if(ParamIsVariable(ins.params[1])){
+            type2 = ins.params[1].var.type;
+
+            if(StringsEqual(type1, type2)){
+                // OK
+            }else{
+                success = false;
+                message.string = "Input parameter to Mov must be the same as the assigned variable.".toCharArray();
+            }
+        }
+
+        return success;
+    }
+
+    private static boolean CheckIdw(Instruction ins, StringReference message) {
+        char[] type1, type2;
+        boolean success;
+
+        success = true;
+
+        // Determine the type
+        type1 = ins.params[0].var.type;
+
+        if(ParamIsVariable(ins.params[1])){
+            type2 = ins.params[1].var.type;
+        }else{
+            type2 = "s64".toCharArray();
+        }
+
+        if (TypeIsArrayType(type1)){
+            ins.hasTypePostfix = true;
+            ins.typePostfix = type1;
+
+            char[] elementType = Substring(type1, 0, type1.length - 1d);
+
+            if(StringsEqual(ins.params[2].var.type, elementType)){
+                if(TypeIsNumberType(type2) && !TypeIsArrayType(type2)){
+                    // OK
+                }else{
+                    success = false;
+                    message.string = "Index variable must be a number.".toCharArray();
+                }
+            }else{
+                success = false;
+                message.string = "Input variable must be element type of array.".toCharArray();
+            }
+        }else{
+            success = false;
+            message.string = "First parameter to Idw must be an array.".toCharArray();
+        }
+
+        return success;
+    }
+
+    private static boolean CheckIdro(Instruction ins, StringReference message) {
+        char[] type1, type2;
+        boolean success;
+
+        success = true;
+
+        // Determine the type
+        type1 = ins.params[1].var.type;
+
+        if(ParamIsVariable(ins.params[2])){
+            type2 = ins.params[2].var.type;
+        }else{
+            type2 = "s64".toCharArray();
+        }
+
+        if (TypeIsArrayType(type1)){
+            ins.hasTypePostfix = true;
+            ins.typePostfix = type1;
+
+            char[] elementType = Substring(type1, 0, type1.length - 1d);
+
+            if(StringsEqual(ins.params[0].var.type, elementType)){
+                if(TypeIsNumberType(type2) && !TypeIsArrayType(type2)){
+                    if(ParamIsLiteral(ins.params[3])){
+                        if(IsValidNumber(ins.params[3].literal)){
+                            // OK
+                        }else{
+                            success = false;
+                            message.string = "Offset parameter must be a number.".toCharArray();
+                        }
+                    }else{
+                        success = false;
+                        message.string = "Offset parameter must be literal.".toCharArray();
+                    }
+                }else{
+                    success = false;
+                    message.string = "Index variable must be a number.".toCharArray();
+                }
+            }else{
+                success = false;
+                message.string = "Assigned variable must be element type of array.".toCharArray();
+            }
+        }else{
+            success = false;
+            message.string = "Second parameter to Idr must be array.".toCharArray();
+        }
+
+        return success;
+    }
+
+    private static boolean CheckIdr(Instruction ins, StringReference message) {
+        char[] type1, type2;
+        boolean success;
+
+        success = true;
+
+        // Determine the type
+        type1 = ins.params[1].var.type;
+
+        if(ParamIsVariable(ins.params[2])){
+            type2 = ins.params[2].var.type;
+        }else{
+            type2 = "s64".toCharArray();
+        }
+
+        if (TypeIsArrayType(type1)){
+            ins.hasTypePostfix = true;
+            ins.typePostfix = type1;
+
+            char[] elementType = Substring(type1, 0, type1.length - 1d);
+
+            if(StringsEqual(ins.params[0].var.type, elementType)){
+                if(TypeIsNumberType(type2) && !TypeIsArrayType(type2)){
+                    // OK
+                }else{
+                    success = false;
+                    message.string = "Index variable must be a number.".toCharArray();
+                }
+            }else{
+                success = false;
+                message.string = "Assigned variable must be element type of array.".toCharArray();
+            }
+        }else{
+            success = false;
+            message.string = "Second parameter to Idr must be array.".toCharArray();
+        }
+
+        return success;
+    }
+
+    private static boolean CheckIf(Instruction ins, StringReference message) {
+        char[] type1;
+        boolean success;
+
+        success = true;
+
+        // Determine the type
+        if (ParamIsVariable(ins.params[0])) {
+            type1 = ins.params[0].var.type;
+        }else{
+            type1 = "b1".toCharArray();
+        }
+
+        if (TypeIsBitfieldType(type1) && !TypeIsArrayType(type1)){
+            ins.hasTypePostfix = true;
+            ins.typePostfix = type1;
+        }else{
+            success = false;
+            message.string = "Variable for if must be bitfield type.".toCharArray();
+        }
+
+        return success;
+    }
+
+    private static boolean CheckBroadcast(Instruction ins, StringReference message) {
+        char[] type1;
+        boolean success;
+
+        success = true;
+
+        // Determine the type
+        type1 = ins.params[0].var.type;
+
+        if (TypeIsMultipleType(type1)){
+            ins.hasTypePostfix = true;
+            ins.typePostfix = type1;
+
+            StringReference[] parts = SplitByCharacter(type1, 'x');
+
+            if(ParamIsVariable(ins.params[1])){
+                if(StringsEqual(ins.params[1].var.type, parts[0].string)){
+
+                }else{
+                    success = false;
+                    message.string = "Input variable in broadcast must be same as element type of assigned variable.".toCharArray();
+                }
+            }
+        }else{
+            success = false;
+            message.string = "Assigned variable must be a multi data type.".toCharArray();
+        }
+
+        return success;
+    }
+
+    private static boolean TypeIsMultipleType(char[] type) {
+        return ContainsCharacter(type, 'x');
     }
 
     private static boolean CheckBitfieldToNumber(Instruction ins, StringReference message) {
@@ -618,7 +851,7 @@ public class Translator2SA {
         // Determine the type
         type1 = ins.params[0].var.type;
 
-        System.out.println(type1);
+        //System.out.println(type1);
 
         if(ParamIsVariable(ins.params[1])){
             type2 = ins.params[1].var.type;
@@ -836,6 +1069,18 @@ public class Translator2SA {
 
             for (i = 0; i < ins.params.length - 1d; i = i + 1d) {
                 if (StringsEqual(ins.params[(int) (i + 1)].type, "var".toCharArray())) {
+                    memoryPostfix[(int) i] = 'm';
+                } else {
+                    memoryPostfix[(int) i] = 'i';
+                }
+            }
+        }
+
+        if(StringsEqual(ins.name, "If".toCharArray())){
+            memoryPostfix = new char[ins.params.length];
+
+            for (i = 0; i < ins.params.length; i = i + 1d) {
+                if (StringsEqual(ins.params[(int)i].type, "var".toCharArray())) {
                     memoryPostfix[(int) i] = 'm';
                 } else {
                     memoryPostfix[(int) i] = 'i';
