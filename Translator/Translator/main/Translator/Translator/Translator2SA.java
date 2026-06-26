@@ -850,20 +850,6 @@ public class Translator2SA {
     }
 
     private static boolean CheckIdw(Instruction ins, StringReference message) {
-        boolean success;
-
-        success = true;
-
-        if(TypeIsArrayType(ins.params[0].var.type)){
-            success = CheckIdwArrayType(ins, message);
-        }else if(TypeIsMultipleType(ins.params[0].var.type)){
-            success = CheckIdwMultipleType(ins, message);
-        }
-
-        return success;
-    }
-
-    private static boolean CheckIdwArrayType(Instruction ins, StringReference message) {
         char[] type1, type2;
         boolean success;
 
@@ -878,62 +864,41 @@ public class Translator2SA {
             type2 = "s64".toCharArray();
         }
 
-        if (TypeIsArrayType(type1)){
-            ins.hasTypePostfix = true;
-            ins.typePostfix = type1;
+        ins.hasTypePostfix = true;
+        ins.typePostfix = type1;
 
+        if (TypeIsArrayType(type1)) {
             char[] elementType = Substring(type1, 0, type1.length - 1d);
 
-            if(StringsEqual(ins.params[2].var.type, elementType)){
-                if(TypeIsNumberType(type2) && !TypeIsArrayType(type2)){
-                    // OK
-                }else{
+            if(ParamIsVariable(ins.params[2])) {
+                if (StringsEqual(ins.params[2].var.type, elementType)) {
+                    if (TypeIsNumberType(type2) && !TypeIsArrayType(type2)) {
+                        // OK
+                    } else {
+                        success = false;
+                        message.string = "Index variable must be a number.".toCharArray();
+                    }
+                } else {
                     success = false;
-                    message.string = "Index variable must be a number.".toCharArray();
+                    message.string = "Input variable must be element type of array.".toCharArray();
                 }
-            }else{
-                success = false;
-                message.string = "Input variable must be element type of array.".toCharArray();
             }
-        }else{
-            success = false;
-            message.string = "First parameter to Idw must be an array.".toCharArray();
-        }
+        }else if (TypeIsMultipleType(type1)){
+            StringReference[] parts = SplitByCharacter(type1, 'x');
+            char[] elementType = parts[0].string;
 
-        return success;
-    }
-
-    private static boolean CheckIdwMultipleType(Instruction ins, StringReference message) {
-        char[] type1, type2;
-        boolean success;
-
-        success = true;
-
-        // Determine the type
-        type1 = ins.params[0].var.type;
-
-        if(ParamIsVariable(ins.params[1])){
-            type2 = ins.params[1].var.type;
-        }else{
-            type2 = "s64".toCharArray();
-        }
-
-        if (TypeIsArrayType(type1)){
-            ins.hasTypePostfix = true;
-            ins.typePostfix = type1;
-
-            char[] elementType = Substring(type1, 0, type1.length - 1d);
-
-            if(StringsEqual(ins.params[2].var.type, elementType)){
-                if(TypeIsNumberType(type2) && !TypeIsArrayType(type2)){
-                    // OK
-                }else{
+            if(ParamIsVariable(ins.params[2])) {
+                if (StringsEqual(ins.params[2].var.type, elementType)) {
+                    if (TypeIsNumberType(type2) && !TypeIsArrayType(type2)) {
+                        // OK
+                    } else {
+                        success = false;
+                        message.string = "Index variable must be a number.".toCharArray();
+                    }
+                } else {
                     success = false;
-                    message.string = "Index variable must be a number.".toCharArray();
+                    message.string = "Input variable must be element type of multiple type.".toCharArray();
                 }
-            }else{
-                success = false;
-                message.string = "Input variable must be element type of array.".toCharArray();
             }
         }else{
             success = false;

@@ -27,7 +27,7 @@ Bgs base64AS
   u8x16 upx
   u32 z
   u8x16 tu8x160
-  u16 c
+  u8 c
   
   ; Constants
   u8x16 cInputShuffle
