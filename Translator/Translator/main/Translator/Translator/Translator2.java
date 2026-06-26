@@ -14,15 +14,17 @@ import static charCharacters.Characters.Characters.charIsNumber;
 import static lists.LinkedListCharacters.LinkedListCharactersFunctions.LinkedListCharactersFunctions.*;
 import static numbers.StringToNumber.StringToNumber.CreateNumberFromDecimalStringWithCheck;
 import static references.references.references.CreateNumberReference;
+import static strings.strings.strings.StartsWith;
+import static strings.strings.strings.Substring;
 
 public class Translator2 {
     public static boolean Tokenize(char[] input, DataReference tokensRef, StringReference message) {
         Array tokens;
-        double i, state;
+        double i, state, part;
         char c;
         LinkedListCharacters ll;
         char [] str;
-        boolean success;
+        boolean success, escape;
 
         success = true;
         message.string = "".toCharArray();
@@ -32,6 +34,8 @@ public class Translator2 {
         tokens = CreateArray();
 
         state = 0d;
+        part = 0d;
+        escape = false;
         for(i = 0; i < input.length + 1; i = i + 1d){
             if(i < input.length) {
                 c = input[(int) i];
@@ -53,12 +57,16 @@ public class Translator2 {
                     ll = CreateLinkedListCharacter();
                 }else if(c == ';'){
                     state = 3d;
+                }else if(c == '\''){
+                    state = 4d;
+                    part = 0d;
+                    ll = CreateLinkedListCharacter();
                 }else if(c == ','){
                     ArrayAddString(tokens, "<comma>".toCharArray());
                     //System.out.println("<comma>");
                 }else{
                     success = false;
-                    message.string = "Character not allowed in token.".toCharArray();
+                    message.string = ("Character not allowed in token (1): " + c).toCharArray();
                 }
             }
 
@@ -79,7 +87,7 @@ public class Translator2 {
 
                     i = i - 1d;
                 }else{
-                    message.string = "Character not allowed in token.".toCharArray();
+                    message.string = ("Character not allowed in token (2): " + c).toCharArray();
                     success = false;
                 }
             }
@@ -94,6 +102,12 @@ public class Translator2 {
                     LinkedListAddCharacter(ll, c);
                 }else if(c == '-'){
                     LinkedListAddCharacter(ll, c);
+                }else if(c == 'x'){
+                    LinkedListAddCharacter(ll, c);
+                }else if(c == 'b'){
+                    LinkedListAddCharacter(ll, c);
+                }else if(c == 'a' || c == 'A' || c == 'b' || c == 'B' || c == 'c' || c == 'C' || c == 'd' || c == 'D' || c == 'e' || c == 'E' || c == 'f' || c == 'F'){
+                    LinkedListAddCharacter(ll, c);
                 }else if(c == '\n' || c == ' ' || c == '\t' || c == ','){
                     // Done
                     str = LinkedListCharactersToArray(ll);
@@ -103,7 +117,7 @@ public class Translator2 {
 
                     i = i - 1d;
                 }else{
-                    message.string = "Character not allowed in token.".toCharArray();
+                    message.string = ("Character not allowed in token (3): " + c).toCharArray();
                     success = false;
                 }
             }
@@ -114,6 +128,38 @@ public class Translator2 {
                     state = 0d;
                 }else{
                     // skip
+                }
+            }
+
+            // Character literal
+            if(state == 4d){
+                if(part == 0d){
+                    if(c == '\''){
+                        LinkedListAddCharacter(ll, c);
+                        part = part + 1d;
+                    }
+                }else if(part == 1d){
+                    LinkedListAddCharacter(ll, c);
+                    part = part + 1d;
+                    if(c == '\\'){
+                        escape = true;
+                    }
+                }else if(part == 2d && escape){
+                    LinkedListAddCharacter(ll, c);
+                    part = part + 1d;
+                    escape = false;
+                }else if(part == 2d || part == 3d){
+                    if(c == '\''){
+                        LinkedListAddCharacter(ll, c);
+                        part = part + 1d;
+                        state = 0d;
+
+                        str = LinkedListCharactersToArray(ll);
+                        ArrayAddString(tokens, str);
+                    }else{
+                        message.string = ("Character literal must end with ': " + c).toCharArray();
+                        success = false;
+                    }
                 }
             }
         }
@@ -402,12 +448,14 @@ public class Translator2 {
         ArrayAddString(ins, "Xb16".toCharArray());
         ArrayAddString(ins, "Xb32".toCharArray());
         ArrayAddString(ins, "Xb64".toCharArray());
+        ArrayAddString(ins, "Xu16".toCharArray());
         ArrayAddString(ins, "Xu64".toCharArray());
         ArrayAddString(ins, "Xb128".toCharArray());
         ArrayAddString(ins, "Xb256".toCharArray());
         ArrayAddString(ins, "Xu16x8a".toCharArray());
         ArrayAddString(ins, "Xu8x16a".toCharArray());
         ArrayAddString(ins, "Xu8x16".toCharArray());
+        ArrayAddString(ins, "Xb8x16".toCharArray());
 
         ArrayAddString(ins, "Cmov".toCharArray());
         ArrayAddString(ins, "Set".toCharArray());
@@ -920,7 +968,7 @@ public class Translator2 {
             p.varname = token;
         }else{
             success = false;
-            message.string = "Parameter is neither variable nor literal.".toCharArray();
+            message.string = ("Parameter is neither variable nor literal: " + new String(token)).toCharArray();
         }
 
         //System.out.print(token);
@@ -983,7 +1031,22 @@ public class Translator2 {
         boolean valid;
         StringReference message = new StringReference();
 
+        // Decimal
         valid = CreateNumberFromDecimalStringWithCheck(token, numRef, message);
+
+        if(valid){
+
+        }else{
+            // Hex
+            if(StartsWith(token, "0x".toCharArray())) {
+                try {
+                    Integer.parseInt(new String(Substring(token, 2, token.length)), 16);
+                    valid = true;
+                }catch (NumberFormatException e){
+                    valid = false;
+                }
+            }
+        }
 
         return valid;
     }

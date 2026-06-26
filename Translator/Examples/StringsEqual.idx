@@ -14,16 +14,17 @@ Bgs StringsEqualAS
   b16x8 tu16x81
   b16x8 tu16x82
   b16x8 all
+  b8x16 allx
   u64 xlen
   u16x8a aa
   u16x8a ba
   u64 i
   u64 j
-  b32 m
+  b16 m
   b1 tb10
   b1 tb11
   b1 equal
-  u64 mn
+  u16 mn
 Ens
 
 Fnc StringsEqualA
@@ -49,8 +50,9 @@ Fnc StringsEqualA
     Idro b4, ba, j, 3
 
     exp b u16x8: all = ((a1 = b1) & (a2 = b2)) & ((a3 = b3) & (a4 = b4))
-    ExtractMask m, all
-    Xu64 mn, m
+    Xb8x16 allx, all
+    ExtractMask m, allx
+    Xu16 mn, m
     If exp b: mn != 65535
       Mov equal, false
     Endb

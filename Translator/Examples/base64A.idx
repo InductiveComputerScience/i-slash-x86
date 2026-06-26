@@ -27,6 +27,7 @@ Bgs base64AS
   u8x16 upx
   u32 z
   u8x16 tu8x160
+  u16 c
   
   ; Constants
   u8x16 cInputShuffle
@@ -44,22 +45,30 @@ Fnc base64A
 
   ; Set up constants
   ; Look up table
-  Idw cLut, 0, 'a'-26
-  Idw cLut, 1, '0'-52
-  Idw cLut, 2, '0'-52
-  Idw cLut, 3, '0'-52
+  Mov c, 'a'
+  Sub c, c, 26
+  Idw cLut, 0, c
+  Mov c, '0'
+  Sub c, c, 52
+  Idw cLut, 1, c
+  Idw cLut, 2, c
+  Idw cLut, 3, c
 
-  Idw cLut, 4, '0'-52
-  Idw cLut, 5, '0'-52
-  Idw cLut, 6, '0'-52
-  Idw cLut, 7, '0'-52
+  Idw cLut, 4, c
+  Idw cLut, 5, c
+  Idw cLut, 6, c
+  Idw cLut, 7, c
 
-  Idw cLut, 8, '0'-52
-  Idw cLut, 9, '0'-52
-  Idw cLut, 10, '0'-52
-  Idw cLut, 11, '+'-62
+  Idw cLut, 8, c
+  Idw cLut, 9, c
+  Idw cLut, 10, c
+  Mov c, '+'
+  Sub c, c, 62
+  Idw cLut, 11, c
 
-  Idw cLut, 12, '/'-63
+  Mov c, '/'
+  Sub c, c, 63
+  Idw cLut, 12, c
   Idw cLut, 13, 'A'
   Idw cLut, 14, 0
   Idw cLut, 15, 0
@@ -100,7 +109,7 @@ Fnc base64A
   Div len, dataLength, 12
   
   ; We use a raw pointer to data
-  Ptr datap, data
+  Xu64 datap, data
 
   ; i is our tracks input progress, j track output progress
   Mov i, 0
@@ -110,7 +119,7 @@ Fnc base64A
   If exp b: i < len
 
     ; Read our data pointer
-    Ptm datax, datap
+    Xu8x16a datax, datap
     Idr element, datax, 0
 
     ; Part 1  

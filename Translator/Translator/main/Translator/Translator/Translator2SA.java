@@ -287,6 +287,7 @@ public class Translator2SA {
         ArrayAddString(p2, "Xu64a".toCharArray());
         ArrayAddString(p2, "Xb8".toCharArray());
         ArrayAddString(p2, "Xb16".toCharArray());
+        ArrayAddString(p2, "Xu16".toCharArray());
         ArrayAddString(p2, "Xb32".toCharArray());
         ArrayAddString(p2, "Xb64".toCharArray());
         ArrayAddString(p2, "Xb128".toCharArray());
@@ -299,6 +300,7 @@ public class Translator2SA {
         ArrayAddString(p2, "Xu16x16a".toCharArray());
         ArrayAddString(p2, "Xu16x16a".toCharArray());
         ArrayAddString(p2, "Xu16x32a".toCharArray());
+        ArrayAddString(p2, "Xb8x16".toCharArray());
         ArrayAddString(p2, "u32tou16s".toCharArray());
         ArrayAddString(p2, "s32tos16s".toCharArray());
         ArrayAddString(p2, "Xchg".toCharArray());
@@ -343,6 +345,7 @@ public class Translator2SA {
         ArrayAddString(p3, "Neq".toCharArray());
         ArrayAddString(p3, "Unequal".toCharArray());
         ArrayAddString(p3, "Equal".toCharArray());
+        ArrayAddString(p3, "MoreThan".toCharArray());
         ArrayAddString(p3, "Acw".toCharArray());
         ArrayAddString(p3, "Acr".toCharArray());
         ArrayAddString(p3, "Shl".toCharArray());
@@ -627,6 +630,7 @@ public class Translator2SA {
         ArrayAddString(reint, "Xu32x4".toCharArray());
         ArrayAddString(reint, "Xu8x16a".toCharArray());
         ArrayAddString(reint, "Xu8x16".toCharArray());
+        ArrayAddString(reint, "Xb8x16".toCharArray());
         ArrayAddString(reint, "Xb8".toCharArray());
         ArrayAddString(reint, "Xb16".toCharArray());
         ArrayAddString(reint, "Xb32".toCharArray());
@@ -634,6 +638,8 @@ public class Translator2SA {
         ArrayAddString(reint, "Xu64".toCharArray());
         ArrayAddString(reint, "Xb128".toCharArray());
         ArrayAddString(reint, "Xb256".toCharArray());
+        ArrayAddString(reint, "Xu16".toCharArray());
+
 
         // No parameters
         Array noParameters = CreateArray();
@@ -694,6 +700,8 @@ public class Translator2SA {
             valid = CheckFindSubstring(ins, message);
         }else if(StringIsInArray(ins.name, noParameters)){
             valid = true;
+        }else if(StringsEqual(ins.name, "ExtractMask".toCharArray())){
+            valid = CheckExtractMask(ins, message);
         }/*else if(StringsEqual(ins.name, "Acw".toCharArray())){
             valid = CheckAcw(ins, message);
         }else if(StringsEqual(ins.name, "Acr".toCharArray())){
@@ -706,6 +714,39 @@ public class Translator2SA {
         // Compute memory postfix.
         if(valid){
             ComputeMemoryPostfix(ins);
+        }
+
+        return valid;
+    }
+
+    private static boolean CheckExtractMask(Instruction ins, StringReference message) {
+        boolean valid;
+
+        valid = true;
+
+        // Parameters: bX <- b8xX
+
+        char[] type = ins.params[1].var.type;
+        ins.hasTypePostfix = true;
+        ins.typePostfix = type;
+
+        StringReference[] parts = SplitByCharacter(type, 'x');
+
+        if(TypeIsMultipleType(type) && TypeIsBitfieldType(type)){
+            if(StringsEqual(parts[0].string, "b8".toCharArray())){
+                if(StringsEqual(ins.params[0].var.type, ("b" + new String(parts[1].string)).toCharArray())){
+
+                }else{
+                    valid = false;
+                    message.string = ("If input to Extract mask is b8xX, output must be bX, was " + new String(ins.params[0].var.type)).toCharArray();
+                }
+            }else{
+                valid = false;
+                message.string = ("Input to ExtractMask must be multiple b8 type: was " + new String(type)).toCharArray();
+            }
+        }else{
+            valid = false;
+            message.string = ("Input to ExtractMask must be multiple b8 type: was " + new String(type)).toCharArray();
         }
 
         return valid;
@@ -809,6 +850,60 @@ public class Translator2SA {
     }
 
     private static boolean CheckIdw(Instruction ins, StringReference message) {
+        boolean success;
+
+        success = true;
+
+        if(TypeIsArrayType(ins.params[0].var.type)){
+            success = CheckIdwArrayType(ins, message);
+        }else if(TypeIsMultipleType(ins.params[0].var.type)){
+            success = CheckIdwMultipleType(ins, message);
+        }
+
+        return success;
+    }
+
+    private static boolean CheckIdwArrayType(Instruction ins, StringReference message) {
+        char[] type1, type2;
+        boolean success;
+
+        success = true;
+
+        // Determine the type
+        type1 = ins.params[0].var.type;
+
+        if(ParamIsVariable(ins.params[1])){
+            type2 = ins.params[1].var.type;
+        }else{
+            type2 = "s64".toCharArray();
+        }
+
+        if (TypeIsArrayType(type1)){
+            ins.hasTypePostfix = true;
+            ins.typePostfix = type1;
+
+            char[] elementType = Substring(type1, 0, type1.length - 1d);
+
+            if(StringsEqual(ins.params[2].var.type, elementType)){
+                if(TypeIsNumberType(type2) && !TypeIsArrayType(type2)){
+                    // OK
+                }else{
+                    success = false;
+                    message.string = "Index variable must be a number.".toCharArray();
+                }
+            }else{
+                success = false;
+                message.string = "Input variable must be element type of array.".toCharArray();
+            }
+        }else{
+            success = false;
+            message.string = "First parameter to Idw must be an array.".toCharArray();
+        }
+
+        return success;
+    }
+
+    private static boolean CheckIdwMultipleType(Instruction ins, StringReference message) {
         char[] type1, type2;
         boolean success;
 
