@@ -195,181 +195,181 @@ public class Translator {
         char [] json;
         boolean success;
 
-        json = ("{\n" +
-                "                \"u8\": {\"nasmType\": \"resb\", \"ctype\": \"uint8_t\"},\n" +
-                "                \"u16\": {\"nasmType\": \"resw\", \"ctype\": \"uint16_t\"},\n" +
-                "                \"u32\": {\"nasmType\": \"resd\", \"ctype\": \"uint32_t\"},\n" +
-                "                \"u64\": {\"nasmType\": \"resq\", \"ctype\": \"uint64_t\"},\n" +
-                "                \"u128\": {\"nasmType\": \"reso\", \"ctype\": \"unsigned __int128\"},\n" +
-
-                "                \"s8\": {\"nasmType\": \"resb\", \"ctype\": \"int8_t\"},\n" +
-                "                \"s16\": {\"nasmType\": \"resw\", \"ctype\": \"int16_t\"},\n" +
-                "                \"s32\": {\"nasmType\": \"resd\", \"ctype\": \"int32_t\"},\n" +
-                "                \"s64\": {\"nasmType\": \"resq\", \"ctype\": \"int64_t\"},\n" +
-                "                \"s128\": {\"nasmType\": \"resq\", \"ctype\": \"__int128\"},\n" +
-
-                "                \"b1\": {\"nasmType\": \"resb\", \"ctype\": \"uint8_t\"},\n" +
-                "                \"b8\": {\"nasmType\": \"resb\", \"ctype\": \"uint8_t\"},\n" +
-                "                \"b16\": {\"nasmType\": \"resw\", \"ctype\": \"uint16_t\"},\n" +
-                "                \"b32\": {\"nasmType\": \"resd\", \"ctype\": \"uint32_t\"},\n" +
-                "                \"b64\": {\"nasmType\": \"resq\", \"ctype\": \"uint64_t\"},\n" +
-                "                \"b128\": {\"nasmType\": \"reso\", \"ctype\": \"__m128\"},\n" +
-                "                \"b256\": {\"nasmType\": \"resy\", \"ctype\": \"__m256\"},\n" +
-                "                \"b512\": {\"nasmType\": \"resz\", \"ctype\": \"__m512\"},\n" +
-
-                "                \"f16\": {\"nasmType\": \"resw\", \"ctype\": \"_Float16\"},\n" +
-                "                \"f32\": {\"nasmType\": \"resd\", \"ctype\": \"float\"},\n" +
-                "                \"f64\": {\"nasmType\": \"resq\", \"ctype\": \"double\"},\n" +
-                "                \"f80\": {\"nasmType\": \"reso\", \"ctype\": \"long double\"},\n" +
-
-                "                \"u8a\": {\"nasmType\": \"resq\", \"ctype\": \"uint8_t *\"},\n" +
-                "                \"u16a\": {\"nasmType\": \"resq\", \"ctype\": \"uint16_t *\"},\n" +
-                "                \"u32a\": {\"nasmType\": \"resq\", \"ctype\": \"uint32_t *\"},\n" +
-                "                \"u64a\": {\"nasmType\": \"resq\", \"ctype\": \"uint64_t *\"},\n" +
-                "                \"u128a\": {\"nasmType\": \"resq\", \"ctype\": \"unsigned __int128 *\"},\n" +
-
-                "                \"s8a\": {\"nasmType\": \"resq\", \"ctype\": \"int8_t *\"},\n" +
-                "                \"s16a\": {\"nasmType\": \"resq\", \"ctype\": \"int16_t *\"},\n" +
-                "                \"s32a\": {\"nasmType\": \"resq\", \"ctype\": \"int32_t *\"},\n" +
-                "                \"s64a\": {\"nasmType\": \"resq\", \"ctype\": \"int64_t *\"},\n" +
-                "                \"s128a\": {\"nasmType\": \"resq\", \"ctype\": \"__int128 *\"},\n" +
-
-                "                \"b1a\": {\"nasmType\": \"resq\", \"ctype\": \"uint8_t *\"},\n" +
-                "                \"b8a\": {\"nasmType\": \"resq\", \"ctype\": \"uint8_t *\"},\n" +
-                "                \"b16a\": {\"nasmType\": \"resq\", \"ctype\": \"uint16_t *\"},\n" +
-                "                \"b32a\": {\"nasmType\": \"resq\", \"ctype\": \"uint32_t *\"},\n" +
-                "                \"b64a\": {\"nasmType\": \"resq\", \"ctype\": \"uint64_t *\"},\n" +
-                "                \"b128a\": {\"nasmType\": \"resq\", \"ctype\": \"__m128 *\"},\n" +
-                "                \"b256a\": {\"nasmType\": \"resq\", \"ctype\": \"__m256 *\"},\n" +
-                "                \"b512a\": {\"nasmType\": \"resq\", \"ctype\": \"__m512 *\"},\n" +
-
-                "                \"f16a\": {\"nasmType\": \"resd\", \"ctype\": \"_Float16 *\"},\n" +
-                "                \"f32a\": {\"nasmType\": \"resq\", \"ctype\": \"float *\"},\n" +
-                "                \"f64a\": {\"nasmType\": \"resq\", \"ctype\": \"double *\"},\n" +
-                "                \"f80a\": {\"nasmType\": \"resq\", \"ctype\": \"long double *\"},\n" +
-
-                // SIMD
-                "                \"u8x8\": {\"nasmType\": \"resq\", \"ctype\": \"__m64\"},\n" +
-                "                \"u8x16\": {\"nasmType\": \"reso\", \"ctype\": \"__m128\"},\n" +
-                "                \"u8x32\": {\"nasmType\": \"resy\", \"ctype\": \"__m256\"},\n" +
-                "                \"u8x64\": {\"nasmType\": \"resz\", \"ctype\": \"__m512\"},\n" +
-                "                \"u8x8a\": {\"nasmType\": \"resq\", \"ctype\": \"__m64 *\"},\n" +
-                "                \"u8x16a\": {\"nasmType\": \"resq\", \"ctype\": \"__m128 *\"},\n" +
-                "                \"u8x32a\": {\"nasmType\": \"resq\", \"ctype\": \"__m256 *\"},\n" +
-                "                \"u8x64a\": {\"nasmType\": \"resq\", \"ctype\": \"__m512 *\"},\n" +
-
-                "                \"u16x4\": {\"nasmType\": \"resq\", \"ctype\": \"__m64\"},\n" +
-                "                \"u16x8\": {\"nasmType\": \"reso\", \"ctype\": \"__m128\"},\n" +
-                "                \"u16x16\": {\"nasmType\": \"resy\", \"ctype\": \"__m256\"},\n" +
-                "                \"u16x32\": {\"nasmType\": \"resz\", \"ctype\": \"__m512\"},\n" +
-                "                \"u16x4a\": {\"nasmType\": \"resq\", \"ctype\": \"__m64 *\"},\n" +
-                "                \"u16x8a\": {\"nasmType\": \"resq\", \"ctype\": \"__m128 *\"},\n" +
-                "                \"u16x16a\": {\"nasmType\": \"resq\", \"ctype\": \"__m256 *\"},\n" +
-                "                \"u16x32a\": {\"nasmType\": \"resq\", \"ctype\": \"__m512 *\"},\n" +
-
-                "                \"u32x2\": {\"nasmType\": \"resq\", \"ctype\": \"__m64\"},\n" +
-                "                \"u32x4\": {\"nasmType\": \"reso\", \"ctype\": \"__m128\"},\n" +
-                "                \"u32x8\": {\"nasmType\": \"resy\", \"ctype\": \"__m256\"},\n" +
-                "                \"u32x16\": {\"nasmType\": \"resz\", \"ctype\": \"__m512\"},\n" +
-                "                \"u32x2a\": {\"nasmType\": \"resq\", \"ctype\": \"__m64 *\"},\n" +
-                "                \"u32x4a\": {\"nasmType\": \"resq\", \"ctype\": \"__m128 *\"},\n" +
-                "                \"u32x8a\": {\"nasmType\": \"resq\", \"ctype\": \"__m256 *\"},\n" +
-                "                \"u32x16a\": {\"nasmType\": \"resq\", \"ctype\": \"__m512 *\"},\n" +
-
-                "                \"u64x2\": {\"nasmType\": \"reso\", \"ctype\": \"__m128\"},\n" +
-                "                \"u64x4\": {\"nasmType\": \"resy\", \"ctype\": \"__m256\"},\n" +
-                "                \"u64x8\": {\"nasmType\": \"resz\", \"ctype\": \"__m512\"},\n" +
-                "                \"u64x2a\": {\"nasmType\": \"resq\", \"ctype\": \"__m128 *\"},\n" +
-                "                \"u64x4a\": {\"nasmType\": \"resq\", \"ctype\": \"__m256 *\"},\n" +
-                "                \"u64x8a\": {\"nasmType\": \"resq\", \"ctype\": \"__m512 *\"},\n" +
-
-                "                \"s8x8\": {\"nasmType\": \"resq\", \"ctype\": \"__m64\"},\n" +
-                "                \"s8x16\": {\"nasmType\": \"reso\", \"ctype\": \"__m128\"},\n" +
-                "                \"s8x32\": {\"nasmType\": \"resy\", \"ctype\": \"__m256\"},\n" +
-                "                \"s8x64\": {\"nasmType\": \"resz\", \"ctype\": \"__m512\"},\n" +
-                "                \"s8x8a\": {\"nasmType\": \"resq\", \"ctype\": \"__m64 *\"},\n" +
-                "                \"s8x16a\": {\"nasmType\": \"resq\", \"ctype\": \"__m128 *\"},\n" +
-                "                \"s8x32a\": {\"nasmType\": \"resq\", \"ctype\": \"__m256 *\"},\n" +
-                "                \"s8x64a\": {\"nasmType\": \"resq\", \"ctype\": \"__m512 *\"},\n" +
-
-                "                \"s16x4\": {\"nasmType\": \"resq\", \"ctype\": \"__m64\"},\n" +
-                "                \"s16x8\": {\"nasmType\": \"reso\", \"ctype\": \"__m128\"},\n" +
-                "                \"s16x16\": {\"nasmType\": \"resy\", \"ctype\": \"__m256\"},\n" +
-                "                \"s16x32\": {\"nasmType\": \"resz\", \"ctype\": \"__m512\"},\n" +
-                "                \"s16x4a\": {\"nasmType\": \"resq\", \"ctype\": \"__m64 *\"},\n" +
-                "                \"s16x8a\": {\"nasmType\": \"resq\", \"ctype\": \"__m128 *\"},\n" +
-                "                \"s16x16a\": {\"nasmType\": \"resq\", \"ctype\": \"__m256 *\"},\n" +
-                "                \"s16x32a\": {\"nasmType\": \"resq\", \"ctype\": \"__m512 *\"},\n" +
-
-                "                \"s32x2\": {\"nasmType\": \"resq\", \"ctype\": \"__m64\"},\n" +
-                "                \"s32x4\": {\"nasmType\": \"reso\", \"ctype\": \"__m128\"},\n" +
-                "                \"s32x8\": {\"nasmType\": \"resy\", \"ctype\": \"__m256\"},\n" +
-                "                \"s32x16\": {\"nasmType\": \"resz\", \"ctype\": \"__m512\"},\n" +
-                "                \"s32x2a\": {\"nasmType\": \"resq\", \"ctype\": \"__m64 *\"},\n" +
-                "                \"s32x4a\": {\"nasmType\": \"resq\", \"ctype\": \"__m128 *\"},\n" +
-                "                \"s32x8a\": {\"nasmType\": \"resq\", \"ctype\": \"__m256 *\"},\n" +
-                "                \"s32x16a\": {\"nasmType\": \"resq\", \"ctype\": \"__m512 *\"},\n" +
-
-                "                \"s64x2\": {\"nasmType\": \"reso\", \"ctype\": \"__m128\"},\n" +
-                "                \"s64x4\": {\"nasmType\": \"resy\", \"ctype\": \"__m256\"},\n" +
-                "                \"s64x8\": {\"nasmType\": \"resz\", \"ctype\": \"__m512\"},\n" +
-                "                \"s64x2a\": {\"nasmType\": \"resq\", \"ctype\": \"__m128 *\"},\n" +
-                "                \"s64x4a\": {\"nasmType\": \"resq\", \"ctype\": \"__m256 *\"},\n" +
-                "                \"s64x8a\": {\"nasmType\": \"resq\", \"ctype\": \"__m512 *\"},\n" +
-
-                "                \"b8x8\": {\"nasmType\": \"resq\", \"ctype\": \"__m64\"},\n" +
-                "                \"b8x16\": {\"nasmType\": \"reso\", \"ctype\": \"__m128\"},\n" +
-                "                \"b8x32\": {\"nasmType\": \"resy\", \"ctype\": \"__m256\"},\n" +
-                "                \"b8x64\": {\"nasmType\": \"resz\", \"ctype\": \"__m512\"},\n" +
-                "                \"b8x8a\": {\"nasmType\": \"resq\", \"ctype\": \"__m64 *\"},\n" +
-                "                \"b8x16a\": {\"nasmType\": \"resq\", \"ctype\": \"__m128 *\"},\n" +
-                "                \"b8x32a\": {\"nasmType\": \"resq\", \"ctype\": \"__m256 *\"},\n" +
-                "                \"b8x64a\": {\"nasmType\": \"resq\", \"ctype\": \"__m512 *\"},\n" +
-
-                "                \"b16x4\": {\"nasmType\": \"resq\", \"ctype\": \"__m64\"},\n" +
-                "                \"b16x8\": {\"nasmType\": \"reso\", \"ctype\": \"__m128\"},\n" +
-                "                \"b16x16\": {\"nasmType\": \"resy\", \"ctype\": \"__m256\"},\n" +
-                "                \"b16x32\": {\"nasmType\": \"resz\", \"ctype\": \"__m512\"},\n" +
-                "                \"b16x4a\": {\"nasmType\": \"resq\", \"ctype\": \"__m64 *\"},\n" +
-                "                \"b16x8a\": {\"nasmType\": \"resq\", \"ctype\": \"__m128 *\"},\n" +
-                "                \"b16x16a\": {\"nasmType\": \"resq\", \"ctype\": \"__m256 *\"},\n" +
-                "                \"b16x32a\": {\"nasmType\": \"resq\", \"ctype\": \"__m512 *\"},\n" +
-
-                "                \"b32x2\": {\"nasmType\": \"resq\", \"ctype\": \"__m64\"},\n" +
-                "                \"b32x4\": {\"nasmType\": \"reso\", \"ctype\": \"__m128\"},\n" +
-                "                \"b32x8\": {\"nasmType\": \"resy\", \"ctype\": \"__m256\"},\n" +
-                "                \"b32x16\": {\"nasmType\": \"resz\", \"ctype\": \"__m512\"},\n" +
-                "                \"b32x2a\": {\"nasmType\": \"resq\", \"ctype\": \"__m64 *\"},\n" +
-                "                \"b32x4a\": {\"nasmType\": \"resq\", \"ctype\": \"__m128 *\"},\n" +
-                "                \"b32x8a\": {\"nasmType\": \"resq\", \"ctype\": \"__m256 *\"},\n" +
-                "                \"b32x16a\": {\"nasmType\": \"resq\", \"ctype\": \"__m512 *\"},\n" +
-
-                "                \"b64x2\": {\"nasmType\": \"reso\", \"ctype\": \"__m128\"},\n" +
-                "                \"b64x4\": {\"nasmType\": \"resy\", \"ctype\": \"__m256\"},\n" +
-                "                \"b64x8\": {\"nasmType\": \"resz\", \"ctype\": \"__m512\"},\n" +
-                "                \"b64x2a\": {\"nasmType\": \"resq\", \"ctype\": \"__m128 *\"},\n" +
-                "                \"b64x4a\": {\"nasmType\": \"resq\", \"ctype\": \"__m256 *\"},\n" +
-                "                \"b64x8a\": {\"nasmType\": \"resq\", \"ctype\": \"__m512 *\"},\n" +
-
-                "                \"f16x8\": {\"nasmType\": \"reso\", \"ctype\": \"__m128\"},\n" +
-                "                \"f16x16\": {\"nasmType\": \"resy\", \"ctype\": \"__m256\"},\n" +
-                "                \"f16x32\": {\"nasmType\": \"resz\", \"ctype\": \"__m512\"},\n" +
-
-                "                \"f32x4\": {\"nasmType\": \"reso\", \"ctype\": \"__m128\"},\n" +
-                "                \"f32x8\": {\"nasmType\": \"resy\", \"ctype\": \"__m256\"},\n" +
-                "                \"f32x16\": {\"nasmType\": \"resz\", \"ctype\": \"__m512\"},\n" +
-                "                \"f32x4a\": {\"nasmType\": \"resq\", \"ctype\": \"__m128 *\"},\n" +
-                "                \"f32x8a\": {\"nasmType\": \"resq\", \"ctype\": \"__m256 *\"},\n" +
-                "                \"f32x16a\": {\"nasmType\": \"resq\", \"ctype\": \"__m512 *\"},\n" +
-
-                "                \"f64x2\": {\"nasmType\": \"reso\", \"ctype\": \"__m128\"},\n" +
-                "                \"f64x4\": {\"nasmType\": \"resy\", \"ctype\": \"__m256\"},\n" +
-                "                \"f64x8\": {\"nasmType\": \"resz\", \"ctype\": \"__m512\"},\n" +
-                "                \"f64x2a\": {\"nasmType\": \"resq\", \"ctype\": \"__m128 *\"},\n" +
-                "                \"f64x4a\": {\"nasmType\": \"resq\", \"ctype\": \"__m256 *\"},\n" +
-                "                \"f64x8a\": {\"nasmType\": \"resq\", \"ctype\": \"__m512 *\"}\n" +
-
-                "            }").toCharArray();
+        json = ("""
+            {
+              "u8": {"nasmType": "resb", "ctype": "uint8_t"},
+              "u16": {"nasmType": "resw", "ctype": "uint16_t"},
+              "u32": {"nasmType": "resd", "ctype": "uint32_t"},
+              "u64": {"nasmType": "resq", "ctype": "uint64_t"},
+              "u128": {"nasmType": "reso", "ctype": "unsigned __int128"},
+            
+              "s8": {"nasmType": "resb", "ctype": "int8_t"},
+              "s16": {"nasmType": "resw", "ctype": "int16_t"},
+              "s32": {"nasmType": "resd", "ctype": "int32_t"},
+              "s64": {"nasmType": "resq", "ctype": "int64_t"},
+              "s128": {"nasmType": "resq", "ctype": "__int128"},
+            
+              "b1": {"nasmType": "resb", "ctype": "uint8_t"},
+              "b8": {"nasmType": "resb", "ctype": "uint8_t"},
+              "b16": {"nasmType": "resw", "ctype": "uint16_t"},
+              "b32": {"nasmType": "resd", "ctype": "uint32_t"},
+              "b64": {"nasmType": "resq", "ctype": "uint64_t"},
+              "b128": {"nasmType": "reso", "ctype": "__m128"},
+              "b256": {"nasmType": "resy", "ctype": "__m256"},
+              "b512": {"nasmType": "resz", "ctype": "__m512"},
+            
+              "f16": {"nasmType": "resw", "ctype": "_Float16"},
+              "f32": {"nasmType": "resd", "ctype": "float"},
+              "f64": {"nasmType": "resq", "ctype": "double"},
+              "f80": {"nasmType": "reso", "ctype": "long double"},
+            
+              "u8a": {"nasmType": "resq", "ctype": "uint8_t *"},
+              "u16a": {"nasmType": "resq", "ctype": "uint16_t *"},
+              "u32a": {"nasmType": "resq", "ctype": "uint32_t *"},
+              "u64a": {"nasmType": "resq", "ctype": "uint64_t *"},
+              "u128a": {"nasmType": "resq", "ctype": "unsigned __int128 *"},
+            
+              "s8a": {"nasmType": "resq", "ctype": "int8_t *"},
+              "s16a": {"nasmType": "resq", "ctype": "int16_t *"},
+              "s32a": {"nasmType": "resq", "ctype": "int32_t *"},
+              "s64a": {"nasmType": "resq", "ctype": "int64_t *"},
+              "s128a": {"nasmType": "resq", "ctype": "__int128 *"},
+            
+              "b1a": {"nasmType": "resq", "ctype": "uint8_t *"},
+              "b8a": {"nasmType": "resq", "ctype": "uint8_t *"},
+              "b16a": {"nasmType": "resq", "ctype": "uint16_t *"},
+              "b32a": {"nasmType": "resq", "ctype": "uint32_t *"},
+              "b64a": {"nasmType": "resq", "ctype": "uint64_t *"},
+              "b128a": {"nasmType": "resq", "ctype": "__m128 *"},
+              "b256a": {"nasmType": "resq", "ctype": "__m256 *"},
+              "b512a": {"nasmType": "resq", "ctype": "__m512 *"},
+            
+              "f16a": {"nasmType": "resd", "ctype": "_Float16 *"},
+              "f32a": {"nasmType": "resq", "ctype": "float *"},
+              "f64a": {"nasmType": "resq", "ctype": "double *"},
+              "f80a": {"nasmType": "resq", "ctype": "long double *"},
+            
+              "u8x8": {"nasmType": "resq", "ctype": "__m64"},
+              "u8x16": {"nasmType": "reso", "ctype": "__m128"},
+              "u8x32": {"nasmType": "resy", "ctype": "__m256"},
+              "u8x64": {"nasmType": "resz", "ctype": "__m512"},
+              "u8x8a": {"nasmType": "resq", "ctype": "__m64 *"},
+              "u8x16a": {"nasmType": "resq", "ctype": "__m128 *"},
+              "u8x32a": {"nasmType": "resq", "ctype": "__m256 *"},
+              "u8x64a": {"nasmType": "resq", "ctype": "__m512 *"},
+            
+              "u16x4": {"nasmType": "resq", "ctype": "__m64"},
+              "u16x8": {"nasmType": "reso", "ctype": "__m128"},
+              "u16x16": {"nasmType": "resy", "ctype": "__m256"},
+              "u16x32": {"nasmType": "resz", "ctype": "__m512"},
+              "u16x4a": {"nasmType": "resq", "ctype": "__m64 *"},
+              "u16x8a": {"nasmType": "resq", "ctype": "__m128 *"},
+              "u16x16a": {"nasmType": "resq", "ctype": "__m256 *"},
+              "u16x32a": {"nasmType": "resq", "ctype": "__m512 *"},
+            
+              "u32x2": {"nasmType": "resq", "ctype": "__m64"},
+              "u32x4": {"nasmType": "reso", "ctype": "__m128"},
+              "u32x8": {"nasmType": "resy", "ctype": "__m256"},
+              "u32x16": {"nasmType": "resz", "ctype": "__m512"},
+              "u32x2a": {"nasmType": "resq", "ctype": "__m64 *"},
+              "u32x4a": {"nasmType": "resq", "ctype": "__m128 *"},
+              "u32x8a": {"nasmType": "resq", "ctype": "__m256 *"},
+              "u32x16a": {"nasmType": "resq", "ctype": "__m512 *"},
+            
+              "u64x2": {"nasmType": "reso", "ctype": "__m128"},
+              "u64x4": {"nasmType": "resy", "ctype": "__m256"},
+              "u64x8": {"nasmType": "resz", "ctype": "__m512"},
+              "u64x2a": {"nasmType": "resq", "ctype": "__m128 *"},
+              "u64x4a": {"nasmType": "resq", "ctype": "__m256 *"},
+              "u64x8a": {"nasmType": "resq", "ctype": "__m512 *"},
+            
+              "s8x8": {"nasmType": "resq", "ctype": "__m64"},
+              "s8x16": {"nasmType": "reso", "ctype": "__m128"},
+              "s8x32": {"nasmType": "resy", "ctype": "__m256"},
+              "s8x64": {"nasmType": "resz", "ctype": "__m512"},
+              "s8x8a": {"nasmType": "resq", "ctype": "__m64 *"},
+              "s8x16a": {"nasmType": "resq", "ctype": "__m128 *"},
+              "s8x32a": {"nasmType": "resq", "ctype": "__m256 *"},
+              "s8x64a": {"nasmType": "resq", "ctype": "__m512 *"},
+            
+              "s16x4": {"nasmType": "resq", "ctype": "__m64"},
+              "s16x8": {"nasmType": "reso", "ctype": "__m128"},
+              "s16x16": {"nasmType": "resy", "ctype": "__m256"},
+              "s16x32": {"nasmType": "resz", "ctype": "__m512"},
+              "s16x4a": {"nasmType": "resq", "ctype": "__m64 *"},
+              "s16x8a": {"nasmType": "resq", "ctype": "__m128 *"},
+              "s16x16a": {"nasmType": "resq", "ctype": "__m256 *"},
+              "s16x32a": {"nasmType": "resq", "ctype": "__m512 *"},
+            
+              "s32x2": {"nasmType": "resq", "ctype": "__m64"},
+              "s32x4": {"nasmType": "reso", "ctype": "__m128"},
+              "s32x8": {"nasmType": "resy", "ctype": "__m256"},
+              "s32x16": {"nasmType": "resz", "ctype": "__m512"},
+              "s32x2a": {"nasmType": "resq", "ctype": "__m64 *"},
+              "s32x4a": {"nasmType": "resq", "ctype": "__m128 *"},
+              "s32x8a": {"nasmType": "resq", "ctype": "__m256 *"},
+              "s32x16a": {"nasmType": "resq", "ctype": "__m512 *"},
+            
+              "s64x2": {"nasmType": "reso", "ctype": "__m128"},
+              "s64x4": {"nasmType": "resy", "ctype": "__m256"},
+              "s64x8": {"nasmType": "resz", "ctype": "__m512"},
+              "s64x2a": {"nasmType": "resq", "ctype": "__m128 *"},
+              "s64x4a": {"nasmType": "resq", "ctype": "__m256 *"},
+              "s64x8a": {"nasmType": "resq", "ctype": "__m512 *"},
+            
+              "b8x8": {"nasmType": "resq", "ctype": "__m64"},
+              "b8x16": {"nasmType": "reso", "ctype": "__m128"},
+              "b8x32": {"nasmType": "resy", "ctype": "__m256"},
+              "b8x64": {"nasmType": "resz", "ctype": "__m512"},
+              "b8x8a": {"nasmType": "resq", "ctype": "__m64 *"},
+              "b8x16a": {"nasmType": "resq", "ctype": "__m128 *"},
+              "b8x32a": {"nasmType": "resq", "ctype": "__m256 *"},
+              "b8x64a": {"nasmType": "resq", "ctype": "__m512 *"},
+            
+              "b16x4": {"nasmType": "resq", "ctype": "__m64"},
+              "b16x8": {"nasmType": "reso", "ctype": "__m128"},
+              "b16x16": {"nasmType": "resy", "ctype": "__m256"},
+              "b16x32": {"nasmType": "resz", "ctype": "__m512"},
+              "b16x4a": {"nasmType": "resq", "ctype": "__m64 *"},
+              "b16x8a": {"nasmType": "resq", "ctype": "__m128 *"},
+              "b16x16a": {"nasmType": "resq", "ctype": "__m256 *"},
+              "b16x32a": {"nasmType": "resq", "ctype": "__m512 *"},
+            
+              "b32x2": {"nasmType": "resq", "ctype": "__m64"},
+              "b32x4": {"nasmType": "reso", "ctype": "__m128"},
+              "b32x8": {"nasmType": "resy", "ctype": "__m256"},
+              "b32x16": {"nasmType": "resz", "ctype": "__m512"},
+              "b32x2a": {"nasmType": "resq", "ctype": "__m64 *"},
+              "b32x4a": {"nasmType": "resq", "ctype": "__m128 *"},
+              "b32x8a": {"nasmType": "resq", "ctype": "__m256 *"},
+              "b32x16a": {"nasmType": "resq", "ctype": "__m512 *"},
+            
+              "b64x2": {"nasmType": "reso", "ctype": "__m128"},
+              "b64x4": {"nasmType": "resy", "ctype": "__m256"},
+              "b64x8": {"nasmType": "resz", "ctype": "__m512"},
+              "b64x2a": {"nasmType": "resq", "ctype": "__m128 *"},
+              "b64x4a": {"nasmType": "resq", "ctype": "__m256 *"},
+              "b64x8a": {"nasmType": "resq", "ctype": "__m512 *"},
+            
+              "f16x8": {"nasmType": "reso", "ctype": "__m128"},
+              "f16x16": {"nasmType": "resy", "ctype": "__m256"},
+              "f16x32": {"nasmType": "resz", "ctype": "__m512"},
+            
+              "f32x4": {"nasmType": "reso", "ctype": "__m128"},
+              "f32x8": {"nasmType": "resy", "ctype": "__m256"},
+              "f32x16": {"nasmType": "resz", "ctype": "__m512"},
+              "f32x4a": {"nasmType": "resq", "ctype": "__m128 *"},
+              "f32x8a": {"nasmType": "resq", "ctype": "__m256 *"},
+              "f32x16a": {"nasmType": "resq", "ctype": "__m512 *"},
+            
+              "f64x2": {"nasmType": "reso", "ctype": "__m128"},
+              "f64x4": {"nasmType": "resy", "ctype": "__m256"},
+              "f64x8": {"nasmType": "resz", "ctype": "__m512"},
+              "f64x2a": {"nasmType": "resq", "ctype": "__m128 *"},
+              "f64x4a": {"nasmType": "resq", "ctype": "__m256 *"},
+              "f64x8a": {"nasmType": "resq", "ctype": "__m512 *"}
+            }
+        """).toCharArray();
 
         success = ReadJSON(json, entryTypesRef, message);
 
