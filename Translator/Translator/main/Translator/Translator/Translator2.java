@@ -394,6 +394,8 @@ public class Translator2 {
         ArrayAddString(ins, "f32x4tof16x4".toCharArray());
         ArrayAddString(ins, "f32x8tof16x8".toCharArray());
         ArrayAddString(ins, "f32x4tof64x4".toCharArray());
+        ArrayAddString(ins, "u32tou16s".toCharArray());
+
 
         ArrayAddString(ins, "Xu32x4".toCharArray());
         ArrayAddString(ins, "Xb8".toCharArray());
@@ -403,9 +405,9 @@ public class Translator2 {
         ArrayAddString(ins, "Xu64".toCharArray());
         ArrayAddString(ins, "Xb128".toCharArray());
         ArrayAddString(ins, "Xb256".toCharArray());
-
         ArrayAddString(ins, "Xu16x8a".toCharArray());
-        ArrayAddString(ins, "u32tou16s".toCharArray());
+        ArrayAddString(ins, "Xu8x16a".toCharArray());
+        ArrayAddString(ins, "Xu8x16".toCharArray());
 
         ArrayAddString(ins, "Cmov".toCharArray());
         ArrayAddString(ins, "Set".toCharArray());

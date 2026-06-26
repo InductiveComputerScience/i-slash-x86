@@ -294,6 +294,7 @@ public class Translator2SA {
         ArrayAddString(p2, "Xu32x4".toCharArray());
         ArrayAddString(p2, "Xu16x8a".toCharArray());
         ArrayAddString(p2, "Xu8x16a".toCharArray());
+        ArrayAddString(p2, "Xu8x16".toCharArray());
         ArrayAddString(p2, "Xu16x8a".toCharArray());
         ArrayAddString(p2, "Xu16x16a".toCharArray());
         ArrayAddString(p2, "Xu16x16a".toCharArray());
@@ -384,14 +385,13 @@ public class Translator2SA {
         ArrayAddString(p4, "MultiplyAndAdd".toCharArray());
         ArrayAddString(p4, "CombineExtract".toCharArray());
         ArrayAddString(p4, "Gather".toCharArray());
-        ArrayAddString(p4, "StringSubset".toCharArray());
-        ArrayAddString(p4, "StringRangeCheck".toCharArray());
-        ArrayAddString(p4, "MatchString".toCharArray());
-        ArrayAddString(p4, "FindSubstring".toCharArray());
-        ArrayAddString(p4, "FindSubstring".toCharArray());
 
         p5 = CreateArray();
         ArrayAddString(p5, "DotProduct".toCharArray());
+        ArrayAddString(p5, "StringSubset".toCharArray());
+        ArrayAddString(p5, "StringRangeCheck".toCharArray());
+        ArrayAddString(p5, "MatchString".toCharArray());
+        ArrayAddString(p5, "FindSubstring".toCharArray());
 
         ps = new Array[6];
         ps[0] = p0;
@@ -527,9 +527,9 @@ public class Translator2SA {
 
         valid = true;
 
-        sameAsAssigneeNumber = CreateArray();
 
         // All parameters are the same, all are numbers. The type of the assigned var is the type of the instruction.
+        sameAsAssigneeNumber = CreateArray();
         ArrayAddString(sameAsAssigneeNumber, "Add".toCharArray());
         ArrayAddString(sameAsAssigneeNumber, "Sub".toCharArray());
         ArrayAddString(sameAsAssigneeNumber, "Mul".toCharArray());
@@ -625,6 +625,8 @@ public class Translator2SA {
         Array reint = CreateArray();
         ArrayAddString(reint, "Xu16x8a".toCharArray());
         ArrayAddString(reint, "Xu32x4".toCharArray());
+        ArrayAddString(reint, "Xu8x16a".toCharArray());
+        ArrayAddString(reint, "Xu8x16".toCharArray());
         ArrayAddString(reint, "Xb8".toCharArray());
         ArrayAddString(reint, "Xb16".toCharArray());
         ArrayAddString(reint, "Xb32".toCharArray());
@@ -632,6 +634,12 @@ public class Translator2SA {
         ArrayAddString(reint, "Xu64".toCharArray());
         ArrayAddString(reint, "Xb128".toCharArray());
         ArrayAddString(reint, "Xb256".toCharArray());
+
+        // No parameters
+        Array noParameters = CreateArray();
+        ArrayAddString(noParameters, "Loop".toCharArray());
+        ArrayAddString(noParameters, "Endb".toCharArray());
+        ArrayAddString(noParameters, "EndLoop".toCharArray());
 
         /*
 
@@ -682,18 +690,85 @@ public class Translator2SA {
             valid = CheckIdw(ins, message);
         }else if(StringsEqual(ins.name, "Mov".toCharArray())){
             valid = CheckMov(ins, message);
+        }else if(StringsEqual(ins.name, "FindSubstring".toCharArray())){
+            valid = CheckFindSubstring(ins, message);
+        }else if(StringIsInArray(ins.name, noParameters)){
+            valid = true;
         }/*else if(StringsEqual(ins.name, "Acw".toCharArray())){
             valid = CheckAcw(ins, message);
         }else if(StringsEqual(ins.name, "Acr".toCharArray())){
             valid = CheckAcr(ins, message);
         }*/else{
-            //valid = false;
-            //message.string = ("Unknown typing rules for instruction: " + new String(ins.name)).toCharArray();
+            valid = false;
+            message.string = ("Unknown typing rules for instruction: " + new String(ins.name)).toCharArray();
         }
 
         // Compute memory postfix.
         if(valid){
             ComputeMemoryPostfix(ins);
+        }
+
+        return valid;
+    }
+
+    private static boolean CheckFindSubstring(Instruction ins, StringReference message) {
+        boolean valid;
+        char [] type;
+
+        valid = true;
+
+        // Parameters: b16, u8x16, number, u8x16, number
+
+        if(ParamIsVariable(ins.params[2])){
+            type = ins.params[2].var.type;
+        }else if(ParamIsVariable(ins.params[4])){
+            type = ins.params[4].var.type;
+        }else{
+            type = "u64".toCharArray();
+        }
+
+        ins.typePostfix = type;
+        ins.hasTypePostfix = true;
+
+
+        if(valid) {
+            if (StringsEqual(ins.params[0].var.type, "b16".toCharArray())) {
+
+            } else {
+                valid = false;
+                message.string = ("Assign variable for FindSubstring must be b16.").toCharArray();
+            }
+        }
+
+        if(valid) {
+            if (StringsEqual(ins.params[1].var.type, "u8x16".toCharArray()) && StringsEqual(ins.params[3].var.type, "u8x16".toCharArray())) {
+
+            } else {
+                valid = false;
+                message.string = ("First and third input for FindSubstring must be u8x16.").toCharArray();
+            }
+        }
+
+        if(valid) {
+            if(ParamIsVariable(ins.params[2])){
+                if (TypeIsNumberType(ins.params[2].type) && !TypeIsArrayType(ins.params[2].type)) {
+
+                } else {
+                    valid = false;
+                    message.string = ("Third parameter must be a non-array number type.").toCharArray();
+                }
+            }
+        }
+
+        if(valid) {
+            if(ParamIsVariable(ins.params[4])){
+                if (TypeIsNumberType(ins.params[4].type) && !TypeIsArrayType(ins.params[4].type)) {
+
+                } else {
+                    valid = false;
+                    message.string = ("Fourth parameter must be a non-array number type.").toCharArray();
+                }
+            }
         }
 
         return valid;

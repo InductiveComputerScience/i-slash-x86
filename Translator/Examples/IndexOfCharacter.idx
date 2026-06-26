@@ -9,9 +9,10 @@ Bgs IndexOfCharacterAS
 	b1 found
 	b1 tb10
 	b1 tb11
-	u16x8a stra
-	u16x8 sc
-	u16x8 cc
+	u8x16a stra
+	u8x16 sc
+	u16x8 ccx
+	u8x16 cc
 	b16 mask1
 	u64 zcnt
 	u64 tu640
@@ -19,8 +20,9 @@ Bgs IndexOfCharacterAS
 Ens
 
 Fnc IndexOfCharacterA
-	Xu16x8a stra, str
-	Broadcast cc, c
+	Xu8x16a stra, str
+	Broadcast ccx, c
+	Xu8x16 cc, ccx
 
 	exp a u64: xlen = len / 8
 
@@ -29,7 +31,7 @@ Fnc IndexOfCharacterA
 	
 		Idr sc, stra, i
 		
-		FindSubstring mask1, sc, cc, 2
+		FindSubstring mask1, sc, 16, cc, 2
 		Lzcnt zcnt, mask1
 		
 		If exp b: zcnt != 16

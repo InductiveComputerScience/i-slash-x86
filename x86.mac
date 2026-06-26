@@ -3568,24 +3568,24 @@ extern free
 
 ; -----------------------------------------------------------------------------
 ; FindSubstring -- Locate string
-; x = FindSubstring(a, b, l). x, a, b are packed bytes. l is a number.
+; x = FindSubstring(a, al, b, bl). x, a, b are packed bytes. al, bl are a numbers.
 
-%macro FindSubstring.mmu8x16 4
+%macro FindSubstring.mmu8x16 5
   movdqu xmm0, oword [rdi + %3]
   mov rax, qword [rdi + %4]
   movdqu xmm1, oword [rdi + %2]
-  mov rdx, 16
+  mov rdx, qword [rdi + %5]
   pcmpestrm xmm0, xmm1, (0 << 6) + (3 << 2)
   vpextrw eax, xmm0, 0
   mov word [rdi + %1], ax
 %endmacro
 
 ; TODO: This naming is not quite right
-%macro FindSubstring.miu16x8 4
+%macro FindSubstring.miu16x8 5
   movdqu xmm0, oword [rdi + %3]
   mov rax, %4
   movdqu xmm1, oword [rdi + %2]
-  mov rdx, 16
+  mov rdx, %5
   pcmpestrm xmm0, xmm1, (0 << 6) + (3 << 2)
   vpextrw eax, xmm0, 0
   mov word [rdi + %1], ax

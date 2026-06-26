@@ -467,6 +467,8 @@ public class Translator {
                 "              \"Xb256\": {\"args\": 1, \"typeDecider\": 0, \"noTypePostfix\": true},\n" +
 
                 "              \"Xu16x8a\": {\"args\": 1, \"typeDecider\": 0, \"noTypePostfix\": true},\n" +
+                "              \"Xu8x16a\": {\"args\": 1, \"typeDecider\": 0, \"noTypePostfix\": true},\n" +
+                "              \"Xu8x16\": {\"args\": 1, \"typeDecider\": 0, \"noTypePostfix\": true},\n" +
                 "              \"u32tou16s\": {\"args\": 1, \"typeDecider\": 0, \"noTypePostfix\": true},\n" +
 
                 "              \"Cmov\": {\"args\": 2, \"typeDecider\": 1},\n" +
