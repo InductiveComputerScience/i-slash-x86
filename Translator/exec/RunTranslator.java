@@ -49,6 +49,8 @@ public class RunTranslator {
 
                     success = Translator2T.Translate(ast, message);
 
+                    success = Translator2T.WriteCHeader(ast, message);
+
                     System.out.println("success");
                 }else{
                     System.out.println("Failed: " + new String(message.string));
