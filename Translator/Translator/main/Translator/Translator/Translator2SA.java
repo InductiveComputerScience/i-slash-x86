@@ -702,6 +702,8 @@ public class Translator2SA {
             valid = true;
         }else if(StringsEqual(ins.name, "ExtractMask".toCharArray())){
             valid = CheckExtractMask(ins, message);
+        }else if(StringsEqual(ins.name, "Shuffle".toCharArray())){
+            valid = CheckShuffle(ins, message);
         }/*else if(StringsEqual(ins.name, "Acw".toCharArray())){
             valid = CheckAcw(ins, message);
         }else if(StringsEqual(ins.name, "Acr".toCharArray())){
@@ -714,6 +716,32 @@ public class Translator2SA {
         // Compute memory postfix.
         if(valid){
             ComputeMemoryPostfix(ins);
+        }
+
+        return valid;
+    }
+
+    private static boolean CheckShuffle(Instruction ins, StringReference message) {
+        boolean valid;
+
+        valid = true;
+
+        // Parameters: bXxY <- bXxY, uXxY
+
+        char[] type = ins.params[0].var.type;
+        ins.hasTypePostfix = true;
+        ins.typePostfix = type;
+
+        if(TypeIsMultipleType(type) && TypeIsBitfieldType(type) && !TypeIsArrayType(type)){
+            if(StringsEqual(type, ins.params[1].var.type)){
+
+            }else{
+                valid = false;
+                message.string = ("Second parameter to shuffle must have the same type as the assigned type: was " + new String(ins.params[1].var.type)).toCharArray();
+            }
+        }else{
+            valid = false;
+            message.string = ("Shuffle must assign to non-array multiple bitfield type: was " + new String(type)).toCharArray();
         }
 
         return valid;
@@ -948,7 +976,7 @@ public class Translator2SA {
                 }
             }else{
                 success = false;
-                message.string = "Assigned variable must be element type of array.".toCharArray();
+                message.string = ("Assigned variable must be element type of array (1): was " + new String(elementType)).toCharArray();
             }
         }else{
             success = false;
@@ -973,26 +1001,43 @@ public class Translator2SA {
             type2 = "s64".toCharArray();
         }
 
-        if (TypeIsArrayType(type1)){
-            ins.hasTypePostfix = true;
-            ins.typePostfix = type1;
+        ins.hasTypePostfix = true;
+        ins.typePostfix = type1;
 
-            char[] elementType = Substring(type1, 0, type1.length - 1d);
-
-            if(StringsEqual(ins.params[0].var.type, elementType)){
-                if(TypeIsNumberType(type2) && !TypeIsArrayType(type2)){
-                    // OK
-                }else{
-                    success = false;
-                    message.string = "Index variable must be a number.".toCharArray();
-                }
-            }else{
-                success = false;
-                message.string = "Assigned variable must be element type of array.".toCharArray();
-            }
+        if(TypeIsNumberType(type2) && !TypeIsArrayType(type2)){
+            // OK
         }else{
             success = false;
-            message.string = "Second parameter to Idr must be array.".toCharArray();
+            message.string = "Index variable must be a number.".toCharArray();
+        }
+
+        if(success) {
+
+            if (TypeIsArrayType(type1)) {
+                char[] elementType = Substring(type1, 0, type1.length - 1d);
+
+                if (StringsEqual(ins.params[0].var.type, elementType)) {
+                    // OK
+                } else {
+                    success = false;
+                    message.string = ("Assigned variable must be element type of array or multi (2): was " + new String(elementType)).toCharArray();
+                }
+            } else if (TypeIsMultipleType(type1)) {
+                StringReference[] parts = SplitByCharacter(type1, 'x');
+                char[] elementType = parts[0].string;
+
+                if (ParamIsVariable(ins.params[2])) {
+                    if (StringsEqual(ins.params[2].var.type, elementType)) {
+                        // OK
+                    } else {
+                        success = false;
+                        message.string = "Input variable must be element type of multiple type.".toCharArray();
+                    }
+                }
+            } else {
+                success = false;
+                message.string = "Second parameter to Idr must be array.".toCharArray();
+            }
         }
 
         return success;
@@ -1270,7 +1315,7 @@ public class Translator2SA {
             }
         } else {
             success = false;
-            message.string = "Instruction only works on number variables.".toCharArray();
+            message.string = ("Instruction only works on number variables: " + new String(ins.name) + " got " + new String(targetType)).toCharArray();
         }
 
         // Check that all parameters are the correct type.
