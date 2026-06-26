@@ -462,6 +462,7 @@ public class Translator {
                 "              \"Xb16\": {\"args\": 1, \"typeDecider\": 0, \"noTypePostfix\": true},\n" +
                 "              \"Xb32\": {\"args\": 1, \"typeDecider\": 0, \"noTypePostfix\": true},\n" +
                 "              \"Xb64\": {\"args\": 1, \"typeDecider\": 0, \"noTypePostfix\": true},\n" +
+                "              \"Xu16\": {\"args\": 1, \"typeDecider\": 0, \"noTypePostfix\": true},\n" +
                 "              \"Xu64\": {\"args\": 1, \"typeDecider\": 0, \"noTypePostfix\": true},\n" +
                 "              \"Xb128\": {\"args\": 1, \"typeDecider\": 0, \"noTypePostfix\": true},\n" +
                 "              \"Xb256\": {\"args\": 1, \"typeDecider\": 0, \"noTypePostfix\": true},\n" +
