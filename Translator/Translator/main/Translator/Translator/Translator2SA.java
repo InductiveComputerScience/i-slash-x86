@@ -650,9 +650,6 @@ public class Translator2SA {
         /*
 
         Other:
-        Mov
-        Idr
-        Idro
         Acw
         Acr
         MulFull
@@ -660,7 +657,6 @@ public class Translator2SA {
         Call
         New
         Del
-        Idw
         Rdrand
         Set
         Movzx
@@ -668,7 +664,6 @@ public class Translator2SA {
         StringSubset
         StringRangeCheck
         MatchString
-        FindSubstring
 
         */
 
