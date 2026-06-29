@@ -1,59 +1,87 @@
 package Translator.Translator;
 
-import DataStructures.Array.Structures.Array;
 import DataStructures.Array.Structures.DataReference;
 import DataStructures.Array.Structures.Structure;
+import lists.LinkedListCharacters.Structures.LinkedListCharacters;
 import references.references.StringReference;
 
-import static DataStructures.Array.Arrays.Arrays.ArrayAddString;
-import static DataStructures.Array.Arrays.Arrays.CreateArray;
 import static DataStructures.Array.Structures.Structures.*;
 import static Translator.Translator.Translator.GetEntryTypes;
-import static Translator.Translator.Translator2.StringIsInArray;
 import static arrays.arrays.arrays.StringsEqual;
+import static lists.LinkedListCharacters.LinkedListCharactersFunctions.LinkedListCharactersFunctions.*;
 
 public class Translator2T {
-    public static boolean Translate(Ast ast, StringReference message) {
+    public static boolean Translate(Ast ast, StringReference asmRef, StringReference message) {
         double i;
         boolean success;
+        LinkedListCharacters ll;
+        StringReference tmp;
 
         success = true;
+        ll = CreateLinkedListCharacter();
 
-        System.out.println("%include \"x86.mac\"\n");
+        LinkedListCharactersAddString(ll, "%include \"x86.mac\"\n\n".toCharArray());
 
         for(i = 0d; i < ast.st.length && success; i = i + 1d){
-            success = PrintStructure(ast.st[(int)i], message);
+            tmp = new StringReference();
+            success = PrintStructure(ast.st[(int)i], tmp, message);
+            if(success){
+                LinkedListCharactersAddString(ll, tmp.string);
+            }
         }
 
         for(i = 0d; i < ast.fnc.length && success; i = i + 1d){
-            success = PrintFunction(ast.fnc[(int)i], message);
+            tmp = new StringReference();
+            success = PrintFunction(ast.fnc[(int)i], tmp, message);
+            if(success){
+                LinkedListCharactersAddString(ll, tmp.string);
+            }
+        }
+
+        if(success){
+            asmRef.string = LinkedListCharactersToArray(ll);
+            FreeLinkedListCharacter(ll);
         }
 
         return success;
     }
 
-    public static boolean PrintStructure(Struct st, StringReference message) {
+    public static boolean PrintStructure(Struct st, StringReference stRef, StringReference message) {
         double i;
         boolean success;
+        LinkedListCharacters ll;
+        StringReference tmp;
 
+        ll = CreateLinkedListCharacter();
         success = true;
+        tmp = new StringReference();
 
-        System.out.println("struc " + new String(st.name));
+        LinkedListCharactersAddString(ll, ("struc " + new String(st.name) + "\n").toCharArray());
 
-        for(i = 0d; i < st.vars.length; i = i + 1d){
-            PrintVariable(st.vars[(int)i], message);
+        for(i = 0d; i < st.vars.length && success; i = i + 1d){
+            success = PrintVariable(st.vars[(int)i], tmp, message);
+            if(success){
+                LinkedListCharactersAddString(ll, tmp.string);
+            }
         }
 
-        System.out.println("endstruc");
-        System.out.println();
+        LinkedListCharactersAddString(ll, "endstruc".toCharArray());
+        LinkedListCharactersAddString(ll, "\n".toCharArray());
+        LinkedListCharactersAddString(ll, "\n".toCharArray());
+
+        stRef.string = LinkedListCharactersToArray(ll);
+
+        FreeLinkedListCharacter(ll);
 
         return success;
     }
 
-    public static boolean PrintVariable(Var var, StringReference message) {
+    public static boolean PrintVariable(Var var, StringReference varRef, StringReference message) {
         boolean success;
         DataReference entryTypesRef;
+        LinkedListCharacters ll;
 
+        ll = CreateLinkedListCharacter();
         success = true;
 
         entryTypesRef = new DataReference();
@@ -61,22 +89,23 @@ public class Translator2T {
         success = GetEntryTypes(entryTypesRef, message);
 
         if(success) {
-            if(StructHasKey(entryTypesRef.data.structure, var.type)) {
-                Structure data = GetStructFromStruct(entryTypesRef.data.structure, var.type);
-                if(StructHasKey(entryTypesRef.data.structure, "nasmType".toCharArray())) {
+            Structure types = entryTypesRef.data.structure;
+            if(StructHasKey(types, var.type)) {
+                Structure data = GetStructFromStruct(types, var.type);
+                if(StructHasKey(data, "nasmType".toCharArray())) {
                     char[] nasmType = GetStringFromStruct(data, "nasmType".toCharArray());
 
-                    System.out.print("  .");
+                    LinkedListCharactersAddString(ll, "  .".toCharArray());
 
-                    System.out.print(var.name);
+                    LinkedListCharactersAddString(ll, var.name);
 
-                    System.out.print(": ");
+                    LinkedListCharactersAddString(ll, ": ".toCharArray());
 
-                    System.out.print(nasmType);
+                    LinkedListCharactersAddString(ll, nasmType);
 
-                    System.out.print(" 1");
+                    LinkedListCharactersAddString(ll, " 1".toCharArray());
 
-                    System.out.println();
+                    LinkedListCharactersAddString(ll, "\n".toCharArray());
                 }else{
                     success = false;
                     message.string = "Could not find NASM type for type.".toCharArray();
@@ -87,152 +116,242 @@ public class Translator2T {
             }
         }
 
+        if(success) {
+            varRef.string = LinkedListCharactersToArray(ll);
+            FreeLinkedListCharacter(ll);
+        }
+
         return success;
     }
 
-    public static boolean PrintFunction(Function fnc, StringReference message) {
+    public static boolean PrintFunction(Function fnc, StringReference fncRef, StringReference message) {
         double i;
         char [] functionStructureName;
         boolean success;
+        LinkedListCharacters ll;
+        StringReference tmp;
+
+        success = true;
+        ll = CreateLinkedListCharacter();
 
         success = true;
 
-        System.out.println("global " + new String(fnc.name));
+        LinkedListCharactersAddString(ll, ("global " + new String(fnc.name)).toCharArray());
+        LinkedListCharactersAddString(ll, "\n".toCharArray());
 
         functionStructureName = (new String(fnc.name) + "S").toCharArray();
 
-        System.out.println(new String(fnc.name) + ":");
+        LinkedListCharactersAddString(ll, (new String(fnc.name) + ":").toCharArray());
+        LinkedListCharactersAddString(ll, "\n".toCharArray());
 
-        for(i = 0d; i < fnc.ins.length; i = i + 1d){
-            PrintInstruction(fnc.ins[(int)i], functionStructureName);
+        for(i = 0d; i < fnc.ins.length && success; i = i + 1d){
+            tmp = new StringReference();
+            success = PrintInstruction(fnc.ins[(int)i], tmp, functionStructureName);
+            if(success){
+                LinkedListCharactersAddString(ll, tmp.string);
+            }
         }
 
-        System.out.println("ret");
-        System.out.println("");
+        LinkedListCharactersAddString(ll, "ret".toCharArray());
+        LinkedListCharactersAddString(ll, "\n".toCharArray());
+
+        if(success) {
+            fncRef.string = LinkedListCharactersToArray(ll);
+            FreeLinkedListCharacter(ll);
+        }
 
         return success;
     }
 
-    public static void PrintInstruction(Instruction ins, char [] fncStName) {
+    public static boolean PrintInstruction(Instruction ins, StringReference insRef, char [] fncStName) {
         double i;
+        boolean success;
+        LinkedListCharacters ll;
+        Structure aliases;
+
+        ll = CreateLinkedListCharacter();
+        success = true;
 
         for(i = 0; i < ins.indentation; i = i + 1d){
-            System.out.print("  ");
+            LinkedListCharactersAddString(ll, "  ".toCharArray());
         }
 
-        System.out.print(new String(ins.name));
+        aliases = GetAliases();
+
+        if(StructHasKey(aliases, ins.name)){
+            LinkedListCharactersAddString(ll, GetStringFromStruct(aliases, ins.name));
+        }else{
+            LinkedListCharactersAddString(ll, ins.name);
+        }
+
 
         if(ins.hasTypePostfix || ins.params.length > 0) {
-            System.out.print(".");
+            LinkedListCharactersAddString(ll, ".".toCharArray());
         }
 
         if(ins.memoryPostfix != null){
-            System.out.print(new String(ins.memoryPostfix));
+            LinkedListCharactersAddString(ll, ins.memoryPostfix);
         }else{
-            System.out.print("_");
+            LinkedListCharactersAddString(ll, "_".toCharArray());
         }
 
         if(ins.hasTypePostfix) {
             if (ins.typePostfix != null) {
-                System.out.print(new String(ins.typePostfix));
+                LinkedListCharactersAddString(ll, ins.typePostfix);
             } else {
-                System.out.print("_");
+                LinkedListCharactersAddString(ll, "_".toCharArray());
             }
         }
 
-        System.out.print(" ");
+        LinkedListCharactersAddString(ll, " ".toCharArray());
 
         for(i = 0d; i < ins.params.length; i = i + 1d){
             Param param = ins.params[(int) i];
             if(StringsEqual(param.type, "var".toCharArray())){
-                System.out.print(new String(fncStName) + "." + new String(param.varname));
+                LinkedListCharactersAddString(ll, (new String(fncStName) + "." + new String(param.varname)).toCharArray());
             }else if(StringsEqual(param.type, "literal".toCharArray())){
-                System.out.print(param.literal);
+                LinkedListCharactersAddString(ll, param.literal);
             }
 
             if(i + 1d < ins.params.length) {
-                System.out.print(", ");
+                LinkedListCharactersAddString(ll, ", ".toCharArray());
             }
         }
 
         if(ins.label1 != null){
             if(ins.params.length > 0){
-                System.out.print(", ");
+                LinkedListCharactersAddString(ll, ", ".toCharArray());
             }
 
-            System.out.print(new String(ins.label1));
+            LinkedListCharactersAddString(ll, ins.label1);
 
             if(ins.label2 != null){
-                System.out.print(", " + new String(ins.label2));
+                LinkedListCharactersAddString(ll, (", " + new String(ins.label2)).toCharArray());
             }
         }
 
-        System.out.print("\n");
+        LinkedListCharactersAddString(ll, "\n".toCharArray());
+
+        if(success) {
+            insRef.string = LinkedListCharactersToArray(ll);
+            FreeLinkedListCharacter(ll);
+        }
+
+        return success;
     }
 
-    public static boolean WriteCHeader(Ast ast, StringReference message) {
+    private static Structure GetAliases() {
+        Structure aliases;
+
+        aliases = CreateStructure();
+        AddStringToStruct(aliases, "LessThan".toCharArray(), "Lt".toCharArray());
+        AddStringToStruct(aliases, "Equal".toCharArray(), "Eq".toCharArray());
+        AddStringToStruct(aliases, "Unequal".toCharArray(), "Neq".toCharArray());
+        AddStringToStruct(aliases, "MoreThanOrEqual".toCharArray(), "Gte".toCharArray());
+        AddStringToStruct(aliases, "MoreThan".toCharArray(), "Gt".toCharArray());
+        AddStringToStruct(aliases, "LessThanOrEqual".toCharArray(), "Lte".toCharArray());
+
+        AddStringToStruct(aliases, "ShiftLeft".toCharArray(), "Shl".toCharArray());
+        AddStringToStruct(aliases, "ShiftRight".toCharArray(), "Shr".toCharArray());
+        AddStringToStruct(aliases, "ShiftArithmeticRight".toCharArray(), "Sal".toCharArray());
+
+        return aliases;
+    }
+
+    public static boolean WriteCHeader(Ast ast, StringReference cInclude, StringReference message) {
         double i;
         boolean success;
+        LinkedListCharacters ll;
+        StringReference tmp;
 
         success = true;
+        ll = CreateLinkedListCharacter();
 
-        System.out.println("#include <stdint.h>");
-        System.out.println("#include <stdbool.h>");
-        System.out.println("#include <uchar.h>");
-        System.out.println("#include <immintrin.h>");
-        System.out.println("");
+        LinkedListCharactersAddString(ll, ("#include <stdint.h>" + "\n").toCharArray());
+        LinkedListCharactersAddString(ll, ("#include <stdbool.h>" + "\n").toCharArray());
+        LinkedListCharactersAddString(ll, ("#include <uchar.h>" + "\n").toCharArray());
+        LinkedListCharactersAddString(ll, ("#include <immintrin.h>" + "\n").toCharArray());
+        LinkedListCharactersAddString(ll, ("\n").toCharArray());
 
         for(i = 0d; i < ast.st.length && success; i = i + 1d){
-            success = PrintCStructure(ast.st[(int)i], message);
+            tmp = new StringReference();
+            success = PrintCStructure(ast.st[(int)i], tmp, message);
+            if(success){
+                LinkedListCharactersAddString(ll, tmp.string);
+            }
         }
 
         for(i = 0d; i < ast.fnc.length && success; i = i + 1d){
-            success = PrintCFunctionPrototype(ast.fnc[(int)i], message);
+            tmp = new StringReference();
+            success = PrintCFunctionPrototype(ast.fnc[(int)i], tmp, message);
+            if(success){
+                LinkedListCharactersAddString(ll, tmp.string);
+            }
+        }
+
+        if(success) {
+            cInclude.string = LinkedListCharactersToArray(ll);
+            FreeLinkedListCharacter(ll);
         }
 
         return success;
     }
 
-    private static boolean PrintCFunctionPrototype(Function fnc, StringReference message) {
+    private static boolean PrintCFunctionPrototype(Function fnc, StringReference cProRef, StringReference message) {
         boolean success;
         char [] functionStructureName;
+        LinkedListCharacters ll;
 
         success = true;
+        ll = CreateLinkedListCharacter();
 
         functionStructureName = (new String(fnc.name) + "S").toCharArray();
 
-        System.out.println("void " + new String(fnc.name) + "(struct " + new String(functionStructureName) + " *args);");
-        System.out.println();
+        LinkedListCharactersAddString(ll, ("void " + new String(fnc.name) + "(struct " + new String(functionStructureName) + " *args);").toCharArray());
+        LinkedListCharactersAddString(ll, "\n".toCharArray());
+
+        cProRef.string = LinkedListCharactersToArray(ll);
+        FreeLinkedListCharacter(ll);
 
         return success;
     }
 
-    private static boolean PrintCStructure(Struct st, StringReference message) {
+    private static boolean PrintCStructure(Struct st, StringReference cStRef, StringReference message) {
         double i;
         boolean success;
+        LinkedListCharacters ll;
+        StringReference tmp;
 
         success = true;
+        ll = CreateLinkedListCharacter();
 
-
-        System.out.println("#pragma pack(push, 1)");
-        System.out.println("struct " + new String(st.name) + "{");
+        LinkedListCharactersAddString(ll, ("#pragma pack(push, 1)" + "\n").toCharArray());
+        LinkedListCharactersAddString(ll, ("struct " + new String(st.name) + "{" + "\n").toCharArray());
 
         for(i = 0d; i < st.vars.length; i = i + 1d){
-            PrintCVariable(st.vars[(int)i], message);
+            tmp = new StringReference();
+            success = PrintCVariable(st.vars[(int)i], tmp, message);
+            if(success){
+                LinkedListCharactersAddString(ll, tmp.string);
+            }
         }
 
-        System.out.println("};");
-        System.out.println("#pragma pack(pop)");
-        System.out.println();
+        LinkedListCharactersAddString(ll, ("};" + "\n").toCharArray());
+        LinkedListCharactersAddString(ll, ("#pragma pack(pop)" + "\n").toCharArray());
+        LinkedListCharactersAddString(ll, "\n".toCharArray());
+
+        cStRef.string = LinkedListCharactersToArray(ll);
 
         return success;
     }
 
-    private static void PrintCVariable(Var var, StringReference message) {
+    private static boolean PrintCVariable(Var var, StringReference cVarRef, StringReference message) {
         DataReference entryTypesRef;
         boolean success;
+        LinkedListCharacters ll;
 
         entryTypesRef = new DataReference();
+        ll = CreateLinkedListCharacter();
 
         success = GetEntryTypes(entryTypesRef, message);
 
@@ -240,12 +359,19 @@ public class Translator2T {
             Structure data = GetStructFromStruct(entryTypesRef.data.structure, var.type);
             char[] ctype = GetStringFromStruct(data, "ctype".toCharArray());
 
-            System.out.print("  ");
-            System.out.print(ctype);
-            System.out.print(" ");
-            System.out.print(var.name);
-            System.out.println(";");
+            LinkedListCharactersAddString(ll, "  ".toCharArray());
+            LinkedListCharactersAddString(ll, ctype);
+            LinkedListCharactersAddString(ll, " ".toCharArray());
+            LinkedListCharactersAddString(ll, var.name);
+            LinkedListCharactersAddString(ll, ";".toCharArray());
+            LinkedListCharactersAddString(ll, "\n".toCharArray());
         }
 
+        if(success){
+            cVarRef.string = LinkedListCharactersToArray(ll);
+            FreeLinkedListCharacter(ll);
+        }
+
+        return success;
     }
 }

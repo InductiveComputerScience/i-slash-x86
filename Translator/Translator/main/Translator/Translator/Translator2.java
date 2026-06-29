@@ -1053,7 +1053,7 @@ public class Translator2 {
 
 
     public static boolean PrettyPrint(Ast ast, StringReference message) {
-        return false;
+        return true;
     }
 }
 

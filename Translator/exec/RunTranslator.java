@@ -20,7 +20,7 @@ public class RunTranslator {
     public static void main(String[] args) throws IOException {
         char [] input;
         Array functions, structures;
-        StringReference message, output, cheaderoutput;
+        StringReference message, output, cheaderoutput, asm, cInclude;
         boolean success;
 
         input = ReadStringFromFile(args[0].toCharArray());
@@ -30,6 +30,8 @@ public class RunTranslator {
         message = new StringReference();
         output = new StringReference();
         cheaderoutput = new StringReference();
+        asm = new StringReference();
+        cInclude = new StringReference();
 
         // New system
         Array tokens;
@@ -47,11 +49,23 @@ public class RunTranslator {
                 if(success){
                     success = Translator2.PrettyPrint(ast, message);
 
-                    success = Translator2T.Translate(ast, message);
+                    if(success) {
+                        success = Translator2T.Translate(ast, asm, message);
+                        if(success){
+                            //System.out.println(asm.string);
+                            WriteStringToFile(args[1].toCharArray(), asm.string);
 
-                    success = Translator2T.WriteCHeader(ast, message);
+                        }
+                    }
 
-                    System.out.println("success");
+                    if(success) {
+                        success = Translator2T.WriteCHeader(ast, cInclude, message);
+                        if(success){
+                            //System.out.println(cInclude.string);
+                            WriteStringToFile(args[2].toCharArray(), cInclude.string);
+                        }
+                    }
+
                 }else{
                     System.out.println("Failed: " + new String(message.string));
                 }
@@ -62,9 +76,15 @@ public class RunTranslator {
             System.out.println("Failed: " + new String(message.string));
         }
 
+        if(success) {
+            System.out.println("success: " + success);
+        }else{
+            System.out.println("failed: " +  new String(message.string));
+        }
+
         // --
 
-        success = FindFunctionsAndStructures(input, functions, structures, message);
+        /*success = FindFunctionsAndStructures(input, functions, structures, message);
         if(success) {
             success = Translate(input, functions, structures, message, output);
             if(success){
@@ -73,11 +93,11 @@ public class RunTranslator {
         }
 
         if(success) {
-            WriteStringToFile(args[1].toCharArray(), output.string);
-            WriteStringToFile(args[2].toCharArray(), cheaderoutput.string);
+            WriteStringToFile((args[1] + ".old").toCharArray(), output.string);
+            WriteStringToFile((args[2] + ".old").toCharArray(), cheaderoutput.string);
         }else{
             System.out.println("Failed: " + new String(message.string));
-        }
+        }*/
 
     }
 
