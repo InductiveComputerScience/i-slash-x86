@@ -869,11 +869,14 @@ public class Translator2 {
                     // Count instructions
                     state = 0d;
                     insCount = 0d;
-                    for(i = tokenRef.numberValue; i < ArrayLength(tokens); i = i + 1d){
+                    done = false;
+                    for(i = tokenRef.numberValue; i < ArrayLength(tokens) && !done; i = i + 1d){
                         token = ArrayIndexString(tokens, i);
 
                         if(state == 0d) {
-                            if (StringIsInArray(token, ins)) {
+                            if(StringsEqual(token, "Ret".toCharArray())){
+                                done = true;
+                            }else if (StringIsInArray(token, ins)) {
                                 insCount = insCount + 1d;
                                 state = 1d;
                             }
@@ -911,6 +914,13 @@ public class Translator2 {
                             success = false;
                             message.string = ("Instruction not one of the valid instructions: " + new String(token)).toCharArray();
                         }
+                    }
+
+                    if(insCount == function.ins.length){
+
+                    }else{
+                        success = false;
+                        message.string = ("Parsed instructions was not the expected count: " + new String(function.name)).toCharArray();
                     }
 
                 } else {

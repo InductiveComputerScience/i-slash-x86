@@ -469,6 +469,7 @@ public class Translator2SA {
         ArrayAddString(p2, "ApproxReciprocalSqrt".toCharArray());
         ArrayAddString(p2, "MovAndDuplicate".toCharArray());
         ArrayAddString(p2, "MovAndDuplicateOdd".toCharArray());
+        ArrayAddString(p2, "Rdrand".toCharArray());
 
         p3 = CreateArray();
         ArrayAddString(p3, "Add".toCharArray());
@@ -493,6 +494,8 @@ public class Translator2SA {
         ArrayAddString(p3, "Unequal".toCharArray());
         ArrayAddString(p3, "Equal".toCharArray());
         ArrayAddString(p3, "MoreThan".toCharArray());
+        ArrayAddString(p3, "MoreThanOrEqual".toCharArray());
+        ArrayAddString(p3, "LessThanOrEqual".toCharArray());
         ArrayAddString(p3, "Acw".toCharArray());
         ArrayAddString(p3, "Acr".toCharArray());
         ArrayAddString(p3, "Shl".toCharArray());
@@ -719,11 +722,14 @@ public class Translator2SA {
         ArrayAddString(numbersToBits, "Lte".toCharArray());
         ArrayAddString(numbersToBits, "Gt".toCharArray());
         ArrayAddString(numbersToBits, "Gte".toCharArray());
-        ArrayAddString(numbersToBits, "Eq".toCharArray());
-        ArrayAddString(numbersToBits, "Neq".toCharArray());
-        ArrayAddString(numbersToBits, "Unequal".toCharArray());
-        ArrayAddString(numbersToBits, "Equal".toCharArray());
         ArrayAddString(numbersToBits, "LessThan".toCharArray());
+
+        // These work on other types as well
+        Array dataToBits = CreateArray();
+        ArrayAddString(dataToBits, "Eq".toCharArray());
+        ArrayAddString(dataToBits, "Neq".toCharArray());
+        ArrayAddString(dataToBits, "Unequal".toCharArray());
+        ArrayAddString(dataToBits, "Equal".toCharArray());
 
         // These take a bitfield and return a number.
         Array bitfieldToNumber = CreateArray();
@@ -828,6 +834,8 @@ public class Translator2SA {
             valid = CheckConversions(ins, message);
         }else if(StringIsInArray(ins.name, numbersToBits)){
             valid = CheckNumbersToBits(ins, message);
+        }else if(StringIsInArray(ins.name, dataToBits)){
+            valid = CheckDataToBits(ins, message);
         }else if(StringIsInArray(ins.name, bitfieldToNumber)){
             valid = CheckBitfieldToNumber(ins, message);
         }else if(StringsEqual(ins.name, "Broadcast".toCharArray())){
@@ -1411,6 +1419,58 @@ public class Translator2SA {
                 success = false;
                 message.string = ("Instruction only works on number variables as input: " + new String(ins.name)).toCharArray();
             }
+        } else {
+            success = false;
+            message.string = ("Assigned variable must be bitfield type: " + new String(ins.params[0].varname)).toCharArray();
+        }
+
+        // Check that all input parameters are the correct type.
+        if(ParamIsVariable(ins.params[1])){
+            if(StringsEqual(ins.params[1].var.type, type2)){
+                // OK
+            } else {
+                success = false;
+                message.string = "Input type not the correct type.".toCharArray();
+            }
+        }
+
+        if(ParamIsVariable(ins.params[2])){
+            if(StringsEqual(ins.params[2].var.type, type2)){
+                // OK
+            } else {
+                success = false;
+                message.string = "Input type not the correct type.".toCharArray();
+            }
+        }
+
+        return success;
+    }
+
+    private static boolean CheckDataToBits(Instruction ins, StringReference message) {
+        char[] type1, type2;
+        boolean success;
+
+        success = true;
+
+        // Determine the type
+        type1 = ins.params[0].var.type;
+
+        //System.out.println(type1);
+
+        if(ParamIsVariable(ins.params[1])){
+            type2 = ins.params[1].var.type;
+        }else if(ParamIsVariable(ins.params[2])){
+            type2 = ins.params[2].var.type;
+        }else{
+            // TODO: What to do her? Try to detect literal type?
+            type2 = "f64".toCharArray();
+        }
+
+        ins.typePostfix = (new String(type1) + new String(type2)).toCharArray();
+        ins.hasTypePostfix = true;
+
+        if (TypeIsBitfieldType(type1)) {
+
         } else {
             success = false;
             message.string = ("Assigned variable must be bitfield type: " + new String(ins.params[0].varname)).toCharArray();
