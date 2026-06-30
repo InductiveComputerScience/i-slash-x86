@@ -448,7 +448,9 @@ public class Translator2 {
         ArrayAddString(ins, "Xb16".toCharArray());
         ArrayAddString(ins, "Xb32".toCharArray());
         ArrayAddString(ins, "Xb64".toCharArray());
+        ArrayAddString(ins, "Xu8".toCharArray());
         ArrayAddString(ins, "Xu16".toCharArray());
+        ArrayAddString(ins, "Xu32".toCharArray());
         ArrayAddString(ins, "Xu64".toCharArray());
         ArrayAddString(ins, "Xb128".toCharArray());
         ArrayAddString(ins, "Xb256".toCharArray());
@@ -648,6 +650,26 @@ public class Translator2 {
                                         typeDecs = typeDecs + 1d;
                                     }
                                 }
+                            }else if (StringsEqual(token, "str".toCharArray()) || StringsEqual(token, "sta".toCharArray())) {
+                                token = GetNextToken(tokens, tokenRef);
+
+                                success = IsValidIdentifier(token, message);
+
+                                if (success) {
+                                    token = GetNextToken(tokens, tokenRef);
+
+                                    success = IsValidIdentifier(token, message);
+
+                                    if (success) {
+                                        token = GetNextToken(tokens, tokenRef);
+
+                                        success = IsNewline(token, message);
+
+                                        if (success) {
+                                            typeDecs = typeDecs + 1d;
+                                        }
+                                    }
+                                }
                             }
                         }
                     }
@@ -668,8 +690,32 @@ public class Translator2 {
                             //System.out.println("Ens");
 
                             token = GetNextToken(tokens, tokenRef);
-                        } else {
-                            if (StringIsInArray(token, typeInstructions)) {
+                        } else if (StringIsInArray(token, typeInstructions)) {
+                            type = token;
+                            token = GetNextToken(tokens, tokenRef);
+
+                            success = IsValidIdentifier(token, message);
+
+                            if (success) {
+                                name = token;
+                                token = GetNextToken(tokens, tokenRef);
+
+                                success = IsNewline(token, message);
+
+                                if (success) {
+                                    struct.vars[(int) typeDec] = CreateTypeDec(type, name, false);
+
+                                    //System.out.println("\t" + new String(type) + " " + new String(name));
+
+                                    typeDec = typeDec + 1d;
+                                }
+                            }
+                        } else if (StringsEqual(token, "str".toCharArray()) || StringsEqual(token, "sta".toCharArray())) {
+                            token = GetNextToken(tokens, tokenRef);
+
+                            success = IsValidIdentifier(token, message);
+
+                            if (success) {
                                 type = token;
                                 token = GetNextToken(tokens, tokenRef);
 
@@ -682,17 +728,17 @@ public class Translator2 {
                                     success = IsNewline(token, message);
 
                                     if (success) {
-                                        struct.vars[(int) typeDec] = CreateTypeDec(type, name);
+                                        struct.vars[(int) typeDec] = CreateTypeDec(type, name, true);
 
                                         //System.out.println("\t" + new String(type) + " " + new String(name));
 
                                         typeDec = typeDec + 1d;
                                     }
                                 }
-                            } else {
-                                success = false;
-                                message.string = ("Token not a type instruction: " + new String(token)).toCharArray();
                             }
+                        } else {
+                            success = false;
+                            message.string = ("Token not a type instruction: " + new String(token)).toCharArray();
                         }
                     }
 
@@ -706,11 +752,12 @@ public class Translator2 {
         return success;
     }
 
-    private static Var CreateTypeDec(char[] type, char[] name) {
+    private static Var CreateTypeDec(char[] type, char[] name, boolean isStruct) {
         Var var = new Var();
 
         var.type = type;
         var.name = name;
+        var.isStruct = isStruct;
 
         return var;
     }

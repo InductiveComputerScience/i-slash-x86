@@ -66,14 +66,8 @@ public class RunTranslator {
                         }
                     }
 
-                }else{
-                    System.out.println("Failed: " + new String(message.string));
                 }
-            }else{
-                System.out.println("Failed: " + new String(message.string));
             }
-        }else{
-            System.out.println("Failed: " + new String(message.string));
         }
 
         if(success) {

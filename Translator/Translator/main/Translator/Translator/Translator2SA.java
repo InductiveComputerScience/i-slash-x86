@@ -44,18 +44,46 @@ public class Translator2SA {
         }
 
         if(success){
+            Array special = CreateArray();
+
+            ArrayAddString(special, "Acr".toCharArray());
+            ArrayAddString(special, "Acw".toCharArray());
+            ArrayAddString(special, "New".toCharArray());
+
             for(i = 0; i < ast.fnc.length && success; i = i + 1d) {
                 fnc = ast.fnc[(int) i];
 
                 for(j = 0; j < fnc.ins.length && success; j = j + 1d) {
                     Instruction ins = fnc.ins[(int) j];
 
-                    for(k = 0; k < ins.params.length && success; k = k + 1d) {
-                        Param param = ins.params[(int) k];
+                    if(!StringIsInArray(ins.name, special)) {
+                        for (k = 0; k < ins.params.length && success; k = k + 1d) {
+                            Param param = ins.params[(int) k];
 
-                        if(StringsEqual(param.type, "var".toCharArray())) {
+                            if (StringsEqual(param.type, "var".toCharArray())) {
+                                success = CheckThatVariableIsDeclared(param, fnc.functionStructure, message);
+                            }
+                        }
+                    }else if(StringsEqual(ins.name, "Acw".toCharArray())) {
+                        success = CheckAcw(ast, ins, fnc, message);
+                    }else if(StringsEqual(ins.name, "Acr".toCharArray())) {
+                        success = CheckAcr(ast, ins, fnc, message);
+                    }else if(StringsEqual(ins.name, "New".toCharArray())) {
+                        // Assigned to variable
+                        Param param = ins.params[0];
+
+                        if (StringsEqual(param.type, "var".toCharArray())) {
                             success = CheckThatVariableIsDeclared(param, fnc.functionStructure, message);
                         }
+
+                        // Structure
+                        // TODO: Check that the structure exists.
+                        param = ins.params[1];
+
+
+                    }else{
+                        success = false;
+                        message.string = ("Missing check for: " + new String(ins.name)).toCharArray();
                     }
                 }
             }
@@ -96,6 +124,122 @@ public class Translator2SA {
             }
         }
 
+        return success;
+    }
+
+    private static boolean CheckAcr(Ast ast, Instruction ins, Function fnc, StringReference message) {
+        boolean success = true;
+        double k;
+        Struct st;
+
+        // Assigned to variable
+        Param param = ins.params[0];
+
+        if (StringsEqual(param.type, "var".toCharArray())) {
+            success = CheckThatVariableIsDeclared(param, fnc.functionStructure, message);
+        }
+
+        // Read from struct
+        param = ins.params[1];
+
+        if (StringsEqual(param.type, "var".toCharArray())) {
+            success = CheckThatVariableIsDeclared(param, fnc.functionStructure, message);
+        }
+
+        // Structure element.
+        param = ins.params[2];
+
+        boolean found = false;
+        for(k = 0; k < ast.st.length && !found; k = k + 1d){
+            if(StringsEqual(ast.st[(int)k].name, ins.params[1].var.type)){
+                found = true;
+                param.var.st = ast.st[(int)k];
+            }
+        }
+
+        if(found) {
+            st = param.var.st;
+            found = false;
+            for(k = 0; k < st.vars.length && !found; k = k + 1d){
+                if(StringsEqual(st.vars[(int)k].name, param.varname)){
+                    found = true;
+                    param.var = st.vars[(int)k];
+                }
+            }
+
+            if(found){
+                success = true;
+            }else{
+                success = false;
+                message.string = ("Element access is not in struct: " + new String(ins.params[0].varname)).toCharArray();
+            }
+        }else{
+            success = false;
+            message.string = ("Structure used in Acr does not exist: " + new String(ins.params[0].var.type)).toCharArray();
+        }
+
+        return success;
+    }
+
+    private static boolean CheckAcw(Ast ast, Instruction ins, Function fnc, StringReference message) {
+        double k;
+        Struct st;
+        boolean success;
+        // Assigned to struct
+        Param param = ins.params[0];
+
+        if (StringsEqual(param.type, "var".toCharArray())) {
+            success = CheckThatVariableIsDeclared(param, fnc.functionStructure, message);
+        }
+
+        // Structure element.
+        param = ins.params[1];
+        //System.out.println(ins.params[0].var.isStruct);
+        //System.out.println(ins.params[0].var.type);
+
+        // Find structure
+        boolean found = false;
+        for(k = 0; k < ast.st.length && !found; k = k + 1d){
+            if(StringsEqual(ast.st[(int)k].name, ins.params[0].var.type)){
+                found = true;
+                ins.params[0].var.st = ast.st[(int)k];
+            }
+        }
+
+        if(found) {
+            success = true;
+
+            st = ins.params[0].var.st;
+            found = false;
+            for(k = 0; k < st.vars.length && !found; k = k + 1d){
+                if(StringsEqual(st.vars[(int)k].name, param.varname)){
+                    found = true;
+                    param.var = st.vars[(int)k];
+                }
+            }
+
+            if(found){
+                success = true;
+            }else{
+                success = false;
+                message.string = ("Element access is not in struct: " + new String(ins.params[0].varname)).toCharArray();
+            }
+        }else{
+            success = false;
+            message.string = ("Structure used in Acw does not exist: " + new String(ins.params[0].var.type)).toCharArray();
+        }
+
+        // Check that element exists
+
+
+        // Assigned from variable
+        if(success){
+            param = ins.params[2];
+
+            if (StringsEqual(param.type, "var".toCharArray())) {
+                success = CheckThatVariableIsDeclared(param, fnc.functionStructure, message);
+            }
+        }
         return success;
     }
 
@@ -281,6 +425,9 @@ public class Translator2SA {
         ArrayAddString(p2, "f64x4tof32x4".toCharArray());
         ArrayAddString(p2, "f32x8tof16x8".toCharArray());
         ArrayAddString(p2, "f32x4tof64x4".toCharArray());
+        ArrayAddString(p2, "Xu8".toCharArray());
+        ArrayAddString(p2, "Xu16".toCharArray());
+        ArrayAddString(p2, "Xu32".toCharArray());
         ArrayAddString(p2, "Xu64".toCharArray());
         ArrayAddString(p2, "Xu8a".toCharArray());
         ArrayAddString(p2, "Xu16a".toCharArray());
@@ -635,6 +782,9 @@ public class Translator2SA {
         ArrayAddString(reint, "Xb16".toCharArray());
         ArrayAddString(reint, "Xb32".toCharArray());
         ArrayAddString(reint, "Xb64".toCharArray());
+        ArrayAddString(reint, "Xu8".toCharArray());
+        ArrayAddString(reint, "Xu16".toCharArray());
+        ArrayAddString(reint, "Xu32".toCharArray());
         ArrayAddString(reint, "Xu64".toCharArray());
         ArrayAddString(reint, "Xb128".toCharArray());
         ArrayAddString(reint, "Xb256".toCharArray());
@@ -664,6 +814,7 @@ public class Translator2SA {
         StringSubset
         StringRangeCheck
         MatchString
+        Len
 
         */
 
@@ -699,11 +850,13 @@ public class Translator2SA {
             valid = CheckExtractMask(ins, message);
         }else if(StringsEqual(ins.name, "Shuffle".toCharArray())){
             valid = CheckShuffle(ins, message);
-        }/*else if(StringsEqual(ins.name, "Acw".toCharArray())){
+        }else if(StringsEqual(ins.name, "Acw".toCharArray())){
             valid = CheckAcw(ins, message);
         }else if(StringsEqual(ins.name, "Acr".toCharArray())){
             valid = CheckAcr(ins, message);
-        }*/else{
+        }else if(StringsEqual(ins.name, "Len".toCharArray())){
+            valid = CheckLen(ins, message);
+        }else{
             valid = false;
             message.string = ("Unknown typing rules for instruction: " + new String(ins.name)).toCharArray();
         }
@@ -711,6 +864,33 @@ public class Translator2SA {
         // Compute memory postfix.
         if(valid){
             ComputeMemoryPostfix(ins);
+        }
+
+        return valid;
+    }
+
+    private static boolean CheckLen(Instruction ins, StringReference message) {
+        boolean valid;
+
+        valid = true;
+
+        // Parameters: number <- array
+
+        char[] type = ins.params[1].var.type;
+        ins.hasTypePostfix = true;
+        ins.typePostfix = type;
+
+        if(TypeIsArrayType(type)){
+            char[] targetType = ins.params[0].var.type;
+            if(TypeIsNumberType(targetType) && !TypeIsArrayType(targetType)){
+
+            }else{
+                valid = false;
+                message.string = ("Len must assign to a number variable: was " + new String(targetType)).toCharArray();
+            }
+        }else{
+            valid = false;
+            message.string = ("Len takes array as input: was " + new String(type)).toCharArray();
         }
 
         return valid;
@@ -839,11 +1019,74 @@ public class Translator2SA {
     }
 
     private static boolean CheckAcr(Instruction ins, StringReference message) {
-        return false;
+        boolean success;
+        char [] type1;
+
+        success = true;
+
+        // 0: Must be type x
+        // 1: Must be struct
+        // 2: Must be type x
+
+        // Determine the type
+        type1 = ins.params[0].var.type;
+
+        ins.hasTypePostfix = true;
+        ins.typePostfix = type1;
+
+        if(StringsEqual(ins.params[2].var.type, type1)){
+            // OK
+        }else{
+            success = false;
+            message.string = ("Variable to assign from is not the same as the variable being assigned to: " + new String(ins.params[2].var.type)).toCharArray();
+        }
+
+        if(success){
+            if(ins.params[1].var.isStruct){
+                // OK
+            }else{
+                success = false;
+                message.string = ("Second parameter to Acr must be struct: was " + new String(ins.params[1].var.type)).toCharArray();
+            }
+        }
+
+
+        return success;
     }
 
     private static boolean CheckAcw(Instruction ins, StringReference message) {
-        return false;
+        boolean success;
+        char [] type1;
+
+        success = true;
+
+        // 0: Must be struct
+        // 1: Must be type x
+        // 2: Must be type x
+
+        // Determine the type
+        type1 = ins.params[1].var.type;
+
+        ins.hasTypePostfix = true;
+        ins.typePostfix = type1;
+
+        if(StringsEqual(ins.params[2].var.type, type1)){
+            // OK
+        }else{
+            success = false;
+            message.string = ("Variable to assign from is not the same as the variable being assigned to: " + new String(ins.params[2].var.type)).toCharArray();
+        }
+
+        if(success){
+            if(ins.params[0].var.isStruct){
+                // OK
+            }else{
+                success = false;
+                message.string = ("First parameter to Acw must be struct: was " + new String(ins.params[0].var.type)).toCharArray();
+            }
+        }
+
+        return success;
     }
 
     private static boolean CheckMov(Instruction ins, StringReference message) {
@@ -865,7 +1108,7 @@ public class Translator2SA {
                 // OK
             }else{
                 success = false;
-                message.string = "Input parameter to Mov must be the same as the assigned variable.".toCharArray();
+                message.string = ("Input parameter to Mov must be the same as the assigned variable: was " + new String(type1) + " and " +  new String(type2)).toCharArray();
             }
         }
 

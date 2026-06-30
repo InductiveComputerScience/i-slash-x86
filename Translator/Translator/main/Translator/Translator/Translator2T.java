@@ -92,27 +92,26 @@ public class Translator2T {
             Structure types = entryTypesRef.data.structure;
             if(StructHasKey(types, var.type)) {
                 Structure data = GetStructFromStruct(types, var.type);
-                if(StructHasKey(data, "nasmType".toCharArray())) {
+                if (StructHasKey(data, "nasmType".toCharArray())) {
                     char[] nasmType = GetStringFromStruct(data, "nasmType".toCharArray());
 
                     LinkedListCharactersAddString(ll, "  .".toCharArray());
-
                     LinkedListCharactersAddString(ll, var.name);
-
                     LinkedListCharactersAddString(ll, ": ".toCharArray());
-
                     LinkedListCharactersAddString(ll, nasmType);
-
                     LinkedListCharactersAddString(ll, " 1".toCharArray());
-
                     LinkedListCharactersAddString(ll, "\n".toCharArray());
-                }else{
+                } else {
                     success = false;
-                    message.string = "Could not find NASM type for type.".toCharArray();
+                    message.string = ("Could not find NASM type for type (2): " + new String(var.type)).toCharArray();
                 }
+            }else if(var.isStruct) {
+                LinkedListCharactersAddString(ll, "  .".toCharArray());
+                LinkedListCharactersAddString(ll, var.name);
+                LinkedListCharactersAddString(ll, ": resq 1\n".toCharArray());
             }else{
                 success = false;
-                message.string = "Could not find NASM type for type.".toCharArray();
+                message.string = ("Could not find NASM type for type (1): " + new String(var.type)).toCharArray();
             }
         }
 
@@ -208,7 +207,14 @@ public class Translator2T {
         for(i = 0d; i < ins.params.length; i = i + 1d){
             Param param = ins.params[(int) i];
             if(StringsEqual(param.type, "var".toCharArray())){
-                LinkedListCharactersAddString(ll, (new String(fncStName) + "." + new String(param.varname)).toCharArray());
+                if(StringsEqual(ins.name, "Acr".toCharArray()) && i == 2d){
+                    LinkedListCharactersAddString(ll, (new String(ins.params[1].var.st.name) + ".").toCharArray());
+                }else if(StringsEqual(ins.name, "Acw".toCharArray()) && i == 1d){
+                    LinkedListCharactersAddString(ll, (new String(ins.params[0].var.st.name) + ".").toCharArray());
+                }else{
+                    LinkedListCharactersAddString(ll, (new String(fncStName) + ".").toCharArray());
+                }
+                LinkedListCharactersAddString(ll, param.varname);
             }else if(StringsEqual(param.type, "literal".toCharArray())){
                 LinkedListCharactersAddString(ll, param.literal);
             }
@@ -328,7 +334,7 @@ public class Translator2T {
         LinkedListCharactersAddString(ll, ("#pragma pack(push, 1)" + "\n").toCharArray());
         LinkedListCharactersAddString(ll, ("struct " + new String(st.name) + "{" + "\n").toCharArray());
 
-        for(i = 0d; i < st.vars.length; i = i + 1d){
+        for(i = 0d; i < st.vars.length && success; i = i + 1d){
             tmp = new StringReference();
             success = PrintCVariable(st.vars[(int)i], tmp, message);
             if(success){
@@ -356,15 +362,32 @@ public class Translator2T {
         success = GetEntryTypes(entryTypesRef, message);
 
         if(success){
-            Structure data = GetStructFromStruct(entryTypesRef.data.structure, var.type);
-            char[] ctype = GetStringFromStruct(data, "ctype".toCharArray());
+            if(StructHasKey(entryTypesRef.data.structure, var.type)) {
+                Structure data = GetStructFromStruct(entryTypesRef.data.structure, var.type);
+                if (StructHasKey(data, "ctype".toCharArray())) {
+                    char[] ctype = GetStringFromStruct(data, "ctype".toCharArray());
 
-            LinkedListCharactersAddString(ll, "  ".toCharArray());
-            LinkedListCharactersAddString(ll, ctype);
-            LinkedListCharactersAddString(ll, " ".toCharArray());
-            LinkedListCharactersAddString(ll, var.name);
-            LinkedListCharactersAddString(ll, ";".toCharArray());
-            LinkedListCharactersAddString(ll, "\n".toCharArray());
+                    LinkedListCharactersAddString(ll, "  ".toCharArray());
+                    LinkedListCharactersAddString(ll, ctype);
+                    LinkedListCharactersAddString(ll, " ".toCharArray());
+                    LinkedListCharactersAddString(ll, var.name);
+                    LinkedListCharactersAddString(ll, ";".toCharArray());
+                    LinkedListCharactersAddString(ll, "\n".toCharArray());
+                } else {
+                    success = false;
+                    message.string = ("Could not find C type for type (2): " + new String(var.type)).toCharArray();
+                }
+            }else if(var.isStruct){
+                LinkedListCharactersAddString(ll, "  struct ".toCharArray());
+                LinkedListCharactersAddString(ll, var.type);
+                LinkedListCharactersAddString(ll, " * ".toCharArray());
+                LinkedListCharactersAddString(ll, var.name);
+                LinkedListCharactersAddString(ll, ";".toCharArray());
+                LinkedListCharactersAddString(ll, "\n".toCharArray());
+            }else{
+                success = false;
+                message.string = ("Could not find C type for type (1): " + new String(var.type)).toCharArray();
+            }
         }
 
         if(success){
